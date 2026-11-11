@@ -1,0 +1,74 @@
+# Secrets: keys live outside the project directory, these rules are a safety net.
+# A secret pushed once stays in git history even after the file is deleted.
+keys/
+secrets/
+*.key
+*.pem
+*.crt
+*.der
+*.p12
+*.pfx
+*.csr
+*.srl
+*.env
+.env*
+wpa_supplicant*.conf
+
+# Yocto: the whole workspace (Poky, ST layers, build, downloads, sstate-cache) lives
+# in yocto/ and is ignored. Only our own layer is re-included.
+# It must be /yocto/* and not /yocto/: git never looks inside an ignored directory,
+# so a "!" rule for something inside it would never apply.
+/yocto/*
+!/yocto/meta-vibration-node/
+
+# Zephyr: the west workspace (Zephyr tree, modules, .west/) lives in firmware/ and is
+# ignored. Until the app directory is re-included (phase 3), nothing in firmware/ is tracked.
+/firmware/*
+
+# Build output anywhere else (e.g. a Zephyr build/ inside the app, or a Yocto build
+# started from the wrong directory).
+build/
+
+# Images and RAUC bundles are build outputs, published as releases, not committed.
+*.wic
+*.wic.*
+*.ext4
+*.raucb
+*.img
+
+# Python: caches and virtual environments of the test rig and helper scripts.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# KiCad: local state and backups only.
+# The design files (*.kicad_pro, *.kicad_sch, *.kicad_pcb) are committed.
+*-backups/
+*.kicad_prl
+fp-info-cache
+_autosave-*
+*.lck
+\#auto_saved_files#
+
+# Editors and OS
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Created when a file is copied from Windows into WSL.
+*:Zone.Identifier
+
+# Claude Code per-machine settings (project settings are committed).
+.claude/settings.local.json
+
+# *.log is not ignored on purpose: serial logs in docs/captures/ are evidence.
