@@ -11,23 +11,16 @@ the old row stays until nothing cites it anymore.
 
 | File | Document | Revision | Source |
 |---|---|---|---|
-| `um3571-rev1.pdf` | UM3571, Discovery kit with STM32MP215F MPU, user manual | Rev 1, Nov 2025 | [st.com](https://www.st.com/resource/en/user_manual/um3571-discovery-kit-with-stm32mp215f-mpu-stmicroelectronics.pdf) |
-| `mb2059-mp215f-b02-schematic.pdf` | MB2059 schematic, variant MP215F | B-02, 08-Jul-2025 | [STM32MP215F-DK page](https://www.st.com/en/evaluation-tools/stm32mp215f-dk.html), CAD Resources |
+| `um3571-rev1.pdf` | UM3571, Discovery kit with STM32MP215F MPU, user manual | Rev 1, Nov 2025 | [link](https://www.st.com/resource/en/user_manual/um3571-discovery-kit-with-stm32mp215f-mpu-stmicroelectronics.pdf) |
+| `mb2059-mp215f-b02-schematic.pdf` | MB2059 schematic, variant MP215F | B-02, 08-Jul-2025 | [link](https://www.st.com/en/evaluation-tools/stm32mp215f-dk.html#cad-resources) |
 
 ## Chip: STM32MP215FAN3 (VFBGA273, silicon revision "Y")
 
 | File | Document | Revision | Source |
 |---|---|---|---|
-| `ds14556-rev2.pdf` | DS14556, STM32MP211C/F, STM32MP213C/F, STM32MP215C/F datasheet | Rev 2, Sep 2026 | [st.com](https://www.st.com/resource/en/datasheet/stm32mp215c.pdf) |
-| `es0628-rev1.pdf` | ES0628, STM32MP21xA/C/D/F device errata | Rev 1, Aug 2025 | [st.com](https://www.st.com/resource/en/errata_sheet/es0628-stm32mp21xacdf-device-errata-stmicroelectronics.pdf) |
-| `rm0506-rev2.pdf` | RM0506, STM32MP21xx reference manual | Rev 2, Aug 2026 | [STM32MP215F page](https://www.st.com/en/microcontrollers-microprocessors/stm32mp215f.html) |
-
-The datasheet and the reference manual cover a whole family: always read what applies to the
-STM32MP215F in the VFBGA273 package. The chip, package and silicon revision are taken from
-UM3571 Rev 1, p. 2 and p. 33.
-
-All STM32MP21 documents are also listed on the ST wiki page
-[STM32MP21 resources](https://wiki.st.com/stm32mpu/wiki/STM32MP21_resources).
+| `ds14556-rev2.pdf` | DS14556, STM32MP211C/F, STM32MP213C/F, STM32MP215C/F datasheet | Rev 2, Sep 2026 | [link](https://www.st.com/resource/en/datasheet/stm32mp215c.pdf) |
+| `es0628-rev1.pdf` | ES0628, STM32MP21xA/C/D/F device errata | Rev 1, Aug 2025 | [link](https://www.st.com/resource/en/errata_sheet/es0628-stm32mp21xacdf-device-errata-stmicroelectronics.pdf) |
+| `rm0506-rev2.pdf` | RM0506, STM32MP21xx reference manual | Rev 2, Aug 2026 | [link](https://www.st.com/en/microcontrollers-microprocessors/stm32mp215f.html#documentation) |
 
 ## SHA-256 checksums
 
