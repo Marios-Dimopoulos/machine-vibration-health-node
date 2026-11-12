@@ -65,7 +65,7 @@ talks to it over RPMsg.
 | HAT (KiCad PCB) | Current measurement, EEPROM, LED, button, sensor connector | planned (phase 2, bring-up phase 7), not designed yet |
 | Test rig (Pi Zero 2 W, labgrid, pytest, relay, USB-UART, Pico) | Automatic verification on the real board | planned (phase 6) |
 | Sensor: ADXL345 on a breakout | Vibration measurement | chosen, not yet connected |
-| 5 V fan | The "machine" being monitored | bought, not yet used |
+| 5 V fan | The "machine" being monitored | ordered, expected by 2026-11-16 |
 
 ## Hardware inventory (what exists today)
 
@@ -75,15 +75,16 @@ Received from the Mouser order (2026-11-11):
 - DFR0251: DFRobot Gravity digital 16 A relay module, 1 channel, 5 V DC supply. Its DC contact rating
   must be checked before phase 6.
 - FIT0121: DFRobot jumper wires, female/male, 65 pack.
-- FIT0030: NOT identified yet. Read the bag label.
+- FIT0030: wires.
   (Identified by part number from distributor listings: TME, Digi-Key, Jameco, DFRobot wiki.)
 
-Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART, 2 microSD 32 GB,
+Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART adapter (used for
+the board's serial console), microSD card reader, power supply for the board, 2 microSD 32 GB,
 passives and cables, Nucleo-F411RE (not used in this project).
 Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
 is a SanDisk, marked Class 10 and A1.
 
-Tools (soldering iron, solder, cutter, multimeter): ordered from Skroutz; delivery state not recorded here yet.
+Ordered, expected by 2026-11-16: soldering iron, solder wire, multimeter, side cutter, 5 V fan.
 
 ## Board facts: STM32MP215F-DK
 
@@ -123,8 +124,7 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 3. CN5 connector type (STLINK header): reference and silkscreen known, exact type not verified.
 4. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
 5. Boot switch positions for microSD boot: to be confirmed from UM3571 before the first power-up.
-6. Mouser part FIT0030 is not identified. The 5 V fan is not among the identified parts: confirm
-   whether FIT0030 is the fan or the fan comes from the Skroutz order.
+6. Mouser parts: resolved (FIT0030 is wires; the 5 V fan is a separate order).
 7. microSD: resolved. SanDisk, Class 10, A1.
 
 ## Decisions
