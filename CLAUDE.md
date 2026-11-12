@@ -49,7 +49,8 @@ The full teaching goes in the conversation, not in the file.
 ## Rules
 
 - Every claim about the hardware (a register, a pin, a bit, a fuse, a boot switch) is checked
-  in the manual or datasheet first. Cite the document and page. If unsure, say so, do not guess.
+  in the manual or datasheet first. Cite the document, revision and page (e.g. "UM3571 Rev 1,
+  p. 13"), using the files listed in docs/datasheets/README.md. If unsure, say so, do not guess.
 - Never close the chip (fuses, secure boot lock) on the only board. Set up and test the whole
   chain without closing. Any such decision is written as an ADR first.
 - Before `dd`, flashing, partitioning or ANY command that deletes or overwrites data, stop and
@@ -86,6 +87,8 @@ machine-vibration-health-node/
 - docs/
   - captures/     evidence: serial logs, logic analyzer captures, screenshots, measurements
   - decisions/    all ADRs, plus adr-template.md (written by the user, always follow it)
+  - datasheets/   manuals and datasheets (PDFs git-ignored); README.md is the index
+                  with document ID, revision, source and SHA-256
   - architecture.md   the CURRENT state of the whole system
   - plan.md       the project plan (phases and the proof that ends each one)
 - tools/          helper scripts

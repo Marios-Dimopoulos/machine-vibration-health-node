@@ -2,7 +2,7 @@
 
 This file describes the CURRENT state of the whole system, not the plan. The plan is in
 [plan.md](plan.md). Update this file whenever something in the system changes (a component is built,
-a decision is made, a measurement is taken), and keep the "Status" column and the change log honest.
+a decision is made, a measurement is taken), and keep the "Status" column honest.
 
 Last updated: 2026-11-11.
 
@@ -71,14 +71,17 @@ talks to it over RPMsg.
 
 Received from the Mouser order (2026-11-11):
 - STM32MP215F-DK (511-STM32MP215F-DK).
-- SEN0032, DFR0251, FIT0030, FIT0121. The plan says the order includes the ADXL345 breakout, the 5 V
-  fan and the relay. Which part number is which has NOT been verified yet; confirm each item against its
-  datasheet/label and record it here.
+- SEN0032: DFRobot ADXL345 triple-axis accelerometer breakout (I2C and SPI).
+- DFR0251: DFRobot Gravity digital 16 A relay module, 1 channel, 5 V DC supply. Its DC contact rating
+  must be checked before phase 6.
+- FIT0121: DFRobot jumper wires, female/male, 65 pack.
+- FIT0030: NOT identified yet. Read the bag label.
+  (Identified by part number from distributor listings: TME, Digi-Key, Jameco, DFRobot wiki.)
 
 Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART, 2 microSD 32 GB,
 passives and cables, Nucleo-F411RE (not used in this project).
-Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. Check the brand of the two
-32 GB cards.
+Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
+is a SanDisk, marked Class 10 and A1.
 
 Tools (soldering iron, solder, cutter, multimeter): ordered from Skroutz; delivery state not recorded here yet.
 
@@ -120,17 +123,12 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 3. CN5 connector type (STLINK header): reference and silkscreen known, exact type not verified.
 4. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
 5. Boot switch positions for microSD boot: to be confirmed from UM3571 before the first power-up.
-6. Which Mouser part number is the fan, the relay and the ADXL345 breakout: to be confirmed.
-7. Brand of the two 32 GB microSD cards (ST verified only SanDisk).
+6. Mouser part FIT0030 is not identified. The 5 V fan is not among the identified parts: confirm
+   whether FIT0030 is the fan or the fan comes from the Skroutz order.
+7. microSD: resolved. SanDisk, Class 10, A1.
 
 ## Decisions
 
 No ADRs yet. They go in [decisions/](decisions/) using `decisions/adr-template.md`.
 Decisions expected: accelerometer choice (phase 2), boot chain options (phase 1/4),
 fuses and secure boot lock (end of week 7).
-
-## Change log
-
-| Date | Change |
-|---|---|
-| 2026-11-11 | File created. Hardware received and inspected, no software built yet. |
