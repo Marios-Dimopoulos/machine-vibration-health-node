@@ -25,6 +25,11 @@ wpa_supplicant*.conf
 # ignored. Until the app directory is re-included (phase 3), nothing in firmware/ is tracked.
 /firmware/*
 
+# Datasheets and manuals: the PDFs are copyrighted by their vendors and large, so they stay
+# local. Only the index (document, revision, URL, checksum) is committed.
+/docs/datasheets/*
+!/docs/datasheets/README.md
+
 # Build output anywhere else (e.g. a Zephyr build/ inside the app, or a Yocto build
 # started from the wrong directory).
 build/
