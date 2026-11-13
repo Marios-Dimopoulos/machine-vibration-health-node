@@ -89,7 +89,7 @@ machine-vibration-health-node/
   - decisions/    all ADRs, plus adr-template.md (written by the user, always follow it)
   - datasheets/   manuals and datasheets (PDFs git-ignored); README.md is the index
                   with document ID, revision, source and SHA-256
-  - architecture.md   the CURRENT state of the whole system
+  - architecture.md   the CURRENT state of the whole system, including open and unverified items
   - plan.md       the project plan (phases and the proof that ends each one)
 - tools/          helper scripts
 - CLAUDE.md, README.md, .gitignore
@@ -106,13 +106,6 @@ Keep docs up to date as the work moves:
 - At the end of each phase, before moving to the next one, quiz the user with 5-10 questions to
   check real understanding. If an answer is weak, go back and explain again.
   Do not start the next phase until the user is comfortable with the current one.
-
-## Unverified items (check before the related phase)
-
-1. The secure boot flow on the MP21 (TF-A, OP-TEE, signed FIT).
-2. The CN12 40-pin pinout compared to Raspberry Pi, before ordering the HAT PCB.
-3. RPMsg support from Zephyr on this board: test it on the first day of phase 3. If it does not
-   work in 2-3 days, fall back to ST's firmware (STM32CubeMP2) and keep Zephyr for later.
 
 ## Current phase
 
