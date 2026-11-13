@@ -122,11 +122,7 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 1. Secure boot flow on the MP21 (TF-A, OP-TEE, signed FIT): not verified. Required before phase 4.
 2. CN12 40-pin pinout compared to Raspberry Pi: not verified. Required before the HAT PCB order
    (end of week 4).
-3. CN5: resolved, STDC14 (2x7, fine pitch).
-4. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
-5. Boot switch positions: resolved (see Board facts).
-6. Mouser parts: resolved (FIT0030 is wires; the 5 V fan is a separate order).
-7. microSD: resolved. SanDisk, Class 10, A1.
+3. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
 
 ## Decisions
 
