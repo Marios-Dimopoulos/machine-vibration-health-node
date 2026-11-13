@@ -1,0 +1,958 @@
+NOTICE:  CPU: STM32MP215FAN Rev.Z
+NOTICE:  Model: STMicroelectronics STM32MP215F-DK OSTL Discovery Board
+NOTICE:  Board: MB2059 Var1.0 Rev.B-02
+NOTICE:  Reset reason: Power-on reset (por_rstn) (0x2035). Cold boot.
+INFO:    PMIC2 version = 0x12
+INFO:    PMIC2 product ID = 0x31
+INFO:    FCONF: Reading TB_FW firmware configuration file from: 0xe011000
+INFO:    FCONF: Reading firmware configuration information for: stm32mp_io
+INFO:    FCONF: Reading firmware configuration information for: stm32mp_fuse
+INFO:    Using SDMMC
+INFO:      Instance 1
+INFO:    Boot used partition fsbl1
+NOTICE:  BL2: v2.10-stm32mp2-r2.0(debug):lts-v2.10.24-dirty(a07367a1)
+NOTICE:  BL2: Built : 16:16:36, Oct  3 2025
+INFO:    BL2: Loading image id 26
+INFO:    Loading image id=26 at address 0xe061000
+INFO:    Image id=26 loaded: 0xe061000 - 0xe069650
+INFO:    BL2: Doing platform setup
+INFO:    RAM: LPDDR4 1x16Gbits 1x16bits 800MHz
+INFO:    Memory size = 0x80000000 (2048 MB)
+INFO:    BL2: Loading image id 1
+INFO:    Loading image id=1 at address 0xe000000
+INFO:    Image id=1 loaded: 0xe000000 - 0xe000326
+INFO:    FCONF: Reading FW_CONFIG firmware configuration file from: 0xe000000
+INFO:    FCONF: Reading firmware configuration information for: dyn_cfg
+INFO:    FCONF: Reading firmware configuration information for: risaf_config
+INFO:    RISAF2: No configuration in DT, use default
+INFO:    BL31 max size = 0x17000 (94208B)
+INFO:    BL2: Loading image id 3
+INFO:    Loading image id=3 at address 0xe000000
+INFO:    Image id=3 loaded: 0xe000000 - 0xe016980
+INFO:    BL2: Loading image id 19
+INFO:    Loading image id=19 at address 0x81fc0000
+INFO:    Image id=19 loaded: 0x81fc0000 - 0x81fc337e
+INFO:    BL2: Loading image id 4
+INFO:    Loading image id=4 at address 0x82000000
+INFO:    Image id=4 loaded: 0x82000000 - 0x8200001c
+INFO:    OPTEE ep=0x82000000
+INFO:    OPTEE header info:
+INFO:          magic=0x4554504f
+INFO:          version=0x2
+INFO:          arch=0x1
+INFO:          flags=0x0
+INFO:          nb_images=0x1
+INFO:    BL2: Loading image id 8
+INFO:    Loading image id=8 at address 0x82000000
+INFO:    Image id=8 loaded: 0x82000000 - 0x820fc008
+INFO:    BL2: Loading image id 2
+INFO:    Loading image id=2 at address 0x84400000
+INFO:    Image id=2 loaded: 0x84400000 - 0x84416610
+INFO:    BL2: Loading image id 5
+INFO:    Loading image id=5 at address 0x84000000
+INFO:    Image id=5 loaded: 0x84000000 - 0x841b3c70
+NOTICE:  BL2: Booting BL31
+INFO:    Entry point address = 0xe000000
+INFO:    SPSR = 0x3cd
+INFO:    ARM GICv2 driver initialized
+NOTICE:  BL31: v2.10-stm32mp2-r2.0(debug):lts-v2.10.24-dirty(a07367a1)
+NOTICE:  BL31: Built : 16:16:36, Oct  3 2025
+INFO:    BL31: Initializing runtime services
+INFO:    BL31: Initializing BL32
+I/TC: Early console on UART#2
+I/TC: 
+I/TC: Embedded DTB found
+I/TC: OP-TEE version: 4.0.0-dev (gcc version 13.4.0 (GCC)) #1 Fri Oct 20 18:29:31 UTC 2023 aarch64
+I/TC: WARNING: This OP-TEE configuration might be insecure!
+I/TC: WARNING: Please check https://optee.readthedocs.io/en/latest/architecture/porting_guidelines.html
+I/TC: Primary CPU initializing
+I/TC: WARNING: All debug access are allowed
+I/TC: Override the OTP 124: 0 to 0x8db6
+I/TC: WARNING: Embeds insecure stm32mp_provisioning driver
+I/TC: PMIC STPMIC REFID:3.A V1.2
+I/TC: Platform stm32mp2: flavor PLATFORM_FLAVOR - DT stm32mp215f-dk-ca35tdcid-ostl.dts
+I/TC: OP-TEE ST profile: secure_and_system_services
+I/TC: DBGMCU Authenticated Debug Mailbox online
+[    0.000000] SCP-firmware 2.13.0-intree-optee-os-4.0.0-dev
+[    0.000000] 
+[    0.000000] [FWK] Module initialization complete!
+I/TC: Primary CPU switching to normal world boot
+INFO:    BL31: Preparing for EL3 exit to normal world
+INFO:    Entry point address = 0x84000000
+INFO:    SPSR = 0x3c9
+I/TC: Reserved shared memory is disabled
+I/TC: Dynamic shared memory is enabled
+I/TC: Normal World virtualization support is disabled
+I/TC: Asynchronous notifications are enabled
+
+
+U-Boot 2023.10-stm32mp-r3.1 (Oct 02 2023 - 14:39:59 +0000)
+
+CPU: STM32MP215FAN Rev.Z
+Model: STMicroelectronics STM32MP215F-DK OSTL Discovery Board
+Board: stm32mp2 (st,stm32mp215f-dk-ca35tdcid-ostl)
+Board: MB2059 Var1.0 Rev.B-02
+DRAM:  2 GiB
+optee optee: OP-TEE: revision 4.0 (2a5b1d12)
+I/TC: Reserved shared memory is disabled
+I/TC: Dynamic shared memory is enabled
+I/TC: Normal World virtualization support is disabled
+I/TC: Asynchronous notifications are enabled
+Core:  290 devices, 38 uclasses, devicetree: board
+WDT:   Started watchdog with servicing every 1000ms (32s timeout)
+NAND:  0 MiB
+MMC:   STM32 SD/MMC: 0
+Loading Environment from MMC... OK
+In:    serial
+Out:   serial
+Err:   serial
+Net:   eth0: eth1@482c0000
+No EFI system partition
+No EFI system partition
+Failed to persist EFI variables
+Hit any key to stop autoboot:  1  0 
+Boot over mmc0!
+switch to partitions #0, OK
+mmc0 is current device
+Scanning mmc 0:8...
+Found /mmc0_extlinux/stm32mp215f-dk-ca35tdcid-ostl_extlinux.conf
+Retrieving file: /mmc0_extlinux/stm32mp215f-dk-ca35tdcid-ostl_extlinux.conf
+Retrieving file: /splash_landscape.bmp
+Select the boot mode
+1:	OpenSTLinux
+2:	m2-bt-wifi
+Enter choice: 1:	OpenSTLinux
+Retrieving file: /Image.gz
+Retrieving file: /st-image-resize-initrd
+append: root=PARTUUID=e91c4e10-16e6-4c0e-bd0e-77becf4a3582 rootwait rw   earlycon console=ttySTM0,115200
+Retrieving file: /stm32mp215f-dk-ca35tdcid-ostl.dtb
+   Uncompressing Kernel Image
+## Flattened Device Tree blob at 90000000
+   Booting using the fdt blob at 0x90000000
+Working FDT set to 90000000
+   Loading Ramdisk to 8f7c0000, end 8ffff41a ... OK
+   Loading Device Tree to 000000008f7a6000, end 000000008f7bf455 ... OK
+Working FDT set to 8f7a6000
+
+Starting kernel ...
+
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x411fd040]
+[    0.000000] Linux version 6.6.129 (oe-user@oe-host) (aarch64-ostl-linux-gcc (GCC) 13.4.0, GNU ld (GNU Binutils) 2.42.0.20240723) #1 SMP PREEMPT Thu Mar  5 15:03:43 UTC 2026
+[    0.000000] KASLR disabled due to lack of seed
+[    0.000000] Machine model: STMicroelectronics STM32MP215F-DK OSTL Discovery Board
+[    0.000000] efi: UEFI not found.
+[    0.000000] Reserved memory: created CMA memory pool at 0x00000000f7600000, size 128 MiB
+[    0.000000] OF: reserved mem: initialized node linux,cma, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x00000000f7600000..0x00000000ff5fffff (131072 KiB) map reusable linux,cma
+[    0.000000] OF: reserved mem: 0x000000000a000000..0x000000000a01ffff (128 KiB) nomap non-reusable tfa-bl31@a000000
+[    0.000000] OF: reserved mem: 0x000000000a020000..0x000000000a02ffff (64 KiB) nomap non-reusable hpdma1-lli@a020000
+[    0.000000] OF: reserved mem: 0x000000000a030000..0x000000000a03dfff (56 KiB) nomap non-reusable hpdma2-lli@a030000
+[    0.000000] OF: reserved mem: 0x000000000a03e000..0x000000000a03ffff (8 KiB) nomap non-reusable hpdma3-lli@a03e000
+[    0.000000] OF: reserved mem: 0x000000000a040000..0x000000000a05efff (124 KiB) nomap non-reusable cm33-retram@a040000
+[    0.000000] OF: reserved mem: 0x000000000a05f000..0x000000000a05ffff (4 KiB) nomap non-reusable ddr-param@a05f000
+[    0.000000] OF: reserved mem: 0x000000000a060000..0x000000000a060fff (4 KiB) nomap non-reusable bsec-mirror@a060000
+[    0.000000] OF: reserved mem: 0x000000000a061000..0x000000000a061fff (4 KiB) nomap non-reusable scmi-cid2-s@a061000
+[    0.000000] OF: reserved mem: 0x000000000a062000..0x000000000a062fff (4 KiB) nomap non-reusable scmi-cid2-ns@a062000
+[    0.000000] OF: reserved mem: 0x000000000a063000..0x000000000a06ffff (52 KiB) nomap non-reusable cm33-sram1@a063000
+[    0.000000] OF: reserved mem: 0x0000000042000000..0x0000000042000fff (4 KiB) nomap non-reusable bl31-lowpower@42000000
+[    0.000000] OF: reserved mem: 0x0000000042001000..0x0000000042001fff (4 KiB) nomap non-reusable tfm-its@42001000
+[    0.000000] OF: reserved mem: 0x0000000060000000..0x000000006fffffff (262144 KiB) nomap non-reusable mm-ospi@60000000
+[    0.000000] OF: reserved mem: 0x0000000080000000..0x00000000800fffff (1024 KiB) nomap non-reusable tfm-code@80000000
+[    0.000000] OF: reserved mem: 0x0000000080100000..0x00000000808fffff (8192 KiB) nomap non-reusable cm33-cube-fw@80100000
+[    0.000000] OF: reserved mem: 0x0000000080900000..0x00000000809fffff (1024 KiB) nomap non-reusable tfm-data@80900000
+[    0.000000] OF: reserved mem: 0x0000000080a00000..0x00000000811fffff (8192 KiB) nomap non-reusable cm33-cube-data@80a00000
+[    0.000000] Reserved memory: created DMA memory pool at 0x0000000081200000, size 0 MiB
+[    0.000000] OF: reserved mem: initialized node ipc-shmem-1@81200000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x0000000081200000..0x00000000812f7fff (992 KiB) nomap non-reusable ipc-shmem-1@81200000
+[    0.000000] Reserved memory: created DMA memory pool at 0x00000000812f8000, size 0 MiB
+[    0.000000] OF: reserved mem: initialized node vdev0vring0@812f8000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x00000000812f8000..0x00000000812f8fff (4 KiB) nomap non-reusable vdev0vring0@812f8000
+[    0.000000] Reserved memory: created DMA memory pool at 0x00000000812f9000, size 0 MiB
+[    0.000000] OF: reserved mem: initialized node vdev0vring1@812f9000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x00000000812f9000..0x00000000812f9fff (4 KiB) nomap non-reusable vdev0vring1@812f9000
+[    0.000000] Reserved memory: created DMA memory pool at 0x00000000812fa000, size 0 MiB
+[    0.000000] OF: reserved mem: initialized node vdev0buffer@812fa000, compatible id shared-dma-pool
+[    0.000000] OF: reserved mem: 0x00000000812fa000..0x00000000812fffff (24 KiB) nomap non-reusable vdev0buffer@812fa000
+[    0.000000] OF: reserved mem: 0x0000000081300000..0x0000000081fbffff (13056 KiB) nomap non-reusable spare1@81300000
+[    0.000000] OF: reserved mem: 0x0000000081fc0000..0x0000000081ffffff (256 KiB) nomap non-reusable bl31-context@81fc0000
+[    0.000000] OF: reserved mem: 0x0000000082000000..0x0000000083ffffff (32768 KiB) nomap non-reusable op-tee@82000000
+[    0.000000] OF: reserved mem: 0x00000000ff600000..0x00000000ff7effff (1984 KiB) nomap non-reusable framebuffer@ff600000
+[    0.000000] OF: reserved mem: 0x00000000ff800000..0x00000000ffffffff (8192 KiB) nomap non-reusable ltdc-sec-layer@ff800000
+[    0.000000] earlycon: stm32 at MMIO 0x00000000400e0000 (options '115200n8')
+[    0.000000] printk: bootconsole [stm32] enabled
+[    0.000000] NUMA: No NUMA configuration found
+[    0.000000] NUMA: Faking a node at [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000] NUMA: NODE_DATA [mem 0xf71b59c0-0xf71b7fff]
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x0000000083ffffff]
+[    0.000000]   node   0: [mem 0x0000000084000000-0x00000000ff5fffff]
+[    0.000000]   node   0: [mem 0x00000000ff600000-0x00000000ff7effff]
+[    0.000000]   node   0: [mem 0x00000000ff7f0000-0x00000000ff7fffff]
+[    0.000000]   node   0: [mem 0x00000000ff800000-0x00000000ffffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000ffffffff]
+[    0.000000] psci: probing for conduit method from DT.
+[    0.000000] psci: PSCIv1.1 detected in firmware.
+[    0.000000] psci: Using standard PSCI v0.2 function IDs
+[    0.000000] psci: Trusted OS migration not required
+[    0.000000] psci: SMC Calling Convention v1.4
+[    0.000000] psci: OSI mode supported.
+[    0.000000] percpu: Embedded 22 pages/cpu s49640 r8192 d32280 u90112
+[    0.000000] Detected VIPT I-cache on CPU0
+[    0.000000] alternatives: applying boot alternatives
+[    0.000000] Kernel command line: root=PARTUUID=e91c4e10-16e6-4c0e-bd0e-77becf4a3582 rootwait rw   earlycon console=ttySTM0,115200
+[    0.000000] Dentry cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.000000] Fallback order for Node 0: 0 
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 516096
+[    0.000000] Policy zone: DMA
+[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+[    0.000000] software IO TLB: area num 1.
+[    0.000000] software IO TLB: mapped [mem 0x00000000f0e00000-0x00000000f4e00000] (64MB)
+[    0.000000] Memory: 1747548K/2097152K available (15360K kernel code, 1680K rwdata, 6040K rodata, 3776K init, 475K bss, 218532K reserved, 131072K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000] rcu: 	RCU event tracing is enabled.
+[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=2 to nr_cpu_ids=1.
+[    0.000000] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000] 	Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] GIC: enabling workaround for 4kB GICC access disabled
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GIC: Using split EOI/Deactivate mode
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] arch_timer: cp15 timer(s) running at 40.00MHz (phys).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x939a85c40, max_idle_ns: 440795202120 ns
+[    0.000001] sched_clock: 56 bits at 40MHz, resolution 25ns, wraps every 4398046511100ns
+[    0.009294] Console: colour dummy device 80x25
+[    0.012619] Calibrating delay loop (skipped), value calculated using timer frequency.. 80.00 BogoMIPS (lpj=160000)
+[    0.022978] pid_max: default: 32768 minimum: 301
+[    0.027689] LSM: initializing lsm=capability,integrity
+[    0.032905] Mount-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+[    0.040233] Mountpoint-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+[    0.049333] cacheinfo: Unable to detect cache hierarchy for CPU 0
+[    0.055634] RCU Tasks: Setting shift to 0 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=1.
+[    0.063203] RCU Tasks Trace: Setting shift to 0 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=1.
+[    0.072683] rcu: Hierarchical SRCU implementation.
+[    0.077120] rcu: 	Max phase no-delay instances is 1000.
+[    0.085213] EFI services will not be available.
+[    0.087265] smp: Bringing up secondary CPUs ...
+[    0.091514] smp: Brought up 1 node, 1 CPU
+[    0.095460] SMP: Total of 1 processors activated.
+[    0.100228] CPU features: detected: 32-bit EL0 Support
+[    0.105390] CPU features: detected: 32-bit EL1 Support
+[    0.110548] CPU features: detected: CRC32 instructions
+[    0.115790] CPU: All CPU(s) started at EL2
+[    0.119853] alternatives: applying system-wide alternatives
+[    0.127729] devtmpfs: initialized
+[    0.146433] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.150653] futex hash table entries: 256 (order: 2, 16384 bytes, linear)
+[    0.162972] pinctrl core: initialized pinctrl subsystem
+[    0.163841] DMI not present or invalid.
+[    0.167527] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.173710] DMA: preallocated 256 KiB GFP_KERNEL pool for atomic allocations
+[    0.179918] DMA: preallocated 256 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+[    0.187702] DMA: preallocated 256 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.196116] thermal_sys: Registered thermal governor 'step_wise'
+[    0.196136] thermal_sys: Registered thermal governor 'power_allocator'
+[    0.201525] cpuidle: using governor menu
+[    0.212196] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.218815] ASID allocator initialised with 65536 entries
+[    0.224540] Serial: AMBA PL011 UART driver
+[    0.240855] /soc@0/bus@42080000/i2c@40180000/camera@1a: Fixed dependency cycle(s) with /soc@0/csi@48020000
+[    0.245663] /soc@0/csi@48020000: Fixed dependency cycle(s) with /soc@0/bus@42080000/i2c@40180000/camera@1a
+[    0.256026] /soc@0/bus@42080000/i2c@40180000/camera@1a: Fixed dependency cycle(s) with /soc@0/csi@48020000
+[    0.265682] /soc@0/bus@42080000/i2c@40180000/camera@1a: Fixed dependency cycle(s) with /soc@0/csi@48020000
+[    0.282483] /soc@0/bus@42080000/i2c@40180000/camera@1a: Fixed dependency cycle(s) with /soc@0/csi@48020000
+[    0.286724] /soc@0/csi@48020000: Fixed dependency cycle(s) with /soc@0/bus@42080000/i2c@40180000/camera@1a
+[    0.297610] /soc@1/dcmipp@48030000: Fixed dependency cycle(s) with /soc@0/csi@48020000
+[    0.305032] /soc@0/csi@48020000: Fixed dependency cycle(s) with /soc@1/dcmipp@48030000
+[    0.312413] /soc@1/dcmipp@48030000: Fixed dependency cycle(s) with /soc@0/csi@48020000
+[    0.322574] /soc@0/bus@42080000/mdf@404d0000/filter@84/mdf-dai: Fixed dependency cycle(s) with /dmic-0
+[    0.329747] /dmic-0: Fixed dependency cycle(s) with /soc@0/bus@42080000/mdf@404d0000/filter@84/mdf-dai
+[    0.339203] /soc@0/bus@42080000/mdf@404d0000/filter@104/mdf-dai: Fixed dependency cycle(s) with /dmic-1
+[    0.348535] /dmic-1: Fixed dependency cycle(s) with /soc@0/bus@42080000/mdf@404d0000/filter@104/mdf-dai
+[    0.359150] /soc@1/display-controller@48010000: Fixed dependency cycle(s) with /panel-rgb
+[    0.366290] /panel-rgb: Fixed dependency cycle(s) with /soc@1/display-controller@48010000
+[    0.375154] /typec/connector: Fixed dependency cycle(s) with /soc@0/bus@42080000/usb@48300000
+[    0.384555] Modules: 25872 pages in range for non-PLT usage
+[    0.384577] Modules: 517392 pages in range for PLT usage
+[    0.389802] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    0.400653] HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
+[    0.406961] HugeTLB: registered 32.0 MiB page size, pre-allocated 0 pages
+[    0.413790] HugeTLB: 0 KiB vmemmap can be freed for a 32.0 MiB page
+[    0.420095] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.426922] HugeTLB: 0 KiB vmemmap can be freed for a 2.00 MiB page
+[    0.433229] HugeTLB: registered 64.0 KiB page size, pre-allocated 0 pages
+[    0.440054] HugeTLB: 0 KiB vmemmap can be freed for a 64.0 KiB page
+[    0.449353] ACPI: Interpreter disabled.
+[    0.451359] iommu: Default domain type: Translated
+[    0.455066] iommu: DMA domain TLB invalidation policy: strict mode
+[    0.461683] SCSI subsystem initialized
+[    0.465761] usbcore: registered new interface driver usbfs
+[    0.470612] usbcore: registered new interface driver hub
+[    0.475924] usbcore: registered new device driver usb
+[    0.481606] pps_core: LinuxPPS API ver. 1 registered
+[    0.485973] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.495169] PTP clock support registered
+[    0.499382] EDAC MC: Ver: 3.0.0
+[    0.502969] CPUidle PSCI: Initialized CPU PM domain topology using OSI mode
+[    0.510254] scmi_core: SCMI protocol bus registered
+[    0.515140] FPGA manager framework
+[    0.517682] Advanced Linux Sound Architecture Driver Initialized.
+[    0.525150] vgaarb: loaded
+[    0.526988] clocksource: Switched to clocksource arch_sys_counter
+[    0.533017] VFS: Disk quotas dquot_6.6.0
+[    0.536553] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    0.544058] pnp: PnP ACPI: disabled
+[    0.560237] NET: Registered PF_INET protocol family
+[    0.560833] IP idents hash table entries: 32768 (order: 6, 262144 bytes, linear)
+[    0.570251] tcp_listen_portaddr_hash hash table entries: 1024 (order: 2, 16384 bytes, linear)
+[    0.575596] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    0.583334] TCP established hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    0.591406] TCP bind hash table entries: 16384 (order: 7, 524288 bytes, linear)
+[    0.599354] TCP: Hash tables configured (established 16384 bind 16384)
+[    0.605421] UDP hash table entries: 1024 (order: 3, 32768 bytes, linear)
+[    0.612023] UDP-Lite hash table entries: 1024 (order: 3, 32768 bytes, linear)
+[    0.619434] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    0.625627] RPC: Registered named UNIX socket transport module.
+[    0.630830] RPC: Registered udp transport module.
+[    0.635510] RPC: Registered tcp transport module.
+[    0.640234] RPC: Registered tcp-with-tls transport module.
+[    0.645749] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.652298] PCI: CLS 0 bytes, default 64
+[    0.656421] Unpacking initramfs...
+[    0.659928] kvm [1]: IPA Size Limit: 40 bits
+[    0.668724] kvm [1]: vgic interrupt IRQ9
+[    0.668800] kvm [1]: Hyp mode initialized successfully
+[    0.681095] Initialise system trusted keyrings
+[    0.683359] workingset: timestamp_bits=42 max_order=19 bucket_order=0
+[    0.686876] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    0.703713] NFS: Registering the id_resolver key type
+[    0.703810] Key type id_resolver registered
+[    0.711058] Key type id_legacy registered
+[    0.711452] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    0.727165] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    0.729058] jffs2: version 2.2. (NAND) © 2001-2006 Red Hat, Inc.
+[    0.743710] fuse: init (API version 7.39)
+[    0.744081] 9p: Installing v9fs 9p2000 file system support
+[    0.857979] NET: Registered PF_ALG protocol family
+[    0.858062] Key type asymmetric registered
+[    0.867120] Asymmetric key parser 'x509' registered
+[    0.867314] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 246)
+[    0.879078] io scheduler mq-deadline registered
+[    0.879131] io scheduler kyber registered
+[    0.882497] io scheduler bfq registered
+[    0.895634] /soc@0/interrupt-controller@44220000: bank0
+[    0.895696] /soc@0/interrupt-controller@44220000: bank1
+[    0.907054] /soc@0/interrupt-controller@44220000: bank2
+[    0.907564] /soc@0/interrupt-controller@442d0000: bank0
+[    0.915100] /soc@0/interrupt-controller@442d0000: bank1
+[    0.917177] /soc@0/interrupt-controller@442d0000: bank2
+[    0.931904] Registering stm32-rifsc firewall controller
+[    0.948730] EINJ: ACPI disabled.
+[    0.974160] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    0.984888] STM32 USART driver initialized
+[    1.007634] loop: module loaded
+[    1.009034] megasas: 07.725.01.00-rc1
+[    1.024876] thunder_xcv, ver 1.0
+[    1.024987] thunder_bgx, ver 1.0
+[    1.025739] nicpf, ver 1.0
+[    1.032010] hns3: Hisilicon Ethernet Network Driver for Hip08 Family - version
+[    1.043057] hns3: Copyright (c) 2017 Huawei Corporation.
+[    1.043322] hclge is initializing
+[    1.046117] e1000: Intel(R) PRO/1000 Network Driver
+[    1.059057] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    1.059323] e1000e: Intel(R) PRO/1000 Network Driver
+[    1.067054] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    1.070291] igb: Intel(R) Gigabit Ethernet Network Driver
+[    1.087072] igb: Copyright (c) 2007-2014 Intel Corporation.
+[    1.087260] igbvf: Intel(R) Gigabit Virtual Function Network Driver
+[    1.099055] igbvf: Copyright (c) 2009 - 2012 Intel Corporation.
+[    1.099813] sky2: driver version 1.30
+[    1.108389] VFIO - User Level meta-driver version: 0.3
+[    1.110734] usbcore: registered new interface driver usb-storage
+[    1.123630] usbcore: registered new device driver onboard-usb-hub
+[    1.127928] i2c_dev: i2c /dev entries driver
+[    1.135628] arm_smc_wdt watchdog: Watchdog registered (timeout=32 sec, nowayout=0)
+[    1.144435] sdhci: Secure Digital Host Controller Interface driver
+[    1.144989] sdhci: Copyright(c) Pierre Ossman
+[    1.155883] Synopsys Designware Multimedia Card Interface Driver
+[    1.157110] sdhci-pltfm: SDHCI platform and OF driver helper
+[    1.173018] ledtrig-cpu: registered to indicate activity on CPUs
+[    1.174753] SMCCC: SOC_ID: ID = jep106:0020:0503 Revision = 0x00000009
+[    1.188399] usbcore: registered new interface driver usbhid
+[    1.188445] usbhid: USB HID core driver
+[    1.203452] hw perfevents: enabled with armv8_cortex_a35 PMU driver, 7 counters available
+[    1.213503] optee: probing for conduit method.
+I/TC: Reserved shared memory is disabled
+I/TC: Dynamic shared memory is enabled
+I/TC: Normal World virtualization support is disabled
+I/TC: Asynchronous notifications are enabled
+[    1.213566] optee: revision 4.0 (2a5b1d12)
+[    1.260953] optee: Asynchronous notifications enabled
+[    1.271144] optee: dynamic shared memory is enabled
+[    1.272611] random: crng init done
+[    1.274365] optee: initialized driver
+[    1.285833] NET: Registered PF_PACKET protocol family
+[    1.287184] 9pnet: Installing 9P2000 support
+[    1.289669] Key type dns_resolver registered
+[    1.331786] registered taskstats version 1
+[    1.332157] Loading compiled-in X.509 certificates
+[    1.379780] scmi_protocol scmi_dev.1: Enabled polling mode TX channel - prot_id:16
+[    1.382000] arm-scmi firmware:scmi: SCMI Notifications - Core Enabled.
+[    1.395505] arm-scmi firmware:scmi: SCMI Protocol v2.0 'ST:ST' Firmware version 0x20d0000
+[    1.404672] cpu cpu0: EM: created perf domain
+[    1.405729] scmi-perf-domain scmi_dev.3: Initialized 1 performance domains
+[    1.461619] scmi-regulator scmi_dev.6: Regulator vddio1 registered for domain [0]
+[    1.467559] scmi-regulator scmi_dev.6: Regulator vddio2 registered for domain [1]
+[    1.475519] scmi-regulator scmi_dev.6: Regulator vddio3 registered for domain [2]
+[    1.478891] scmi-regulator scmi_dev.6: Regulator vdda18adc registered for domain [3]
+[    1.499522] scmi-regulator scmi_dev.6: Regulator vddcore registered for domain [5]
+[    1.501823] scmi-regulator scmi_dev.6: Regulator vdd3v3_usb registered for domain [15]
+[    1.519521] scmi-regulator scmi_dev.6: Regulator vdd_flash registered for domain [16]
+[    1.522092] scmi-regulator scmi_dev.6: Regulator vdda_1v8 registered for domain [17]
+[    1.539523] scmi-regulator scmi_dev.6: Regulator v3v3 registered for domain [21]
+[    1.551952] stm32-ipcc 40490000.mailbox: ipcc rev:2.0 enabled, 16 chans, proc 0
+[    1.583598] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOA bank added
+[    1.587595] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOB bank added
+[    1.595959] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOC bank added
+[    1.603576] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOD bank added
+[    1.605258] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOE bank added
+[    1.620103] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOF bank added
+[    1.621848] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOG bank added
+[    1.636066] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOH bank added
+[    1.639461] stm32mp215-pinctrl soc@0:pinctrl@44240000: GPIOI bank added
+[    1.651249] stm32mp215-pinctrl soc@0:pinctrl@44240000: Pinctrl STM32 initialized
+[    1.659525] stm32mp215-pinctrl soc@0:pinctrl@46200000: GPIOZ bank added
+[    1.660523] stm32mp215-pinctrl soc@0:pinctrl@46200000: Pinctrl STM32 initialized
+[    1.676320] stm32-dma3 40400000.dma-controller: created LLI gen_pool at 0x000000000a020000, size 64KiB
+[    1.695131] stm32-dma3 40400000.dma-controller: STM32 DMA3 registered rev:1.6
+[    1.697481] stm32-dma3 40410000.dma-controller: created LLI gen_pool at 0x000000000a030000, size 56KiB
+[    1.723137] stm32-dma3 40410000.dma-controller: STM32 DMA3 registered rev:1.6
+[    1.728009] stm32-dma3 40420000.dma-controller: created LLI gen_pool at 0x000000000a03e000, size 8KiB
+[    1.740594] Freeing initrd memory: 8444K
+[    1.740679] stm32-dma3 40420000.dma-controller: STM32 DMA3 registered rev:1.6
+[    1.750682] [drm] Initialized simpledrm 1.0.0 20200625 for ff600000.framebuffer on minor 0
+[    1.756603] stm32_rtc 46000000.rtc: registered as rtc0
+[    1.759743] stm32_rtc 46000000.rtc: setting system clock to 2000-01-01T00:00:09 UTC (946684809)
+[    1.769029] stm32_rtc 46000000.rtc: Date/Time must be initialized
+[    1.774548] stm32_rtc 46000000.rtc: registered rev:3.5
+[    1.782654] stm32-usart 400e0000.serial: Wakeup might not be available: No autonomous clock
+[    1.789280] mmci-pl18x 48220000.mmc: Got CD GPIO
+[    1.793679] mmci-pl18x 48220000.mmc: mmc0: PL180 manf 53 rev3 at 0x48220000 irq 54,0 (pio)
+[    1.801318] stm32-usart 400e0000.serial: interrupt mode for rx (no dma)
+[    1.808183] stm32-usart 400e0000.serial: interrupt mode for tx (no dma)
+[    1.814765] 400e0000.serial: ttySTM0 at MMIO 0x400e0000 (irq = 53, base_baud = 4000000) is a stm32-usart
+[    1.830830] printk: console [ttySTM0] enabled
+[    1.830830] printk: console [ttySTM0] enabled
+[    1.833946] printk: bootconsole [stm32] disabled
+[    1.833946] printk: bootconsole [stm32] disabled
+[    1.850766] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    1.854274] clk: Disabling unused clocks
+[    1.856236] ALSA device list:
+[    1.858823]   No soundcards found.
+[    1.871108] Freeing unused kernel memory: 3776K
+[    1.871241] Run /init as init process
+[    1.909197] mmc0: new high speed SDHC card at address aaaa
+[    1.910865] mmcblk0: mmc0:aaaa SD32G 29.7 GiB
+[    1.926485]  mmcblk0: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11
+Starting systemd-udevd version 255.21^
+[    4.136121] EXT4-fs (mmcblk0p10): recovery complete
+[    4.138149] EXT4-fs (mmcblk0p10): mounted filesystem b18b558e-7a48-4cfd-a961-3f4c0f2d10cd r/w with ordered data mode. Quota mode: none.
+[    5.067519] stm32-rproc 0.m33: Support of signed firmware only
+[    5.068028] stm32-rproc 0.m33: wdg irq registered
+[    5.118461] stm32-rproc 0.m33: pdds sys config not defined
+[    5.118759] stm32-rproc 0.m33: rsc tbl syscon not supported
+[    5.149081] stm32-rproc 0.m33: mbox_request_channel_byname() could not locate channel named "detach"
+[    5.176801] remoteproc remoteproc0: cannot get detach mbox
+[    5.177031] remoteproc remoteproc0: m33 is available
+[    5.308149] stm32-crc32 404c0000.crc: Initialized
+[    5.321595] stm32-mdf 404d0000.mdf: No cache defaults, reading back from HW
+[    5.422527] stm32f7-i2c 40180000.i2c: using dma0chan0 (tx) and dma0chan1 (rx) for DMA transfers
+[    5.427941] stm32-cryp 42030000.crypto: will run requests pump with realtime priority
+[    5.460403] /soc@0/csi@48020000: Fixed dependency cycle(s) with /soc@0/bus@42080000/i2c@40180000/camera@1a
+[    5.483262] stm32-cryp 42030000.crypto: Initialized
+[    5.507324] /soc@0/bus@42080000/i2c@40180000/camera@1a: Fixed dependency cycle(s) with /soc@0/csi@48020000
+[    5.551377] stm32f7-i2c 40180000.i2c: STM32F7 I2C-0 bus adapter
+[    5.572988] mc: Linux media interface: v0.10
+[    5.695986] videodev: Linux video capture interface: v2.00
+[    5.838948] [drm] Initialized stm 1.0.0 20170330 for 48010000.display-controller on minor 0
+[    5.847291] stm32-csi 48020000.csi: Probed CSI with 2 lanes
+[    6.031568] dwc2 48300000.usb: supply vusb_d not found, using dummy regulator
+[    6.033317] dwc2 48300000.usb: supply vusb_a not found, using dummy regulator
+[    6.053743] dwc2 48300000.usb: EPs: 9, dedicated fifos, 1976 entries in SPRAM
+[    6.218431] stm32-dwmac 482c0000.eth1: IRQ eth_lpi not found
+[    6.242524] stm32-dwmac 482c0000.eth1: User ID: 0x1b, Synopsys ID: 0x53
+[    6.248675] dcmipp 48030000.dcmipp: Probe done
+[    6.249891] stm32-dwmac 482c0000.eth1: 	DWMAC4/5
+[    6.274183] stm32-dwmac 482c0000.eth1: DMA HW capability register supported
+[    6.285629] stm32-dwmac 482c0000.eth1: RX Checksum Offload Engine supported
+[    6.295974] stm32-dwmac 482c0000.eth1: TX Checksum insertion supported
+[    6.296931] stm32-dwmac 482c0000.eth1: Wake-Up On Lan supported
+[    6.328977] stm32-dwmac 482c0000.eth1: TSO supported
+[    6.329023] stm32-dwmac 482c0000.eth1: Enable RX Mitigation via HW Watchdog Timer
+[    6.370146] stm32-dwmac 482c0000.eth1: Enabled L3L4 Flow TC (entries=2)
+[    6.371669] stm32-dwmac 482c0000.eth1: Enabled RFS Flow TC (entries=10)
+[    6.405827] stm32-dwmac 482c0000.eth1: TSO feature enabled
+[    6.405880] stm32-dwmac 482c0000.eth1: Using 40/40 bits DMA host/device width
+[    6.939482] imx335 0-001a: Error reading reg 0x3912: -6
+[    6.939537] imx335 0-001a: failed to find sensor: -6
+[    6.950782] stm32-mdf-adc 404d0084.filter: No cache defaults, reading back from HW
+[    6.960943] iio-rescale voltage-divider-cc1: using raw+scale/offset source channel
+[    6.968355] iio-rescale voltage-divider-cc2: using raw+scale/offset source channel
+[    6.998091] Goodix-TS 0-005d: i2c test failed attempt 1: -6
+[    7.006013] stm32-mdf-adc 404d0104.filter: No cache defaults, reading back from HW
+[    7.023400] Goodix-TS 0-005d: i2c test failed attempt 2: -6
+[    7.055615] Goodix-TS 0-005d: I2C communication failure: -6
+[    7.106336] stm32-dwmac 482c0000.eth1 end0: renamed from eth0
+ln: /etc/mtab: File exists
+[    8.116904] systemd[1]: System time before build time, advancing clock.
+[    8.205938] NET: Registered PF_INET6 protocol family
+[    8.263414] Segment Routing with IPv6
+[    8.263520] In-situ OAM (IOAM) with IPv6
+[    8.331508] systemd[1]: systemd 255.21^ running in system mode (+PAM -AUDIT -SELINUX -APPARMOR +IMA -SMACK -SECCOMP -GCRYPT -GNUTLS -OPENSSL -ACL +BLKID -CURL -ELFUTILS -FIDO2 -IDN2 -IDN +IPTC +KMOD -LIBCRYPTSETUP +LIBFDISK -PCRE2 -PWQUALITY -P11KIT -QRENCODE -TPM2 -BZIP2 -LZ4 -XZ -ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+[    8.358495] systemd[1]: Detected architecture arm64.
+
+Welcome to ST OpenSTLinux - Weston - (A Yocto Project Based Distro) 5.0.17-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10 (scarthgap)!
+
+[    8.392593] systemd[1]: Hostname set to <stm32mp2-e5-12-5c>.
+[    8.439248] systemd[1]: Using hardware watchdog 'arm_smc_wdt', version 0, device /dev/watchdog0
+[    8.442649] systemd[1]: Watchdog running with a hardware timeout of 32s.
+[    9.243265] systemd[1]: Queued start job for default target Multi-User System.
+[    9.280290] systemd[1]: Created slice Slice /system/getty.
+[  OK  ] Created slice Slice /system/getty.
+[    9.298147] systemd[1]: Created slice Slice /system/modprobe.
+[  OK  ] Created slice Slice /system/modprobe.
+[    9.318128] systemd[1]: Created slice Slice /system/serial-getty.
+[  OK  ] Created slice Slice /system/serial-getty.
+[    9.341795] systemd[1]: Created slice User and Session Slice.
+[  OK  ] Created slice User and Session Slice.
+[    9.360033] systemd[1]: Started Dispatch Password Requests to Console Directory Watch.
+[  OK  ] Started Dispatch Password Requests to Console Directory Watch.
+[    9.383946] systemd[1]: Started Forward Password Requests to Wall Directory Watch.
+[  OK  ] Started Forward Password Requests to Wall Directory Watch.
+[    9.404354] systemd[1]: Expecting device /dev/dri/card0...
+         Expecting device /dev/dri/card0...
+[    9.419540] systemd[1]: Expecting device /dev/hwrng...
+         Expecting device /dev/hwrng...
+[    9.436188] systemd[1]: Expecting device /dev/tee0...
+         Expecting device /dev/tee0...
+[    9.451751] systemd[1]: Reached target Path Units.
+[  OK  ] Reached target Path Units.
+[    9.468315] systemd[1]: Reached target Remote File Systems.
+[  OK  ] Reached target Remote File Systems.
+[    9.487618] systemd[1]: Reached target Slice Units.
+[  OK  ] Reached target Slice Units.
+[    9.503570] systemd[1]: Reached target Swaps.
+[  OK  ] Reached target Swaps.
+[    9.557663] systemd[1]: Listening on RPCbind Server Activation Socket.
+[  OK  ] Listening on RPCbind Server Activation Socket.
+[    9.580190] systemd[1]: Reached target RPC Port Mapper.
+[  OK  ] Reached target RPC Port Mapper.
+[    9.596576] systemd[1]: Listening on Syslog Socket.
+[  OK  ] Listening on Syslog Socket.
+[    9.621580] systemd[1]: Listening on Process Core Dump Socket.
+[  OK  ] Listening on Process Core Dump Socket.
+[    9.640199] systemd[1]: Listening on initctl Compatibility Named Pipe.
+[  OK  ] Listening on initctl Compatibility Named Pipe.
+[    9.669451] systemd[1]: Journal Audit Socket was skipped because of an unmet condition check (ConditionSecurity=audit).
+[    9.676501] systemd[1]: Listening on Journal Socket (/dev/log).
+[  OK  ] Listening on Journal Socket (/dev/log).
+[    9.701167] systemd[1]: Listening on Journal Socket.
+[  OK  ] Listening on Journal Socket.
+[    9.716712] systemd[1]: Listening on Network Service Netlink Socket.
+[  OK  ] Listening on Network Service Netlink Socket.
+[    9.737508] systemd[1]: Listening on udev Control Socket.
+[  OK  ] Listening on udev Control Socket.
+[    9.756354] systemd[1]: Listening on udev Kernel Socket.
+[  OK  ] Listening on udev Kernel Socket.
+[    9.798891] systemd[1]: Mounting Huge Pages File System...
+         Mounting Huge Pages File System...
+[    9.835707] systemd[1]: Mounting POSIX Message Queue File System...
+         Mounting POSIX Message Queue File System...
+[    9.887671] systemd[1]: Mounting Kernel Debug File System...
+         Mounting Kernel Debug File System...
+[    9.908157] systemd[1]: Kernel Trace File System was skipped because of an unmet condition check (ConditionPathExists=/sys/kernel/tracing).
+[    9.938832] systemd[1]: Mounting Temporary Directory /tmp...
+         Mounting Temporary Directory /tmp...
+[    9.976059] systemd[1]: Starting Create List of Static Device Nodes...
+         Starting Create List of Static Device Nodes...
+[   10.020001] systemd[1]: Starting Load Kernel Module configfs...
+         Starting Load Kernel Module configfs...
+[   10.084114] systemd[1]: Starting Load Kernel Module drm...
+         Starting Load Kernel Module drm...
+[   10.136208] systemd[1]: Starting Load Kernel Module fuse...
+         Starting Load Kernel Module fuse...
+[   10.186735] systemd[1]: Starting Mount partitions...
+         Starting Mount partitions...
+[   10.238421] systemd[1]: Starting RPC Bind...
+         Starting RPC Bind...
+[   10.253932] systemd[1]: File System Check on Root Device was skipped because of an unmet condition check (ConditionPathIsReadWrite=!/).
+[   10.314347] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[   10.364283] systemd[1]: Load Kernel Modules was skipped because no trigger condition checks were met.
+[   10.394327] systemd[1]: Starting Generate network units from Kernel command line...
+         Starting Generate network units from Kernel command line...
+[   10.479970] systemd[1]: Starting Remount Root and Kernel File Systems...
+         Starting Remount Root and Kernel File Systems...
+[   10.495597] systemd-journald[289]: Collecting audit messages is disabled.
+[   10.592014] systemd[1]: Starting Apply Kernel Variables...
+         Starting Apply Kernel Variables...
+[   10.715943] systemd[1]: Starting Coldplug All udev Devices...
+         Starting Coldplug All udev Devices...
+[   10.880425] systemd[1]: Started RPC Bind.
+[  OK  ] Started RPC Bind.
+[   10.909787] systemd[1]: Mounted Huge Pages File System.
+[  OK  ] Mounted Huge Pages File System.
+[   10.958457] systemd[1]: Mounted POSIX Message Queue File System.
+[  OK  ] Mounted POSIX Message Queue File System.
+[   10.981848] systemd[1]: Mounted Kernel Debug File System.
+[  OK  ] Mounted Kernel Debug File System.
+[   11.010635] systemd[1]: Mounted Temporary Directory /tmp.
+[  OK  ] Mounted Temporary Directory /tmp.
+[   11.068980] systemd[1]: Finished Create List of Static Device Nodes.
+[  OK  ] Finished    11.074569] EXT4-fs (mmcblk0p10): re-mounted b18b558e-7a48-4cfd-a961-3f4c0f2d10cd.
+39mCreate List of Static Device Nodes.
+[   11.094460] systemd[1]: Started Journal Service.
+[  OK  ] Started Journal Service.
+[  OK  ] Finished Load Kernel Module configfs.
+[  OK  ] Finished Load Kernel Module drm.
+[  OK  ] Finished Load Kernel Module fuse.
+[  OK  ] Finished Generate network units from Kernel command line.
+[  OK  ] Finished Remount Root and Kernel File Systems.
+[  OK  ] Finished Apply Kernel Variables.
+         Mounting FUSE Control File System...
+         Mounting Kernel Configuration File System...
+         Starting Flush Journal to Persistent Storage   11.701363] EXT4-fs (mmcblk0p8): recovery complete
+m...
+[   11.708877] EXT4-fs (mmcblk0p8): mounted filesystem 56a0347e-dc14-4f33-b71a-39cba4d394b7 r/w with ordered data mode. Quota mode: none.
+         Starting Create Static Device Nodes in /dev gracefully...
+[  OK  ] Mounted FUSE Control File System.
+[  OK  ] Mounted Kernel Configuration File System.
+[   12.063853] systemd-journald[289]: Received client request to flush runtime journal.
+[  OK  ] Finished Flush Journal to Persistent Storage.
+[  OK  ] Finished Create Static Device Nodes in /dev gracefully.
+         Starting Create Static Device Nodes in /dev...
+[  OK  ] Finished Create Static Device Nodes in /dev.
+[  OK  ] Reached target Preparation for Local File Systems.
+         Mounting /var/volatile...
+         Starting Rule-based Manager for Device Events and Files...
+[  OK  ] Mounted /var/volatile.
+[   12.952691] EXT4-fs (mmcblk0p9): recovery complete
+[   12.954638] EXT4-fs (mmcblk0p9): mounted filesystem 5583d621-d71b-4fee-a421-2f9fe7de4d4c r/w with ordered data mode. Quota mode: none.
+         Starting Load/Save OS Random Seed...
+[  OK  ] Finished Load/Save OS Random Seed.
+[  OK  ] Started Rule-based Manager for Device Events and Files.
+[   13.566421] EXT4-fs (mmcblk0p11): recovery complete
+[   13.568393] EXT4-fs (mmcblk0p11): mounted filesystem b87251a7-26c4-4a20-a129-4744138a6dd8 r/w with ordered data mode. Quota mode: none.
+[  OK  ] Finished Mount partitions.
+[  OK  ] Reached target Local File Systems.
+         Starting Automatic Boot Loader Update...
+         Starting Create System Files and Directories...
+[  OK  ] Finished Automatic Boot Loader Update.
+[  OK  ] Finished Create System Files and Directories.
+         Starting Network Name Resolution...
+         Starting Network Time Synchronization...
+         Starting Record System Boot/Shutdown in UTMP...
+[  OK  ] Finished Record System Boot/Shutdown in UTMP.
+[  OK  ] Finished Coldplug All udev Devices.
+         Starting Wait for udev To Complete Device Initialization...
+[  OK  ] Started Network Time Synchronization.
+[  OK  ] Started Network Name Resolution.
+[  OK  ] Reached target Host and Network Name Lookups.
+[  OK  ] Reached target System Time Set.
+[*     ] (1 of 4) A start job is running for /dev/dri/card0 (8s / 1min 30s)
+[**    ] (1 of 4) A start job is running for /dev/dri/card0 (8s / 1min 30s)
+[  OK  ] Created slice Slice /system/systemd-backlight.
+         Starting Load/Save Screen Backligh…ess of backlight:panel-backlight...
+[  OK  ] Finished Load/Save Screen Backligh…tness of backlight:panel-backlight.
+[  OK  ] Found device /dev/dri/card0.
+[  OK  ] Started Starts Psplash Boot screen.
+[  OK  ] Found device /dev/hwrng.
+[  OK  ] Started Hardware RNG Entropy Gatherer Daemon.
+[  OK  ] Found device /dev/tee0.
+[   20.196503] configfs-gadget.g1 gadget.0: HOST MAC ac:98:7a:08:b0:ae
+[   20.197162] configfs-gadget.g1 gadget.0: MAC 62:06:4a:9c:bb:7f
+[   20.283359] dwc2 48300000.usb: bound driver configfs-gadget.g1
+         Starting Virtual Console Setup...
+[   20.448384] dwc2 48300000.usb: Device connected to DCP
+[  OK  ] Reached target Hardware activated USB gadget.
+[  OK  ] Finished Virtual Console Setup.
+[  OK  ] Finished Wait for udev To Complete Device Initialization.
+[  OK  ] Reached target System Initialization.
+[  OK  ] Started Serves stm32mp clocks calibration..
+[  OK  ] Started Daily Cleanup of Temporary Directories.
+[  OK  ] Reached target Timer Units.
+[  OK  ] Listening on Avahi mDNS/DNS-SD Stack Activation Socket.
+[  OK  ] Listening on D-Bus System Message Bus Socket.
+[  OK  ] Listening on dropbear.socket.
+[  OK  ] Reached target Socket Units.
+[  OK  ] Reached target Basic System.
+         Starting ST set alsa state configuration...
+         Starting Avahi mDNS/DNS-SD Stack...
+         Starting Bluetooth brcmfmac reboot hook...
+[  OK  ] Started Kernel Logging Service.
+[  OK  ] Started System Logging Service.
+         Starting D-Bus System Message Bus...
+         Starting IPv6 Packet Filtering Framework...
+         Starting IPv4 Packet Filtering Framework...
+[  OK  ] Started Seat for Weston user.
+         Starting ST Load M33 firmware via remoteproc...
+[  OK  ] Started Calibrates HSI/CSI clocks.
+         Starting Resets System Activity Logs...
+         Starting User Login Management...
+         Starting TEE Supplicant...
+         Starting Check if the gpu are pres…the correct weston configuration...
+[  OK  ] Started D-Bus System Message Bus.
+[  OK  ] Finished Bluetooth brcmfmac reboot hook.
+[  OK  ] Finished IPv6 Packet Filtering Framework.
+[  OK  ] Finished IPv4 Packet Filtering Framework.
+[  OK  ] Finished Resets System Activity Logs.
+[  OK  ] Reached target Preparation for Network.
+[   23.248904] Board is not a valid BOARD (stm32mp257f-ev1-ca35tdcid-ostl stm32mp257f-dk-ca35tdcid-ostl stm32mp235f-dk stm32mp257f-dk stm32mp257f-ev1)
+         Starting Network Configuration...
+[  OK  ] Finished ST Load M33 firmware via remoteproc.
+[  OK  ] Started TEE Supplicant.
+[  OK  ] Started User Login Management.
+[  OK  ] Finished ST set alsa state configuration.
+[  OK  ] Started Avahi mDNS/DNS-SD Stack.
+         Starting Save/Restore Sound Card State...
+[   23.767668] Gcnano in /proc/device-tree/soc/ is not available
+[  OK  ] Finished Check if the gpu are pres…t the correct weston configuration.
+[  OK  ] Finished Save/Restore Sound Card State.
+[  OK  ] Reached target Sound Card.
+[  OK  ] Listening on Load/Save RF Kill Switc[   24.023622] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+h Status /dev/rfkill Watch.
+[   24.065925] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[   24.066811] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[  OK  ] Started Network Configuration.
+[  OK  ] Reached target Network.
+[   24.203396] stm32-dwmac 482c0000.eth1 end0: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   24.206335] stm32-dwmac 482c0000.eth1 end0: Register MEM_TYPE_PAGE_POOL RxQ-1
+[  OK  ] Started IIO Daemon.
+         Starting Real time performance monitoring...
+[   24.328851] stm32-dwmac 482c0000.eth1 end0: PHY [stmmac-0:00] driver [Microchip LAN8742] (irq=POLL)
+[   24.348407] dwmac4: Master AXI performs any burst length
+[   24.348486] stm32-dwmac 482c0000.eth1 end0: No Safety Features support found
+[   24.371181] stm32-dwmac 482c0000.eth1 end0: IEEE 1588-2008 Advanced Timestamp supported
+         Starting ST hostname...
+[   24.380956] stm32-dwmac 482c0000.eth1 end0: registered PTP clock
+[   24.406813] stm32-dwmac 482c0000.eth1 end0: FPE workqueue start
+[   24.407303] stm32-dwmac 482c0000.eth1 end0: configuring for phy/rmii link mode
+         Starting Permit User Sessions...
+         Starting Target Communication Framework agent...
+[  OK  ] Finished Permit User Sessions.
+[  OK  ] Started Target Communication Framework agent.
+[  OK  ] Finished ST hostname.
+[  OK  ] Started Real time performance monitoring.
+[  OK  ] Started Getty on tty1.
+[  OK  ] Started Serial Getty on ttySTM0.
+[  OK  ] Reached target Login Prompts.
+         Starting Weston graphical session...
+[  OK  ] Created slice User Slice of UID 1000.
+         Starting User Runtime Directory /run/user/1000...
+[  OK  ] Finished User Runtime Directory /run/user/1000.
+         Starting User Manager for UID 1000...
+[  OK  ] Started User Manager for UID 1000.
+[  OK  ] Started Session c1 of User weston.
+
+ST OpenSTLinux - Weston - (A Yocto Project Based Distro) 5.0.17-openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10 stm32mp2-e5-12-5c ttySTM0
+
+stm32mp2-e5-12-5c login: root (automatic login)
+
+[   31.907737] vddio2: disabling
+[   31.907820] vddio3: disabling
+[   31.908067] vddcore: disabling
+root@stm32mp2-e5-12-5c:~# [   36.914553] weston[1197]: memfd_create() called without MFD_EXEC or MFD_NOEXEC_SEAL set
+clear
+root@stm32mp2-e5-12-5c:~# ls
+README-CHECK-GPU
+root@stm32mp2-e5-12-5c:~# vimcat REroot@stm32mp2-e5-12-5c:~# cat README-CHECK-GPU 
+Check GPU
+=========
+
+GPU can be deactivated by fuse or not present in some SOC
+
+So in case the GPU is not present, you must configure weston on pix-man by creating this file :
+/etc/default/weston with this content :
+
+OPTARGS=--use-pixman
+root@stm32mp2-e5-12-5c:~# poweroff
+root@stm32mp2-e5-12-5c:~#          Stopping Session c2 of User root...
+         Stopping Session c3 of User weston...
+[  OK  ] Removed slice Slice /system/modprobe.
+[  OK  ] Stopped target Multi-User System.
+[  OK  ] Stopped target Login Prompts.
+[  OK  ] Stopped target Host and Network Name Lookups.
+[  OK  ] Stopped target RPC Port Mapper.
+[  OK  ] Stopped target Sound Card.
+[  OK  ] Stopped target Timer Units.
+[  OK  ] Stopped Serves stm32mp clocks calibration..
+[  OK  ] Stopped Daily Cleanup of Temporary Directories.
+[  OK  ] Stopped target System Time Set.
+[  OK  ] Stopped target Hardware activated USB gadget.
+[  OK  ] Closed Load/Save RF Kill Switch Status /dev/rfkill Watch.
+         Stopping Save/Restore Sound Card State...
+         Stopping Avahi mDNS/DNS-SD Stack...
+         Stopping Bluetooth brcmfmac reboot hook...
+         Stopping Kernel Logging Service...
+         Stopping System Logging Service...
+         Stopping Getty on tty1...
+         Stopping IIO Daemon...
+         Stopping Real time performance monitoring...
+         Stopping Serial Getty on ttySTM0...
+         Stopping ST Load M33 firmware via remoteproc...
+[  OK  ] Stopped Resets System Activity Logs.
+         Stopping Load/Save OS Random Seed...
+         Stopping Target Communication Framework agent...
+         Stopping TEE Supplicant...
+         Stopping Weston graphical session...
+[  OK  ] Stopped Avahi mDNS/DNS-SD Stack.
+[  OK  ] Stopped Kernel Logging Service.
+[  OK  ] Stopped System Logging Service.
+[  OK  ] Stopped TEE Supplicant.
+[  OK  ] Stopped Target Communication Framework agent.
+[  OK  ] Stopped Getty on tty1.
+[  OK  ] Stopped Serial Getty on ttySTM0.
+[  OK  ] Stopped Save/Restore Sound Card State.
+[  OK  ] Stopped Bluetooth brcmfmac reboot hook.
+[  OK  ] Stopped Session c3 of User weston.
+[  OK  ] Stopped Session c2 of User root.
+[  OK  ] Stopped Load/Save OS Random Seed.
+[  OK  ] Removed slice Slice /system/getty.
+[  OK  ] Removed slice Slice /system/serial-getty.
+[  OK  ] Stopped ST set alsa state configuration.
+         Stopping User Login Management...
+         Stopping User Manager for UID 0...
+         Stopping User Manager for UID 1000...
+[  OK  ] Stopped IIO Daemon.
+[   78.011526] Board is not a valid BOARD (stm32mp257f-ev1-ca35tdcid-ostl stm32mp257f-dk-ca35tdcid-ostl stm32mp235f-dk stm32mp257f-dk stm32mp257f-ev1)
+[  OK  ] Stopped User Manager for UID 0.
+[  OK  ] Stopped User Login Management.
+[  OK  ] Stopped ST Load M33 firmware via remoteproc.
+         Stopping User Runtime Directory /run/user/0...
+[  OK  ] Unmounted /run/user/0.
+[  OK  ] Stopped User Runtime Directory /run/user/0.
+[  OK  ] Removed slice User Slice of UID 0.
+[  OK  ] Stopped Weston graphical session.
+         Stopping Seat for Weston user...
+[  OK  ] Stopped Check if the gpu are prese…t the correct weston configuration.
+[  OK  ] Stopped Seat for Weston user.
+[  OK  ] Stopped User Manager for UID 1000.
+         Stopping Permit User Sessions...
+         Stopping User Runtime Directory /run/user/1000...
+[  OK  ] Stopped Permit User Sessions.
+[  OK  ] Stopped target Remote File Systems.
+[  OK  ] Unmounted /run/user/1000.
+[  OK  ] Stopped User Runtime Directory /run/user/1000.
+[  OK  ] Removed slice User Slice of UID 1000.
+         Stopping D-Bus System Message Bus...
+[  OK  ] Stopped D-Bus System Message Bus.
+[ ***  ] A stop job is running for Real time…ormance monitoring (5s / 1min 31s)
+[***   ] A stop job is running for Real time…ormance monitoring (5s / 1min 31s)
+[**    ] A stop job is running for Real time…ormance monitoring (6s / 1min 31s)
+[*     ] A stop job is running for Real time…ormance monitoring (6s / 1min 31s)
+[**    ] A stop job is running for Real time…ormance monitoring (7s / 1min 31s)
+[***   ] A stop job is running for Real time…ormance monitoring (7s / 1min 31s)
+[ ***  ] A stop job is running for Real time…ormance monitoring (8s / 1min 31s)
+[  *** ] A stop job is running for Real time…ormance monitoring (8s / 1min 31s)
+[   ***] A stop job is running for Real time…ormance monitoring (9s / 1min 31s)
+[  OK  ] Stopped Real time performance monitoring.
+[  OK  ] Stopped target Network.
+         Stopping Network Configuration...
+[  OK  ] Stopped Network Configuration.
+[  OK  ] Stopped target Preparation for Network.
+[  OK  ] Stopped IPv6 Packet Filtering Framework.
+[  OK  ] Stopped IPv4 Packet Filtering Framework.
+[  OK  ] Stopped target Basic System.
+[  OK  ] Stopped target Path Units.
+[  OK  ] Stopped Dispatch Password Requests to Console Directory Watch.
+[  OK  ] Stopped Forward Password Requests to Wall Directory Watch.
+[  OK  ] Stopped target Slice Units.
+[  OK  ] Removed slice User and Session Slice.
+[  OK  ] Stopped target Socket Units.
+[  OK  ] Closed Avahi mDNS/DNS-SD Stack Activation Socket.
+[  OK  ] Closed D-Bus System Message Bus Socket.
+[  OK  ] Closed dropbear.socket.
+[  OK  ] Stopped target System Initialization.
+[  OK  ] Closed Syslog Socket.
+[  OK  ] Closed Network Service Netlink Socket.
+         Stopping Hardware RNG Entropy Gatherer Daemon...
+         Stopping Load/Save Screen Backligh…ess of backlight:panel-backlight...
+[  OK  ] Stopped Automatic Boot Loader Update.
+[  OK  ] Stopped Generate network units from Kernel command line.
+         Stopping Network Name Resolution...
+         Stopping Network Time Synchronization...
+[  OK  ] Stopped Network Name Resolution.
+[  OK  ] Stopped Network Time Synchronization.
+[  OK  ] Stopped Hardware RNG Entropy Gatherer Daemon.
+[  OK  ] Stopped Load/Save Screen Backlight…tness of backlight:panel-backlight.
+[  OK  ] Removed slice Slice /system/systemd-backlight.
+[  OK  ] Stopped Apply Kernel Variables.
+[  OK  ] Closed Process Core Dump Socket.
+[  OK  ] Stopped Create System Files and Directories.
+[  OK  ] Stopped target Local File Systems.
+         Unmounting /boot...
+         Unmounting Temporary Directory /tmp...
+[   86.290430] EXT4-fs (mmcblk0p8): unmounting filesystem 56a0347e-dc14-4f33-b71a-39cba4d394b7.
+         Unmounting /usr/local...
+         Unmounting /var/volatile...
+         Unmounting /vendor...
+[   86.423292] EXT4-fs (mmcblk0p11): unmounting filesystem b87251a7-26c4-4a20-a129-4744138a6dd8.
+[  OK  ] Unmounted /boot.
+[   86.512039] EXT4-fs (mmcblk0p9): unmounting filesystem 5583d621-d71b-4fee-a421-2f9fe7de4d4c.
+[  OK  ] Unmounted Temporary Directory /tmp.
+[  OK  ] Unmounted /usr/local.
+[  OK  ] Unmounted /var/volatile.
+[  OK  ] Unmounted /vendor.
+[  OK  ] Stopped target Preparation for Local File Systems.
+[  OK  ] Stopped target Swaps.
+[  OK  ] Reached target Unmount All Filesystems.
+[  OK  ] Stopped Remount Root and Kernel File Systems.
+[  OK  ] Stopped Create Static Device Nodes in /dev.
+[  OK  ] Stopped Create Static Device Nodes in /dev gracefully.
+[  OK  ] Reached target System Shutdown.
+[  OK  ] Reached target Late Shutdown Services.
+[  OK  ] Finished System Power Off.
+[  OK  ] Reached target System Power Off.
+[   86.960161] systemd-shutdown[1]: Syncing filesystems and block devices.
+[   87.070137] systemd-shutdown[1]: Sending SIGTERM to remaining processes...
+[   87.102568] systemd-journald[289]: Received SIGTERM from PID 1 (systemd-shutdow).
+[   87.117916] systemd-shutdown[1]: Sending SIGKILL to remaining processes...
+[   87.143932] systemd-shutdown[1]: Unmounting file systems.
+[   87.150607] (sd-remount)[1360]: Remounting '/' read-only with options ''.
+[   87.187642] EXT4-fs (mmcblk0p10): re-mounted b18b558e-7a48-4cfd-a961-3f4c0f2d10cd ro.
+[   87.197780] systemd-shutdown[1]: All filesystems unmounted.
+[   87.197844] systemd-shutdown[1]: Deactivating swaps.
+[   87.203267] systemd-shutdown[1]: All swaps deactivated.
+[   87.208831] systemd-shutdown[1]: Detaching loop devices.
+[   87.223654] systemd-shutdown[1]: All loop devices detached.
+[   87.223713] systemd-shutdown[1]: Stopping MD devices.
+[   87.229787] systemd-shutdown[1]: All MD devices stopped.
+[   87.234233] systemd-shutdown[1]: Detaching DM devices.
+[   87.240332] systemd-shutdown[1]: All DM devices detached.
+[   87.244884] systemd-shutdown[1]: All filesystems, swaps, loop devices, MD devices and DM devices detached.
+[   87.523873] Board is not a valid BOARD (stm32mp257f-ev1-ca35tdcid-ostl stm32mp257f-dk-ca35tdcid-ostl stm32mp235f-dk stm32mp257f-dk stm32mp257f-ev1)
+[   87.536288] systemd-shutdown[1]: Syncing filesystems and block devices.
+[   87.540923] systemd-shutdown[1]: Powering off.
+[   87.567112] stm32-dwmac 482c0000.eth1 end0: stmmac_dvr_remove: removing driver
+[   87.574637] stm32-dwmac 482c0000.eth1 end0: FPE workqueue stop
+[   87.593782] panel-simple panel-rgb: Skipping disable of already disabled panel
+[   87.595579] panel-simple panel-rgb: Skipping unprepare of already unprepared panel
+[   87.618055] kvm: exiting hardware virtualization
+[   87.618108] reboot: Power down
+INFO:    PSCI Power Domain Map:
+INFO:      Domain Node : Level 4, parent_node 4294967295, State ON (0x0)
+INFO:      Domain Node : Level 3, parent_node 0, State ON (0x0)
+INFO:      Domain Node : Level 2, parent_node 1, State ON (0x0)
+INFO:      Domain Node : Level 1, parent_node 2, State ON (0x0)
+INFO:      CPU Node : MPID 0x0, parent_node 3, State ON (0x0)
+INFO:      CPU Node : MPID 0xffffffffffffffff, parent_node 3, State OFF (0x3)
+INFO:    BL31: power off

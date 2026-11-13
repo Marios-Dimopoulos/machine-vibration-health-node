@@ -4,12 +4,12 @@ This file describes the CURRENT state of the whole system, not the plan. The pla
 [plan.md](plan.md). Update this file whenever something in the system changes (a component is built,
 a decision is made, a measurement is taken), and keep the "Status" column honest.
 
-Last updated: 2026-11-11.
+Last updated: 2026-11-13.
 
 ## Summary
 
-Nothing is built or booted yet. The hardware from the Mouser order has arrived and the board has been
-inspected. The project is at the start of phase 1 (bring-up and own image).
+Phase 1 (bring-up and own image) is in progress. The board boots ST's ready-made image (Starter
+Package) from microSD, and the A35 console works. Nothing of our own is built yet.
 
 Status legend: `planned` (not started), `in progress`, `working` (proof recorded in `captures/`),
 `blocked`.
@@ -55,9 +55,9 @@ talks to it over RPMsg.
 
 | Component | Role | Status |
 |---|---|---|
-| STM32MP215F-DK | The board of the project | first power-up 2026-11-13 with boot switches 0000 (USB/UART programming mode): LD1 on (5 V OK), LD5 blinking at about 3-4 Hz (Boot ROM waiting for USB/UART, PH4). Nothing booted from microSD yet |
-| Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | Signed boot | planned (phase 1, 4) |
-| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | planned (phase 1) |
+| STM32MP215F-DK | The board of the project | working: boots from microSD (2026-11-13). In USB/UART programming mode (switches 0000) LD5 blinks at about 3-4 Hz (Boot ROM waiting, PH4) |
+| Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | Signed boot | ST's binaries boot (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10, Linux 6.6), see `captures/first_boot.log`. Not signed yet (phase 4) |
+| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | in progress: ST Starter Package OpenSTLinux v26.06.10 (A35-TD, flash layout `FlashLayout_sdcard_stm32mp215f-dk-ca35tdcid-ostl-optee.tsv`) boots; own image not built yet |
 | Zephyr firmware for the M33 (`firmware/`) | Sampling, FFT, RPMsg | planned (phase 3) |
 | remoteproc + RPMsg link | M33 <-> Linux communication | planned (phase 3), unverified on this board |
 | Detection daemon | Statistical anomaly detection, MQTT/TLS alerts | planned (phase 7) |
@@ -85,7 +85,8 @@ passives and cables, Nucleo-F411RE (not used in this project).
 Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
 is a SanDisk, marked Class 10 and A1.
 
-Ordered, expected by 2026-11-16: soldering iron, solder wire, multimeter, side cutter, 5 V fan.
+Received 2026-11-13: soldering iron, solder wire, multimeter.
+Ordered, expected by 2026-11-16: side cutter, 5 V fan.
 
 ## Board facts: STM32MP215F-DK
 
@@ -102,7 +103,8 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 | Display | FFC connector CN8, silkscreen "DISPLAY" | photo, ST wiki |
 | Ethernet | RJ45, reference CN11 | photo |
 | GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4; SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). I/O at 3.3 V (VDDIO). Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). Comparison with Raspberry Pi: see open items | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheet 3 |
-| Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3 |
+| Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers, pin 1 = board RX, pin 2 = GND, pin 3 = board TX. A35 console: 115200 baud, Linux device ttySTM0 | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3; `captures/first_boot.log` line 207 |
+| Silicon revision | The chip reports Rev.Z (UM3571 lists revision "Y"). ES0628 errata must be read for Rev.Z | `captures/first_boot.log` lines 1, 91; UM3571 Rev 1, p. 33 |
 | Power | Power cable connector CN10 | ST wiki |
 | Flashing | USB connector CN15 (USB_DRD) is used for flashing (boot from UART/USB switch position) | ST wiki |
 
