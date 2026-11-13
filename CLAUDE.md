@@ -96,8 +96,6 @@ machine-vibration-health-node/
 
 Keep docs up to date as the work moves:
 - Update docs/architecture.md whenever the state of the system changes.
-- Mark progress in docs/plan.md; read it to know the phases and what each proof is.
-- Put proof of a finished step (logs, captures) in docs/captures/.
 
 ## Decisions and learning checks
 
@@ -113,8 +111,7 @@ Keep docs up to date as the work moves:
 
 1. The secure boot flow on the MP21 (TF-A, OP-TEE, signed FIT).
 2. The CN12 40-pin pinout compared to Raspberry Pi, before ordering the HAT PCB.
-3. The type of the CN5 connector.
-4. RPMsg support from Zephyr on this board: test it on the first day of phase 3. If it does not
+3. RPMsg support from Zephyr on this board: test it on the first day of phase 3. If it does not
    work in 2-3 days, fall back to ST's firmware (STM32CubeMP2) and keep Zephyr for later.
 
 ## Current phase
