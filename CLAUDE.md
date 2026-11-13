@@ -96,6 +96,9 @@ machine-vibration-health-node/
 
 Keep docs up to date as the work moves:
 - Update docs/architecture.md whenever the state of the system changes.
+- "Open items and unverified facts" in architecture.md holds only items that are still open.
+  When one is resolved, record the fact in its proper section (with its source) and delete the
+  item from the list. No "resolved" entries.
 
 ## Decisions and learning checks
 
