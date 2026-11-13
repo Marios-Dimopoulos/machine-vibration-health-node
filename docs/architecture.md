@@ -55,7 +55,7 @@ talks to it over RPMsg.
 
 | Component | Role | Status |
 |---|---|---|
-| STM32MP215F-DK | The board of the project | hardware received 2026-11-11, not booted yet |
+| STM32MP215F-DK | The board of the project | first power-up 2026-11-13 with boot switches 0000 (USB/UART programming mode): LD1 on (5 V OK), LD5 blinking at about 3-4 Hz (Boot ROM waiting for USB/UART, PH4). Nothing booted from microSD yet |
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | Signed boot | planned (phase 1, 4) |
 | Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | planned (phase 1) |
 | Zephyr firmware for the M33 (`firmware/`) | Sampling, FFT, RPMsg | planned (phase 3) |
