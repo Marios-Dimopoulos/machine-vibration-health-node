@@ -106,8 +106,3 @@ Keep docs up to date as the work moves:
 - At the end of each phase, before moving to the next one, quiz the user with 5-10 questions to
   check real understanding. If an answer is weak, go back and explain again.
   Do not start the next phase until the user is comfortable with the current one.
-
-## Current phase
-
-Phase 1: bring-up and own image. Next step: confirm the microSD boot position of switches
-SW1/SW2 from the board manual (UM3571), then boot the ST image.
