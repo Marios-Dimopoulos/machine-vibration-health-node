@@ -94,6 +94,12 @@ machine-vibration-health-node/
 - tools/          helper scripts
 - CLAUDE.md, README.md, .gitignore
 
+Each doc holds only its own subject, no noise:
+- plan.md: goal, phases, proofs, risks. No prices, budgets, shop orders or purchase history.
+- architecture.md: the current state of the system, hardware inventory, board facts, open items.
+- decisions/: decisions and their reasoning (ADRs).
+- CLAUDE.md: rules and how to work, nothing that changes from week to week.
+
 Keep docs up to date as the work moves:
 - Update docs/architecture.md whenever the state of the system changes.
 - "Open items and unverified facts" in architecture.md holds only items that are still open.
