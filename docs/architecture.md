@@ -101,7 +101,7 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 | STLINK | CN5: STDC14 debug connector, 14 pins in 2 rows of 7. Carries SWD/JTAG and the A35 console (USART2). Pitch about half of CN12's (by eye), consistent with STDC14 | UM3571 Rev 1, p. 2; MB2059 schematic B-02, sheet 3; counted on the board |
 | Display | FFC connector CN8, silkscreen "DISPLAY" | photo, ST wiki |
 | Ethernet | RJ45, reference CN11 | photo |
-| GPIO expansion | 40-pin header CN12 | ST wiki. Pinout compared to Raspberry Pi NOT verified |
+| GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4; SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). I/O at 3.3 V (VDDIO). Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). Comparison with Raspberry Pi: see open items | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheet 3 |
 | Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3 |
 | Power | Power cable connector CN10 | ST wiki |
 | Flashing | USB connector CN15 (USB_DRD) is used for flashing (boot from UART/USB switch position) | ST wiki |
