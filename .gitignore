@@ -30,6 +30,10 @@ wpa_supplicant*.conf
 /docs/datasheets/*
 !/docs/datasheets/README.md
 
+# Learning notes: personal, kept local. Only the README describing the directory is committed.
+/docs/notes/*
+!/docs/notes/README.md
+
 # Build output anywhere else (e.g. a Zephyr build/ inside the app, or a Yocto build
 # started from the wrong directory).
 build/

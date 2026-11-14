@@ -89,6 +89,8 @@ machine-vibration-health-node/
   - decisions/    all ADRs, plus adr-template.md (written by the user, always follow it)
   - datasheets/   manuals and datasheets (PDFs git-ignored); README.md is the index
                   with document ID, revision, source and SHA-256
+  - notes/        the user's learning notes (git-ignored, e.g. yocto-basics.md); README.md
+                  describes the directory
   - architecture.md   the CURRENT state of the whole system, including open and unverified items
   - plan.md       the project plan (phases and the proof that ends each one)
 - tools/          helper scripts
@@ -98,6 +100,7 @@ Each doc holds only its own subject, no noise:
 - plan.md: goal, phases, proofs, risks. No prices, budgets, shop orders or purchase history.
 - architecture.md: the current state of the system, hardware inventory, board facts, open items.
 - decisions/: decisions and their reasoning (ADRs).
+- notes/: explanations of concepts, kept for learning and reference.
 - CLAUDE.md: rules and how to work, nothing that changes from week to week.
 
 Keep docs up to date as the work moves:
