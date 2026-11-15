@@ -10,8 +10,8 @@ Last updated: 2026-11-15.
 
 Phase 1 (bring-up and own image) is in progress. The board boots ST's ready-made image (Starter
 Package) from microSD, and the A35 console works. ST's `st-image-weston` has also been rebuilt from
-source with Yocto (ST's layers and recipes, no changes of ours) and boots. Our own image is not
-created yet.
+source with Yocto. Our own image, `vibration-image` (layer `meta-vibration-node`), boots in 29.0 s
+from TF-A to login and runs our first program, `vibration-hello`.
 
 Status legend: `planned` (not started), `in progress`, `working` (proof recorded in `captures/`),
 `blocked`.
@@ -59,7 +59,8 @@ talks to it over RPMsg.
 |---|---|---|
 | STM32MP215F-DK | The board of the project | working: boots from microSD (2026-11-13). In USB/UART programming mode (switches 0000) LD5 blinks at about 3-4 Hz (Boot ROM waiting, PH4) |
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | Signed boot | ST's binaries boot (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10, Linux 6.6), see `captures/st-starter_first-boot_untimed.log`. Not signed yet (phase 4) |
-| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | in progress: ST Starter Package OpenSTLinux v26.06.10 (A35-TD, flash layout `FlashLayout_sdcard_stm32mp215f-dk-ca35tdcid-ostl-optee.tsv`) boots (37.3-37.6 s, TF-A to login). ST's `st-image-weston` rebuilt from source boots too (38.1-38.2 s), see the Yocto build section. Our own image is not created yet |
+| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | in progress: ST Starter Package OpenSTLinux v26.06.10 (A35-TD, flash layout `FlashLayout_sdcard_stm32mp215f-dk-ca35tdcid-ostl-optee.tsv`) boots (37.3-37.6 s, TF-A to login). ST's `st-image-weston` rebuilt from source boots too (38.1-38.2 s). Our own `vibration-image` boots (29.0 s). See the Yocto build section |
+| Own layer `meta-vibration-node` (`yocto/layers/`) | Our recipes and image | working: `vibration-hello` (C program, cross-compiled for aarch64) and `vibration-image` (image recipe) |
 | Zephyr firmware for the M33 (`firmware/`) | Sampling, FFT, RPMsg | planned (phase 3) |
 | remoteproc + RPMsg link | M33 <-> Linux communication | planned (phase 3), unverified on this board |
 | Detection daemon | Statistical anomaly detection, MQTT/TLS alerts | planned (phase 7) |
@@ -92,17 +93,50 @@ All ordered items have arrived.
 
 ## Yocto build (`yocto/`)
 
-ST's `st-image-weston` rebuilt from source, without changes of ours. It is the reference for the
-build setup; our own image will reuse its layers and caches.
+One build directory for both images: ST's `st-image-weston` (rebuilt from source, without changes of
+ours, the reference for the build setup) and our own `vibration-image`, which reuses its layers and
+caches.
 
 | Item | Value |
 |---|---|
 | Layers | ST manifest `openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10` (github.com/STMicroelectronics/oe-manifest), 7 repositories cloned by hand into `yocto/layers/` at the pinned commits (OE-Core = Yocto 5.0.17) |
 | Build directory | `yocto/build-openstlinuxweston-stm32mp21-disco/` |
-| MACHINE / DISTRO / image | `stm32mp21-disco` (A35-TD, kernel device tree `stm32mp215f-dk`) / `openstlinux-weston` / `st-image-weston` |
+| MACHINE / DISTRO / images | `stm32mp21-disco` (A35-TD, kernel device tree `stm32mp215f-dk`) / `openstlinux-weston` / `st-image-weston`, `vibration-image` |
 | Caches | `yocto/oe-downloads/`, `yocto/oe-sstate-cache/` (outside the build directory, shared by future builds) |
-| Flash layout | `FlashLayout_sdcard_stm32mp215f-dk-optee.tsv` (ST's Starter Package used MACHINE `stm32mp2` and the `ca35tdcid-ostl` device tree instead) |
-| Boot time | 38.1-38.2 s TF-A to login (`captures/st-weston-rebuilt_boot_timed-*.log`); first boot 58.6 s because the initrd resizes the partitions once |
+| Flash layout | `FlashLayout_sdcard_stm32mp215f-dk-optee.tsv`, one per image in `flashlayout_<image>/` (ST's Starter Package used MACHINE `stm32mp2` and the `ca35tdcid-ostl` device tree instead). Both images write a `.raw` with the same name to the same folder |
+
+Our image, `vibration-image` (`meta-vibration-node/recipes-images/images/vibration-image.bb`):
+- `inherit core-image` (base: `packagegroup-core-boot`, `packagegroup-base-extended`), the
+  `ssh-server-dropbear` feature, and `st-hostname`, `packagegroup-optee-core`, `vibration-hello`.
+- 1237 packages (st-image-weston: 2170). rootfs about 203 MB (st-image-weston: about 770 MB).
+- Not wanted but still pulled in by ST's machine configuration: all kernel modules
+  (`kernel-modules`) and the extras of `packagegroup-base-extended` (Wi-Fi, Bluetooth, audio).
+- Workarounds for ST's partition class (`image_types-stsplitpartitions`):
+  - `PACKAGE_EXCLUDE` of `m33projects-stm32mp2`, `m0projects-stm32mp2`: ST example firmware,
+    recommended by the machine features `m33copro`/`m0copro`. `BAD_RECOMMENDATIONS` does not work
+    with `.deb` packages.
+  - `IMAGE_ROOTFS_EXTRA_SPACE = "8192"`: ST sizes each partition as content x 1.3 with no minimum, so
+    a small userfs did not fit ext4's journal ("Could not allocate block").
+  - `export splitted_directory`: ST's class runs `du` on this unset variable, which scans the whole
+    build directory (44 min instead of 32 s). The result is overwritten anyway.
+- No package manager on the board (no `package-management` feature). The first boot still resizes the
+  partitions (ST's resize initrd is in bootfs).
+
+Boot time, TF-A to login (`tools/boot_time.py`, normal boots, logs in `captures/`):
+
+| Stage | ST Starter Package | st-image-weston rebuilt | vibration-image |
+|---|---|---|---|
+| TF-A BL2 | 0.60 s | 0.62 s | 0.59 s |
+| BL31 + OP-TEE | 0.77 s | 0.84 s | 0.83 s |
+| U-Boot | 5.54 s | 5.55 s | 5.52 s |
+| Kernel | 2.74 s | 3.00 s | 3.02 s |
+| initrd + rootfs | 6.39 s | 6.77 s | 6.77 s |
+| systemd to login | 21.4 s | 21.4 s | 12.2 s |
+| **Total** | **37.5 s** | **38.2 s** | **29.0 s** |
+
+The gain of `vibration-image` is all in user space (no Weston, no demos). First boots are longer
+because the initrd resizes the partitions once: 58.6 s (st-image-weston rebuilt), 51.4 s
+(vibration-image). About 3 s of U-Boot is the autoboot countdown and the boot menu.
 
 Changes to `conf/local.conf` (it is not in git):
 - `ACCEPT_EULA_stm32mp21-disco = "1"` (ST SLA0048).
