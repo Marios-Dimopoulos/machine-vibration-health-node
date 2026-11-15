@@ -4,12 +4,14 @@ This file describes the CURRENT state of the whole system, not the plan. The pla
 [plan.md](plan.md). Update this file whenever something in the system changes (a component is built,
 a decision is made, a measurement is taken), and keep the "Status" column honest.
 
-Last updated: 2026-11-13.
+Last updated: 2026-11-15.
 
 ## Summary
 
 Phase 1 (bring-up and own image) is in progress. The board boots ST's ready-made image (Starter
-Package) from microSD, and the A35 console works. Nothing of our own is built yet.
+Package) from microSD, and the A35 console works. ST's `st-image-weston` has also been rebuilt from
+source with Yocto (ST's layers and recipes, no changes of ours) and boots. Our own image is not
+created yet.
 
 Status legend: `planned` (not started), `in progress`, `working` (proof recorded in `captures/`),
 `blocked`.
@@ -56,16 +58,16 @@ talks to it over RPMsg.
 | Component | Role | Status |
 |---|---|---|
 | STM32MP215F-DK | The board of the project | working: boots from microSD (2026-11-13). In USB/UART programming mode (switches 0000) LD5 blinks at about 3-4 Hz (Boot ROM waiting, PH4) |
-| Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | Signed boot | ST's binaries boot (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10, Linux 6.6), see `captures/first_boot.log`. Not signed yet (phase 4) |
-| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | in progress: ST Starter Package OpenSTLinux v26.06.10 (A35-TD, flash layout `FlashLayout_sdcard_stm32mp215f-dk-ca35tdcid-ostl-optee.tsv`) boots; own image not built yet |
+| Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | Signed boot | ST's binaries boot (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10, Linux 6.6), see `captures/st-starter_first-boot_untimed.log`. Not signed yet (phase 4) |
+| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | in progress: ST Starter Package OpenSTLinux v26.06.10 (A35-TD, flash layout `FlashLayout_sdcard_stm32mp215f-dk-ca35tdcid-ostl-optee.tsv`) boots (37.3-37.6 s, TF-A to login). ST's `st-image-weston` rebuilt from source boots too (38.1-38.2 s), see the Yocto build section. Our own image is not created yet |
 | Zephyr firmware for the M33 (`firmware/`) | Sampling, FFT, RPMsg | planned (phase 3) |
 | remoteproc + RPMsg link | M33 <-> Linux communication | planned (phase 3), unverified on this board |
 | Detection daemon | Statistical anomaly detection, MQTT/TLS alerts | planned (phase 7) |
 | RAUC A/B update system | Updates with rollback, dm-verity, watchdog | planned (phase 5) |
 | HAT (KiCad PCB) | Current measurement, EEPROM, LED, button, sensor connector | planned (phase 2, bring-up phase 7), not designed yet |
 | Test rig (Pi Zero 2 W, labgrid, pytest, relay, USB-UART, Pico) | Automatic verification on the real board | planned (phase 6) |
-| Sensor: ADXL345 on a breakout | Vibration measurement | chosen, not yet connected |
-| 5 V fan | The "machine" being monitored | ordered, expected by 2026-11-16 |
+| Sensor: ADXL345 on a breakout | Vibration measurement | header soldered (pins on the sensor side, continuity checked), not yet connected |
+| 5 V fan | The "machine" being monitored | received, not yet used |
 
 ## Hardware inventory (what exists today)
 
@@ -79,14 +81,40 @@ Received from the Mouser order (2026-11-11):
   (Identified by part number from distributor listings: TME, Digi-Key, Jameco, DFRobot wiki.)
 
 Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART adapter (used for
-the board's serial console), microSD card reader, power supply for the board (Samsung USB-C charger, 15 W, 5 V / 3 A;
-a new USB-C to USB-C cable still to be bought), 2 microSD 32 GB,
+the board's serial console), microSD card reader, power supply for the board (Samsung USB-C charger, 15 W, 5 V / 3 A,
+with a USB-C to USB-C cable), 2 microSD 32 GB,
 passives and cables, Nucleo-F411RE (not used in this project).
 Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
 is a SanDisk, marked Class 10 and A1.
 
-Received 2026-11-13: soldering iron, solder wire, multimeter.
-Ordered, expected by 2026-11-16: side cutter, 5 V fan.
+Received: soldering iron, solder wire, multimeter (2026-11-13); side cutter, 5 V fan (by 2026-11-15).
+All ordered items have arrived.
+
+## Yocto build (`yocto/`)
+
+ST's `st-image-weston` rebuilt from source, without changes of ours. It is the reference for the
+build setup; our own image will reuse its layers and caches.
+
+| Item | Value |
+|---|---|
+| Layers | ST manifest `openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10` (github.com/STMicroelectronics/oe-manifest), 7 repositories cloned by hand into `yocto/layers/` at the pinned commits (OE-Core = Yocto 5.0.17) |
+| Build directory | `yocto/build-openstlinuxweston-stm32mp21-disco/` |
+| MACHINE / DISTRO / image | `stm32mp21-disco` (A35-TD, kernel device tree `stm32mp215f-dk`) / `openstlinux-weston` / `st-image-weston` |
+| Caches | `yocto/oe-downloads/`, `yocto/oe-sstate-cache/` (outside the build directory, shared by future builds) |
+| Flash layout | `FlashLayout_sdcard_stm32mp215f-dk-optee.tsv` (ST's Starter Package used MACHINE `stm32mp2` and the `ca35tdcid-ostl` device tree instead) |
+| Boot time | 38.1-38.2 s TF-A to login (`captures/st-weston-rebuilt_boot_timed-*.log`); first boot 58.6 s because the initrd resizes the partitions once |
+
+Changes to `conf/local.conf` (it is not in git):
+- `ACCEPT_EULA_stm32mp21-disco = "1"` (ST SLA0048).
+- `BB_NUMBER_THREADS = "6"`, `PARALLEL_MAKE = "-j 6"`: 2 of 8 cores left free, less RAM.
+- `rm_work` disabled: it deleted bison-native's work directory, which bison's built-in m4 path points
+  into (glibc then failed with "m4 subprocess failed").
+- `PARALLEL_MAKEINST:pn-openssl = "-j 1"` (and `openssl-native`): OpenSSL's `make install` rebuilt
+  its libraries in parallel and failed with undefined references.
+
+Build host: WSL's clock drifted and jumped backwards under load ("Clock skew detected" in meson,
+probably also the cause of the OpenSSL rebuild). `chrony` replaced `systemd-timesyncd` so the clock
+is corrected by slewing instead of jumping.
 
 ## Board facts: STM32MP215F-DK
 
