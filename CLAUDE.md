@@ -82,7 +82,7 @@ KiCad, Python with pytest and labgrid.
 
 machine-vibration-health-node/
 - yocto/          Yocto layer(s), recipes and configuration for the Linux image
-                  (own layer: yocto/meta-vibration-node/)
+                  (own layer: yocto/layers/meta-vibration-node/, next to the vendor layers)
 - firmware/       Zephyr application for the M33
 - docs/
   - captures/     evidence: serial logs, logic analyzer captures, screenshots, measurements

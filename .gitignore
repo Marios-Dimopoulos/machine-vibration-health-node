@@ -14,12 +14,14 @@ secrets/
 .env*
 wpa_supplicant*.conf
 
-# Yocto: the whole workspace (Poky, ST layers, build, downloads, sstate-cache) lives
-# in yocto/ and is ignored. Only our own layer is re-included.
-# It must be /yocto/* and not /yocto/: git never looks inside an ignored directory,
-# so a "!" rule for something inside it would never apply.
+# Yocto: the whole workspace (vendor layers, build, downloads, sstate-cache) lives in yocto/
+# and is ignored. Only our own layer, next to the vendor layers in yocto/layers/, is re-included.
+# Each level needs "dir/*" plus "!": git never looks inside an ignored directory, so a "!" rule
+# for something inside it would never apply.
 /yocto/*
-!/yocto/meta-vibration-node/
+!/yocto/layers/
+/yocto/layers/*
+!/yocto/layers/meta-vibration-node/
 
 # Zephyr: the west workspace (Zephyr tree, modules, .west/) lives in firmware/ and is
 # ignored. Until the app directory is re-included (phase 3), nothing in firmware/ is tracked.
