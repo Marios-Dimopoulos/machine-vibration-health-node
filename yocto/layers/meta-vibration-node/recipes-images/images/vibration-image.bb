@@ -8,14 +8,25 @@ inherit core-image
 # Remote access for development and, later, the test rig
 IMAGE_FEATURES += "ssh-server-dropbear"
 
-# On top of core-image's base (packagegroup-core-boot, packagegroup-base-extended):
+# Install only what we list, instead of core-image's default
+# (packagegroup-core-boot + packagegroup-base-extended).
+# packagegroup-base-extended brings audio, Bluetooth, Wi-Fi and mDNS (avahi),
+# because ST's machine and distro features enable them.
+IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
+
 #   st-hostname             unique hostname from the MAC address
 #   packagegroup-optee-core Linux side of OP-TEE (TEE client), needed for secure storage later
 #   vibration-hello         our first program
+#   e2fsprogs-e2fsck        checks the ext4 partitions at boot (after a power cut)
+#   kmod                    loads kernel modules (modprobe)
+#   st-initrd               ST's initrd, kept until we look at it (it was pulled in by packagegroup-base)
 CORE_IMAGE_EXTRA_INSTALL += " \
     st-hostname \
     packagegroup-optee-core \
     vibration-hello \
+    e2fsprogs-e2fsck \
+    kmod \
+    st-initrd \
 "
 
 # Never install ST's example firmware: recommended by the machine features m33copro/m0copro,
