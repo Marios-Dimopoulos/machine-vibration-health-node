@@ -14,19 +14,17 @@ IMAGE_FEATURES += "ssh-server-dropbear"
 # because ST's machine and distro features enable them.
 IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
 
-#   st-hostname             unique hostname from the MAC address
 #   packagegroup-optee-core Linux side of OP-TEE (TEE client), needed for secure storage later
 #   vibration-hello         our first program
 #   e2fsprogs-e2fsck        checks the ext4 partitions at boot (after a power cut)
 #   kmod                    loads kernel modules (modprobe)
-#   st-initrd               ST's initrd, kept until we look at it (it was pulled in by packagegroup-base)
+# No st-initrd: we boot without an initrd (see stm32mp-extlinux.bbappend), so the filesystems
+# keep their build-time sizes and are not grown to fill their partitions on the first boot.
 CORE_IMAGE_EXTRA_INSTALL += " \
-    st-hostname \
     packagegroup-optee-core \
     vibration-hello \
     e2fsprogs-e2fsck \
     kmod \
-    st-initrd \
 "
 
 # Never install ST's example firmware: recommended by the machine features m33copro/m0copro,

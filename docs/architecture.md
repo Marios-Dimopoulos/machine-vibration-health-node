@@ -119,8 +119,8 @@ Our image, `vibration-image` (`meta-vibration-node/recipes-images/images/vibrati
     a small userfs did not fit ext4's journal ("Could not allocate block").
   - `export splitted_directory`: ST's class runs `du` on this unset variable, which scans the whole
     build directory (44 min instead of 32 s). The result is overwritten anyway.
-- No package manager on the board (no `package-management` feature). The first boot still resizes the
-  partitions (ST's resize initrd is in bootfs).
+- No package manager on the board (no `package-management` feature). The first boot still grows the
+  filesystems to fill their partitions (ST's resize initrd is in bootfs).
 
 Boot time, TF-A to login (`tools/boot_time.py`, normal boots, logs in `captures/`):
 
@@ -135,7 +135,7 @@ Boot time, TF-A to login (`tools/boot_time.py`, normal boots, logs in `captures/
 | **Total** | **37.5 s** | **38.2 s** | **29.0 s** |
 
 The gain of `vibration-image` is all in user space (no Weston, no demos). First boots are longer
-because the initrd resizes the partitions once: 58.6 s (st-image-weston rebuilt), 51.4 s
+because the initrd grows the filesystems to fill their partitions once: 58.6 s (st-image-weston rebuilt), 51.4 s
 (vibration-image). About 3 s of U-Boot is the autoboot countdown and the boot menu.
 
 Changes to `conf/local.conf` (it is not in git):

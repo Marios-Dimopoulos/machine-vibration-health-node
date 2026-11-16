@@ -12,7 +12,8 @@ MARKERS = [
     ("BL31+OP-TEE", r"NOTICE:  BL31: v"),
     ("U-Boot", r"^U-Boot 20"),
     ("Kernel", r"^Starting kernel"),
-    ("initrd+rootfs", r"Run /init as init"),
+    # "Run /init" with an initrd, "Run /sbin/init" without one (the kernel mounts the rootfs itself).
+    ("initrd+rootfs", r"Run /(sbin/)?init as init"),
     ("systemd", r"^Welcome to "),
     ("login", r"login:"),
 ]
