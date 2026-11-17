@@ -62,7 +62,14 @@ Switched off: camera and video (`MEDIA_SUPPORT`), display (`DRM`), touchscreen, 
 (`SOUND`, `STM32_MDF_*`), Wi-Fi and Bluetooth (`WLAN`, `CFG80211`, `MAC80211`, `BT`, `RFKILL`),
 USB and the CN10 charger detection (`USB_SUPPORT`, `PHY_STM32_USB2PHY`, `STM32_ADC*`,
 `IIO_RESCALE`, the IIO timer triggers), debug tracing and DDR counters (`CORESIGHT`, `STM`,
-`STM32_DDR_PMU`).
+`STM32_DDR_PMU`), the debug bus (`STM32_DBG_BUS`) and UIO (`UIO`).
+
+Also switched off, built in by the generic `defconfig` but not usable or not used here (measured with
+`initcall_debug`: about 0.2 s of kernel boot): PCI (the STM32MP21 has no PCIe, DS14556 Rev 2), the
+network filesystems (`NFS_FS`, `SUNRPC`, `NET_9P`, `9P_FS`), virtualization (`VIRTUALIZATION`,
+`VFIO`), huge pages (`HUGETLBFS`), other vendors' SD controllers (`MMC_SDHCI`, `MMC_DW`), disk quotas
+(`QUOTA`) and JFFS2. Kept on purpose: `loop` and `squashfs` (RAUC bundles, phase 5) and the jitter
+entropy random source (crypto).
 
 ## Consequences
 
@@ -72,10 +79,11 @@ USB and the CN10 charger detection (`USB_SUPPORT`, `PHY_STM32_USB2PHY`, `STM32_A
   display or audio without changing the fragment. Flashing is not affected: it runs in the Boot
   ROM and U-Boot.
 - After each build, check that no switched-off option is back in the final `.config`.
-- Follow-up: still to decide: `uio`, `stm32_dbg_bus` and `stm32_lptimer` (purpose not verified).
-  Built-in drivers for hardware this SoC cannot have (`e1000`, `igb`, `hns3` ...) and about 700
-  modules that never load are not handled yet. The device tree still declares the removed hardware
-  (phase 1, step 4).
+- Later steps: loaded modules 22 to 19 (debug bus, UIO), then built-in options 1951 to 1702 and
+  boot 16.6 to 16.0 s (PCI, network filesystems and the rest).
+- Follow-up: `stm32_lptimer` is kept (a built-in clock driver, `CLKSRC_STM32_LP`, may depend on it;
+  not verified). About 600 modules that never load are not handled (disk space only). The device
+  tree still declares the removed hardware (phase 1, step 4).
 - If the HAT or a later phase needs a removed subsystem (for example an ADC), remove its line from
   the fragment.
 
