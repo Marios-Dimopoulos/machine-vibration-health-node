@@ -26,6 +26,9 @@ well enough to work as an embedded / Linux / hardware engineer.
 Everything is in English: the conversation with the user, README, ADRs, code, comments,
 commit messages and the comprehension checks.
 
+Everything written in the project (docs, ADRs, comments, commit messages) is in the first person
+singular, in the user's own voice: I, me, my, myself. Never we, our, us.
+
 ## How to work with the user
 
 The user does not yet know most of what this project involves (boot chain, device tree, RAUC,
@@ -68,7 +71,7 @@ The full teaching goes in the conversation, not in the file.
   Yocto cannot run on Windows and needs a case-sensitive, fast filesystem.
 - The Yocto workspace (Poky, ST layers, build, downloads, sstate-cache) lives inside yocto/,
   and the west workspace (Zephyr tree, modules) inside firmware/. Both are ignored by
-  .gitignore with an allow-list: only our own layer and app are re-included.
+  .gitignore with an allow-list: only my own layer and app are re-included.
 - Never run `git clean -x` (or `-X`): it deletes ignored files, which here means the Yocto
   downloads and sstate-cache (hours of rebuilding). Plain `git clean -fd` is safe.
 - Windows is used only for tools that fit there (KiCad, STM32CubeProgrammer, a serial terminal).

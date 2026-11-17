@@ -18,11 +18,11 @@ Sources: `meta-st-openstlinux/recipes-st/images/st-image-resize-initrd.bb` and
 `meta-st-openstlinux/recipes-st/initrd/st-initrd/` (meta-st, OpenSTLinux v26.06.10).
 
 In the boot log, the initrd starts at 2.15 s (kernel time) and systemd only starts at 8.58 s. In
-between, the initrd probes every device, including hardware we do not have (camera, touchscreen,
+between, the initrd probes every device, including hardware I do not have (camera, touchscreen,
 display). Then systemd runs `systemd-udev-trigger` and processes every device a second time. The
 "initrd + rootfs" stage is 6.7 s of the 25.2 s boot (`tools/boot_time.py`, trim-1 boots).
 
-Our kernel can mount the rootfs without help: the SD card driver and ext4 are built in
+My kernel can mount the rootfs without help: the SD card driver and ext4 are built in
 (`CONFIG_MMC_STM32_SDMMC=y`, `CONFIG_EXT4_FS=y` in the kernel `.config`), and the kernel command
 line already has `root=PARTUUID=... rootwait`.
 
@@ -32,25 +32,25 @@ line already has `root=PARTUUID=... rootwait`.
 - How it works: no change.
 - Pros: the filesystems grow to fill their partitions on the first boot. Same as ST's reference image.
 - Cons: all devices are probed twice on every boot, and systemd starts about 6 s late. More code in
-  the boot path that we do not need.
+  the boot path that I do not need.
 
 ### Option B: No initrd
 - How it works: `UBOOT_EXTLINUX_INITRD = ""` removes the `INITRD` line from `extlinux.conf`, and the
   image no longer installs `st-initrd` into bootfs. The kernel mounts the rootfs itself.
 - Pros: one less boot stage, each device probed once (by systemd's udev), simpler boot chain.
 - Cons: no automatic resize. The filesystems keep their build-time sizes (ST's content x 1.3 plus
-  our 8 MB `IMAGE_ROOTFS_EXTRA_SPACE`: rootfs 148 MB, 26 MB free), and the rest of each partition
+  my 8 MB `IMAGE_ROOTFS_EXTRA_SPACE`: rootfs 148 MB, 26 MB free), and the rest of each partition
   stays unused.
 
-### Option C: Our own minimal initrd
-- How it works: a small initrd of our own that does only what we need.
+### Option C: My own minimal initrd
+- How it works: a small initrd of my own that does only what I need.
 - Pros: room for later jobs that need to run before the rootfs is mounted.
 - Cons: nothing needs it today, so it is extra work and boot time for no gain.
 
 ## Decision
 
 Option B. The kernel already has everything it needs to mount the rootfs, and the only job of the
-initrd that we would lose, the first-boot resize, does not need an initrd: the filesystem size can be
+initrd that I would lose, the first-boot resize, does not need an initrd: the filesystem size can be
 set at build time, or grown by systemd (`x-systemd.growfs`), once the A/B layout of phase 5 fixes the
 partition sizes.
 
@@ -69,5 +69,5 @@ partition sizes.
 
 ## Interview angle
 
-The initrd only exists to help the kernel reach its root filesystem; our kernel can do that alone, so
-we removed a whole boot stage that was probing every device twice.
+The initrd only exists to help the kernel reach its root filesystem; my kernel can do that alone, so
+I removed a whole boot stage that was probing every device twice.

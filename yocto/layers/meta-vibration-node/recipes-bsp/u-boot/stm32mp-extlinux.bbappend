@@ -5,7 +5,7 @@
 # Keep only the normal entry: drop the M.2 Wi-Fi/Bluetooth entry (no M.2 card on this board).
 UBOOT_EXTLINUX_TARGETS_EXTRA_CONFIG[stm32mp215f-dk] = ""
 
-# No menu background picture: it is drawn on a display, and we have none.
+# No menu background picture: it is drawn on a display, and I have none.
 # Only this recipe's copy of MACHINE_FEATURES changes; the machine keeps the feature.
 MACHINE_FEATURES:remove = "splashscreen"
 

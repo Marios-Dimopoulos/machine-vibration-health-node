@@ -10,13 +10,13 @@ Last updated: 2026-11-15.
 
 Phase 1 (bring-up and own image) is in progress. The board boots ST's ready-made image (Starter
 Package) from microSD, and the A35 console works. ST's `st-image-weston` has also been rebuilt from
-source with Yocto. Our own image, `vibration-image` (layer `meta-vibration-node`), boots in 29.0 s
-from TF-A to login and runs our first program, `vibration-hello`.
+source with Yocto. My own image, `vibration-image` (layer `meta-vibration-node`), boots in 29.0 s
+from TF-A to login and runs my first program, `vibration-hello`.
 
 Status legend: `planned` (not started), `in progress`, `working` (proof recorded in `captures/`),
 `blocked`.
 
-## Target architecture (what we are building)
+## Target architecture (what I am building)
 
 One board, one HAT, one test rig. The M33 analyzes vibration, Linux is updated securely.
 
@@ -59,8 +59,8 @@ talks to it over RPMsg.
 |---|---|---|
 | STM32MP215F-DK | The board of the project | working: boots from microSD (2026-11-13). In USB/UART programming mode (switches 0000) LD5 blinks at about 3-4 Hz (Boot ROM waiting, PH4) |
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | Signed boot | ST's binaries boot (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10, Linux 6.6), see `captures/st-starter_first-boot_untimed.log`. Not signed yet (phase 4) |
-| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | in progress: ST Starter Package OpenSTLinux v26.06.10 (A35-TD, flash layout `FlashLayout_sdcard_stm32mp215f-dk-ca35tdcid-ostl-optee.tsv`) boots (37.3-37.6 s, TF-A to login). ST's `st-image-weston` rebuilt from source boots too (38.1-38.2 s). Our own `vibration-image` boots (29.0 s). See the Yocto build section |
-| Own layer `meta-vibration-node` (`yocto/layers/`) | Our recipes and image | working: `vibration-hello` (C program, cross-compiled for aarch64) and `vibration-image` (image recipe) |
+| Yocto / OpenSTLinux image (`yocto/`) | The Linux system for the A35 | in progress: ST Starter Package OpenSTLinux v26.06.10 (A35-TD, flash layout `FlashLayout_sdcard_stm32mp215f-dk-ca35tdcid-ostl-optee.tsv`) boots (37.3-37.6 s, TF-A to login). ST's `st-image-weston` rebuilt from source boots too (38.1-38.2 s). My own `vibration-image` boots (29.0 s). See the Yocto build section |
+| Own layer `meta-vibration-node` (`yocto/layers/`) | My recipes and image | working: `vibration-hello` (C program, cross-compiled for aarch64) and `vibration-image` (image recipe) |
 | Zephyr firmware for the M33 (`firmware/`) | Sampling, FFT, RPMsg | planned (phase 3) |
 | remoteproc + RPMsg link | M33 <-> Linux communication | planned (phase 3), unverified on this board |
 | Detection daemon | Statistical anomaly detection, MQTT/TLS alerts | planned (phase 7) |
@@ -94,7 +94,7 @@ All ordered items have arrived.
 ## Yocto build (`yocto/`)
 
 One build directory for both images: ST's `st-image-weston` (rebuilt from source, without changes of
-ours, the reference for the build setup) and our own `vibration-image`, which reuses its layers and
+mine, the reference for the build setup) and my own `vibration-image`, which reuses its layers and
 caches.
 
 | Item | Value |
@@ -105,7 +105,7 @@ caches.
 | Caches | `yocto/oe-downloads/`, `yocto/oe-sstate-cache/` (outside the build directory, shared by future builds) |
 | Flash layout | `FlashLayout_sdcard_stm32mp215f-dk-optee.tsv`, one per image in `flashlayout_<image>/` (ST's Starter Package used MACHINE `stm32mp2` and the `ca35tdcid-ostl` device tree instead). Both images write a `.raw` with the same name to the same folder |
 
-Our image, `vibration-image` (`meta-vibration-node/recipes-images/images/vibration-image.bb`):
+My image, `vibration-image` (`meta-vibration-node/recipes-images/images/vibration-image.bb`):
 - `inherit core-image` (base: `packagegroup-core-boot`, `packagegroup-base-extended`), the
   `ssh-server-dropbear` feature, and `st-hostname`, `packagegroup-optee-core`, `vibration-hello`.
 - 1237 packages (st-image-weston: 2170). rootfs about 203 MB (st-image-weston: about 770 MB).

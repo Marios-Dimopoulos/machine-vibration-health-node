@@ -15,7 +15,7 @@ secrets/
 wpa_supplicant*.conf
 
 # Yocto: the whole workspace (vendor layers, build, downloads, sstate-cache) lives in yocto/
-# and is ignored. Only our own layer, next to the vendor layers in yocto/layers/, is re-included.
+# and is ignored. Only my own layer, next to the vendor layers in yocto/layers/, is re-included.
 # Each level needs "dir/*" plus "!": git never looks inside an ignored directory, so a "!" rule
 # for something inside it would never apply.
 /yocto/*
