@@ -1,0 +1,145 @@
+stm32mp215f-dk: disable hardware the vibration node does not use
+
+Camera, the I2C2 bus of the camera and touch panel, display, audio, USB and
+its charger detection, and debug tracing. Their drivers are also switched off
+in the kernel configuration (fragment-vibration-drop.cfg, ADR-0002).
+
+Upstream-Status: Inappropriate [product-specific board configuration]
+
+--- a/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
++++ b/arch/arm64/boot/dts/st/stm32mp215f-dk.dts
+@@ -697,3 +697,134 @@
+ 		};
+ 	};
+ };
++
++/*
++ * vibration node: hardware this product does not use. A later definition of a node overrides
++ * the earlier one, so these blocks only change status. The drivers are also switched off in the
++ * kernel (fragment-vibration-drop.cfg, ADR-0002).
++ */
++
++/* Camera: CSI receiver and DCMIPP. Nothing on the camera connector CN4. */
++&csi {
++	status = "disabled";
++};
++
++&dcmipp {
++	status = "disabled";
++};
++
++/*
++ * I2C2 only goes to the camera connector and the display's touch panel (UM3571 Rev 1, p. 21,
++ * Table 12), so it carries only the IMX335 camera and the Goodix touchscreen.
++ */
++&i2c2 {
++	status = "disabled";
++};
++
++/* Display: LTDC controller, RGB panel and its backlight */
++&ltdc {
++	status = "disabled";
++};
++
++&panel_rgb {
++	status = "disabled";
++};
++
++&panel_backlight {
++	status = "disabled";
++};
++
++/* Audio: the digital microphones, their filter (MDF) and the sound card */
++&mdf1 {
++	status = "disabled";
++};
++
++&dmic0 {
++	status = "disabled";
++};
++
++&dmic1 {
++	status = "disabled";
++};
++
++&{/sound} {
++	status = "disabled";
++};
++
++/* USB: CN10 is used for power only. The ADC measured its CC lines to detect the charger. */
++&usbotg_hs {
++	status = "disabled";
++};
++
++&usb2_phy2 {
++	status = "disabled";
++};
++
++&{/typec} {
++	status = "disabled";
++};
++
++&vdiv_cc1 {
++	status = "disabled";
++};
++
++&vdiv_cc2 {
++	status = "disabled";
++};
++
++&adc_1 {
++	status = "disabled";
++};
++
++/* Debug tracing (CoreSight), its debug bus, and the DDR performance counters */
++&dbg_bus {
++	status = "disabled";
++};
++
++&cs_cpu_debug0 {
++	status = "disabled";
++};
++
++&cs_cti0 {
++	status = "disabled";
++};
++
++&cs_cti1 {
++	status = "disabled";
++};
++
++&cs_cti_cpu0 {
++	status = "disabled";
++};
++
++&cs_etf {
++	status = "disabled";
++};
++
++&cs_etm0 {
++	status = "disabled";
++};
++
++&cs_etr {
++	status = "disabled";
++};
++
++&cs_funnel {
++	status = "disabled";
++};
++
++&cs_replicator {
++	status = "disabled";
++};
++
++&cs_stm {
++	status = "disabled";
++};
++
++&cs_tpiu {
++	status = "disabled";
++};
++
++&ddrperfm {
++	status = "disabled";
++};

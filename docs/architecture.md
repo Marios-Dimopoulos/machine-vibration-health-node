@@ -187,6 +187,10 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 2. CN12 40-pin pinout compared to Raspberry Pi: not verified. Required before the HAT PCB order
    (end of week 4).
 3. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
+4. Bus for the HAT's current sensor and EEPROM: no I2C bus reaches CN12. Pins 3 and 5 carry I3C1
+   (PA2, PG13), pins 27 and 28 I3C2 (UM3571 Rev 1, p. 26, Table 17), and I2C2 only goes to the
+   camera connector and the touch panel (p. 21, Table 12). To check in DS14556 before the HAT design
+   (phase 2): I2C as an alternate function of these pins, or I3C driving I2C devices.
 
 ## Decisions
 
