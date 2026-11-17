@@ -32,6 +32,21 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 # BAD_RECOMMENDATIONS would be the usual tool, but it does not work with .deb packages.
 PACKAGE_EXCLUDE += "m33projects-stm32mp2 m0projects-stm32mp2"
 
+# No busybox syslogd/klogd (recommended by packagegroup-core-boot): systemd's journal already
+# collects the kernel and program logs, so they only duplicated it.
+PACKAGE_EXCLUDE += "busybox-syslog"
+
+# Mask systemd units that have no job on this board. Masking links the unit to /dev/null in /etc,
+# so systemd never starts it, even if another unit asks for it.
+#   systemd-boot-update  updates systemd-boot on an EFI system partition (this board boots with U-Boot)
+#   getty@tty1           login prompt on a screen's virtual terminal; the console is the serial
+#                        port (serial-getty@ttySTM0)
+ROOTFS_POSTPROCESS_COMMAND += "vibration_mask_units; "
+vibration_mask_units() {
+    ln -sf /dev/null ${IMAGE_ROOTFS}${sysconfdir}/systemd/system/systemd-boot-update.service
+    ln -sf /dev/null ${IMAGE_ROOTFS}${sysconfdir}/systemd/system/getty@tty1.service
+}
+
 # ST's partition sizing has no minimum: give every partition 8 MB of free room,
 # so small partitions (userfs) still fit ext4's journal and metadata.
 IMAGE_ROOTFS_EXTRA_SPACE = "8192"
