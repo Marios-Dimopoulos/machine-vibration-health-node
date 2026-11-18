@@ -47,6 +47,19 @@ vibration_mask_units() {
     ln -sf /dev/null ${IMAGE_ROOTFS}${sysconfdir}/systemd/system/getty@tty1.service
 }
 
+# Partition sizes on the SD card, in KB. ST's defaults are for its demo images (rootfs 4 GB,
+# vendorfs 250 MB), which made a 5 GB .raw that is mostly empty. These values go into the .tsv.
+# The names must match ST's exactly, ${...} included (st-machine-flashlayout-stm32mp.inc): with
+# "rootfs" written out, ST's name expands to the same key at the end of parsing and replaces mine.
+FLASHLAYOUT_PARTITION_SIZE:sdcard:${STM32MP_ROOTFS_LABEL} = "524288"
+FLASHLAYOUT_PARTITION_SIZE:sdcard:${STM32MP_VENDORFS_LABEL}:stm32mp2common = "32768"
+# Largest filesystem image the build accepts in each partition (same sizes), so a too big
+# rootfs fails at build time instead of when the .raw is created.
+STM32MP_ROOTFS_SIZE = "524288"
+STM32MP_VENDORFS_SIZE = "32768"
+# userfs is the last partition: ST's script stretches it to the end of the .raw, whose size is
+# set when the script runs: SDCARD_SIZE=768 ./scripts/create_sdcard_from_flashlayout.sh <tsv>
+
 # ST's partition sizing has no minimum: give every partition 8 MB of free room,
 # so small partitions (userfs) still fit ext4's journal and metadata.
 IMAGE_ROOTFS_EXTRA_SPACE = "8192"
