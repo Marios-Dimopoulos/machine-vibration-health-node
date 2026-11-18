@@ -85,9 +85,9 @@ Status legend: `planned` (not started), `in progress`, `working` (proof recorded
 
 ## Linux image (A35)
 
-`vibration-image`, built with Yocto from ST's OpenSTLinux layers and my layer `meta-vibration-node`
-(`yocto/layers/meta-vibration-node/`). MACHINE `stm32mp21-disco`, DISTRO `openstlinux-weston`, ST's
-Linux 6.6.129, device tree `stm32mp215f-dk`. How it is built: see Build setup.
+`vibration-image`, built with Yocto from ST's OpenSTLinux v26.06.10 layers (Yocto 5.0.17) and my
+layer `meta-vibration-node` (`yocto/layers/meta-vibration-node/`). MACHINE `stm32mp21-disco`, DISTRO
+`openstlinux-weston`, ST's Linux 6.6.129, device tree `stm32mp215f-dk`.
 
 ### Contents
 
@@ -212,37 +212,6 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 | Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers, pin 1 = board RX, pin 2 = GND, pin 3 = board TX. A35 console: 115200 baud, Linux device ttySTM0 | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3; `captures/st-starter_first-boot_untimed.log` line 207 |
 | Silicon revision | The chip reports Rev.Z (UM3571 lists revision "Y"). ES0628 errata must be read for Rev.Z | `captures/st-starter_first-boot_untimed.log` lines 1, 91; UM3571 Rev 1, p. 33 |
 | Power and USB | CN10 is the only USB connector: USB Type-C, 5 V power input and USB 2.0 data (device). Its CC1/CC2 lines go to ADC inputs ANA0/ANA1 to detect the current the power source offers (0.5, 1.5 or 3 A). Also used for flashing with STM32CubeProgrammer (UART/USB boot switch position). Checked on the board | UM3571 Rev 1, p. 11, section 7.4.2; p. 16, section 8.1 |
-
-## Build setup (my PC)
-
-How the images are built, on my PC (WSL2, Ubuntu). This is not part of the system on the board, but
-it is needed to build it again.
-
-| Item | Value |
-|---|---|
-| Layers | ST manifest `openstlinux-6.6-yocto-scarthgap-mpu-v26.06.10` (github.com/STMicroelectronics/oe-manifest), 7 repositories cloned by hand into `yocto/layers/` at the pinned commits (OE-Core = Yocto 5.0.17), plus my layer `meta-vibration-node` |
-| Build directory | `yocto/build-openstlinuxweston-stm32mp21-disco/` |
-| MACHINE / DISTRO / images | `stm32mp21-disco` (A35-TD) / `openstlinux-weston` / `vibration-image`, and `st-image-weston` (ST's, the reference for the build setup) |
-| Caches | `yocto/oe-downloads/`, `yocto/oe-sstate-cache/` (outside the build directory, shared by future builds) |
-| Flash layout | `FlashLayout_sdcard_stm32mp215f-dk-optee.tsv`, one per image in `flashlayout_<image>/` in the deploy directory |
-| SD card image | in the deploy directory: `SDCARD_SIZE=768 ./scripts/create_sdcard_from_flashlayout.sh flashlayout_vibration-image/optee/FlashLayout_sdcard_stm32mp215f-dk-optee.tsv` gives a 768 MB `.raw`. Every image writes a `.raw` with the same name, so check its time. Written to the card from Windows with Raspberry Pi Imager |
-
-My appends to the kernel, U-Boot, extlinux and base-files recipes apply to every image built here, so
-a rebuild of `st-image-weston` would include them too.
-
-Changes to `conf/local.conf` (it is not in git):
-- `ACCEPT_EULA_stm32mp21-disco = "1"` (ST SLA0048).
-- `BB_NUMBER_THREADS = "6"`, `PARALLEL_MAKE = "-j 6"`: 2 of 8 cores left free, less RAM.
-- `rm_work` disabled: it deleted bison-native's work directory, which bison's built-in m4 path points
-  into (glibc then failed with "m4 subprocess failed").
-- `PARALLEL_MAKEINST:pn-openssl = "-j 1"` (and `openssl-native`): OpenSSL's `make install` rebuilt
-  its libraries in parallel and failed with undefined references.
-- `INHERIT += "buildhistory"`, `BUILDHISTORY_COMMIT = "0"`: records the packages of each image and who
-  pulled them in (`buildhistory/images/.../depends.dot`), without a git repository.
-
-Build host: WSL's clock drifted and jumped backwards under load ("Clock skew detected" in meson,
-probably also the cause of the OpenSSL rebuild). `chrony` replaced `systemd-timesyncd` so the clock
-is corrected by slewing instead of jumping.
 
 ## Open items and unverified facts
 
