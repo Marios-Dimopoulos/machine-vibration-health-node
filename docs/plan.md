@@ -66,10 +66,12 @@ sampling starts with the sensor on wires. Every phase ends with a proof on the b
 
 Status legend: `[ ]` not started, `[~]` in progress, `[x]` done and proof recorded in `docs/captures/`.
 
-### 1. Bring-up and own image (weeks 1-2) `[ ]`
+### 1. Bring-up and own image (weeks 1-2) `[x]`
 Start from the ready-made ST image, then build your own with the ST BSP layer and your own layer,
 `meta-vibration-node`. Read every boot stage on the serial console.
 - Proof: your image boots from microSD, and a table shows the time of each stage, measured from the log.
+- Done (2026-11-18): `vibration-image` boots from microSD in 15.0 s, logs in
+  `captures/vibration-image-trimmed_*.log`, stage table in [architecture.md](architecture.md).
 
 ### 2. HAT design (weeks 2-4) `[ ]`
 Schematic and two-layer layout in KiCad: sensor connector, current-measurement chip, EEPROM, LED,
