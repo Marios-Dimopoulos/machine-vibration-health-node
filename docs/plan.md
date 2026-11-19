@@ -68,9 +68,9 @@ sampling starts with the sensor on wires. Every phase ends with a proof on the b
 Status legend: `[ ]` not started, `[~]` in progress, `[x]` done and proof recorded in `docs/captures/`.
 
 ### 1. Bring-up and own image (weeks 1-2) `[x]`
-Start from the ready-made ST image, then build your own with the ST BSP layer and your own layer,
-`meta-vibration-node`. Read every boot stage on the serial console.
-- Proof: your image boots from microSD, and a table shows the time of each stage, measured from the log.
+I start from the ready-made ST image, then build my own with the ST BSP layer and my own layer,
+`meta-vibration-node`. I read every boot stage on the serial console.
+- Proof: my image boots from microSD, and a table shows the time of each stage, measured from the log.
 - Done (2026-11-18): `vibration-image` boots from microSD in 15.0 s, logs in
   `captures/boot-time/vibration-image-trimmed_*.log`, stage table in [architecture.md](architecture.md).
 
@@ -85,7 +85,7 @@ With the breakout on wires, before the HAT arrives. Zephyr firmware reads the se
 at a fixed rate, computes the FFT and sends the spectrum to Linux over RPMsg. Linux loads the firmware
 with remoteproc.
 - Proof: the logic analyzer shows samples at equal intervals, with the jitter measured. The spectrum
-  shows a peak at the fan's rotation frequency. You kill the M33 firmware, and Linux detects it and
+  shows a peak at the fan's rotation frequency. I kill the M33 firmware, and Linux detects it and
   restarts it.
 
 ### 4. Secure boot (weeks 6-7) `[ ]`
@@ -115,18 +115,18 @@ statistical comparison.
 ### 8. Wrap-up (weeks 12-13) `[ ]`
 SBOM in SPDX from Yocto, CVE report, threat model, support-period document, demo video. README with
 measured results and 2-3 cases where a mistake was made and how it was fixed.
-- Proof: someone who does not know you builds the image and runs the tests from the README alone.
+- Proof: someone who does not know me builds the image and runs the tests from the README alone.
 
 If something runs late, cut from the end: phase 8 shrinks and phase 7 stays on simple statistical
 detection. Phases 3 to 6 are the core and are not cut.
 
 ## Risks
 
-| Risk | What you do |
+| Risk | What I do |
 |---|---|
-| **Fuses and closing the chip.** Writing the keys to the fuses and closing the chip are irreversible; closing without a working signature check kills the chip. ST's guide covers the MP13 and MP15, not the MP21 ([ST wiki](https://wiki.st.com/stm32mpu/wiki/How_to_perform_Secure_Boot_from_Distribution_package)). | Read the MP21 documentation first. Set up and test the whole chain without closing. Never close the only board. The decision is written in an ADR (end of week 7). |
-| **RPMsg from Zephyr on the M33.** Not confirmed for this board. An RPMsg problem was reported on the MP257 DK with STM32Cube firmware ([ST community](https://community.st.com/stm32-mpus-embedded-software-and-solutions-46/stm32mp257-openamp-rpmsg-endpoint-not-getting-created-161965)). | Test it on the first day of phase 3. If it does not work in 2-3 days, switch to ST's firmware (STM32CubeMP2) and keep Zephyr for later. |
-| **Weak vibration signal.** The sensor may pick up more noise from the table than vibration from the fan. | Fix the sensor rigidly on the fan. Compare the spectrum with and without tape before writing detection. |
-| **First PCB revision with errors.** Normal for a first spin. | Check every connection against the datasheets and the CN12 pinout before ordering. Fix errors with a wire and record them. |
-| **The relay cuts the board's 5 V.** | Switch only the 5 V DC line, with a common ground. Measure with a multimeter before connecting the board. Never mains voltage. |
-| **Time.** 13 weeks is ambitious. | Cut from the end (see phases). Phases 3 to 6 stay. |
+| **Fuses and closing the chip.** Writing the keys to the fuses and closing the chip are irreversible; closing without a working signature check kills the chip. ST's guide covers the MP13 and MP15, not the MP21 ([ST wiki](https://wiki.st.com/stm32mpu/wiki/How_to_perform_Secure_Boot_from_Distribution_package)). | I read the MP21 documentation first. I set up and test the whole chain without closing. I never close the only board. The decision is written in an ADR (end of week 7). |
+| **RPMsg from Zephyr on the M33.** Not confirmed for this board. An RPMsg problem was reported on the MP257 DK with STM32Cube firmware ([ST community](https://community.st.com/stm32-mpus-embedded-software-and-solutions-46/stm32mp257-openamp-rpmsg-endpoint-not-getting-created-161965)). | I test it on the first day of phase 3. If it does not work in 2-3 days, I switch to ST's firmware (STM32CubeMP2) and keep Zephyr for later. |
+| **Weak vibration signal.** The sensor may pick up more noise from the table than vibration from the fan. | I fix the sensor rigidly on the fan. I compare the spectrum with and without tape before writing detection. |
+| **First PCB revision with errors.** Normal for a first spin. | I check every connection against the datasheets and the CN12 pinout before ordering. I fix errors with a wire and record them. |
+| **The relay cuts the board's 5 V.** | I switch only the 5 V DC line, with a common ground. I measure with a multimeter before connecting the board. Never mains voltage. |
+| **Time.** 13 weeks is ambitious. | I cut from the end (see phases). Phases 3 to 6 stay. |
