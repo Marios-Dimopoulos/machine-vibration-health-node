@@ -58,8 +58,6 @@ may not be present, like the HAT later.
 - Harder: an ST update that changes `stm32mp215f-dk.dts` can break the patch.
 - Using any of this hardware again means removing its block from the patch and its line from the
   kernel fragment (ADR-0002).
-- Follow-up: the HAT's bus (open item 4 in `architecture.md`). The HAT itself can be described with
-  an overlay in phase 7.
 
 ## Interview angle
 

@@ -65,8 +65,6 @@ new part would add cost and risk without changing what the project can show.
     (MISO) (p. 6).
   - VCC comes from 5 V, so the regulator has headroom.
   - The signals are 3.3 V, inside the chip's limit of its supply + 0.3 V (p. 5).
-- Follow-up: in phase 3, measure the fan's real speed and check that the blade frequency is below
-  1600 Hz.
 
 ## Interview angle
 

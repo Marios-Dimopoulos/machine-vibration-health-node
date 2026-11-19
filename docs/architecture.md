@@ -219,7 +219,7 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 2. CN12 40-pin pinout compared to Raspberry Pi: not verified. Required before the HAT PCB order
    (end of week 4).
 3. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
-4. Bus for the HAT's current sensor and EEPROM: no I2C bus reaches CN12. Pins 3 and 5 carry I3C1
+4. Bus for the HAT's EEPROM: no I2C bus reaches CN12. Pins 3 and 5 carry I3C1
    (PA2, PG13), pins 27 and 28 I3C2 (UM3571 Rev 1, p. 26, Table 17), and I2C2 only goes to the
    camera connector and the touch panel (p. 21, Table 12). To check in DS14556 before the HAT design
    (phase 2): I2C as an alternate function of these pins, or I3C driving I2C devices.
@@ -237,6 +237,11 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
    from `EXTRA_IMAGE_FEATURES ?= "debug-tweaks"` in `local.conf` (ST's template), the autologin from
    ST's getty setting. Anyone on the network can log in as root over SSH. To remove for the product
    in phase 4: no `debug-tweaks`, SSH with keys only, no autologin.
+10. Parts for the test rig's power path, not bought yet: two USB-C female breakouts (wired back to
+    back, with the relay and the current sensor in series in VBUS) and an INA219 current-sensor
+    breakout, read by the Pi Zero over I2C. Before buying: check that the USB-C breakouts bring out
+    VBUS, GND, CC1 and CC2 (CC must pass through or the charger gives no power), and that the INA219
+    breakout handles 5 V and up to 3 A.
 
 ## Decisions
 
@@ -246,6 +251,9 @@ ADRs in [decisions/](decisions/), using `decisions/adr-template.md`:
   node does not use.
 - [ADR-0003](decisions/0003-device-tree-disable-unused-hardware.md): disable unused hardware in the
   device tree with a patch.
+- [ADR-0004](decisions/0004-accelerometer-adxl345.md): keep the ADXL345 as the vibration sensor.
+- [ADR-0005](decisions/0005-current-measurement-on-test-rig.md): measure the board's current on the
+  test rig, not on the HAT.
 
-Decisions expected: accelerometer choice (phase 2), boot chain and signing (phase 4), fuses and
+Decisions expected: boot chain and signing (phase 4), fuses and
 secure boot lock (end of week 7).

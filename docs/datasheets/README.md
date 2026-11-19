@@ -29,6 +29,12 @@ the old row stays until nothing cites it anymore.
 | `adxl345-revg.pdf` | ADXL345, 3-axis ±2 g/±4 g/±8 g/±16 g digital accelerometer datasheet | Rev. G, May 2022 | [link](https://www.analog.com/media/en/technical-documentation/data-sheets/ADXL345.pdf) |
 | `sen0032-schematic-rev2.pdf` | SEN0032, triple axis accelerometer breakout (ADXL345), schematic | 2.0, 7-May-2011 | [link](https://dfimg.dfrobot.com/wiki/18629/SEN0032_adxl345-digital-triaxial-acceleration-sensor_schematics_V1.0.pdf) |
 
+## Relay: DFRobot DFR0251 relay module (Hongfa HF152FD)
+
+| File | Document | Revision | Source |
+|---|---|---|---|
+| `hf152fd-rev1.pdf` | HF152FD, subminiature high power relay datasheet | Rev. 1.00, 2013 | [link](https://gr.mouser.com/datasheet/3/1500/1/HF152FD_Datasheet.pdf) |
+
 ## SHA-256 checksums
 
 ```
@@ -39,6 +45,7 @@ d9b28dea43bfd41e30d6938caf020e366f8f770f7b3962b999de33410edcca4c  es0628-rev1.pd
 2e8a6f8eb676fae1c70768e9f3e49b4f111e3b94aadf58bf172624a5920c04e0  rm0506-rev2.pdf
 87ae2212498c35a6759d8732adee0ec9b9d8d60fa95688bc5904f1f07ceb8ff6  adxl345-revg.pdf
 c9cc93bf3e46ab1103863963aba46b03266a183e4aebbd0a339cfc77920cb4e5  sen0032-schematic-rev2.pdf
+38dd9b38da342a159fe2da6e82c8b0ebc403584907947c27e1badb0987c05f08  hf152fd-rev1.pdf
 ```
 
 A different checksum means a different file (usually a silent update by the vendor):

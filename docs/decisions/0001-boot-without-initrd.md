@@ -64,8 +64,6 @@ partition sizes.
   so the Ethernet driver was not loaded yet and the hostname became `stm32mp21-discounknownunknown`.
   The initrd had hidden this by loading every driver before systemd started. Fix: `st-hostname`
   removed, fixed hostname `vibration-node` set in `base-files` (one board only).
-- Follow-up: in phase 5, check whether dm-verity can be set up without an initrd
-  (`dm-mod.create=` on the kernel command line). If it cannot, revisit with Option C.
 
 ## Interview angle
 

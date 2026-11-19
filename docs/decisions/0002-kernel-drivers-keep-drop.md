@@ -81,9 +81,6 @@ entropy random source (crypto).
 - After each build, check that no switched-off option is back in the final `.config`.
 - Later steps: loaded modules 22 to 19 (debug bus, UIO), then built-in options 1951 to 1702 and
   boot 16.6 to 16.0 s (PCI, network filesystems and the rest).
-- Follow-up: `stm32_lptimer` is kept (a built-in clock driver, `CLKSRC_STM32_LP`, may depend on it;
-  not verified). About 600 modules that never load are not handled (disk space only). The device
-  tree still declares the removed hardware (phase 1, step 4).
 - If the HAT or a later phase needs a removed subsystem (for example an ADC), remove its line from
   the fragment.
 
