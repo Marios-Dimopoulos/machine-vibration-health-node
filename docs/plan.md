@@ -74,7 +74,7 @@ Start from the ready-made ST image, then build your own with the ST BSP layer an
 - Done (2026-11-18): `vibration-image` boots from microSD in 15.0 s, logs in
   `captures/vibration-image-trimmed_*.log`, stage table in [architecture.md](architecture.md).
 
-### 2. HAT design (weeks 2-4) `[ ]`
+### 2. HAT design (weeks 2-4) `[~]`
 Schematic and two-layer layout in KiCad: sensor connector, EEPROM, LED, button. The accelerometer
 is chosen here, with an ADR.
 - Proof: ERC and DRC with no errors, every connection checked against the datasheets, order placed at

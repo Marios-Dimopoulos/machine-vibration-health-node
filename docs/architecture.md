@@ -15,6 +15,8 @@ Phase 1 (bring-up and own image) is done. The board boots my own Linux image,
 not signed yet) and ST's Linux 6.6, trimmed to what the product needs. It is reached over SSH on
 Ethernet and over the serial console on CN2, and runs my first program, `vibration-hello`. The rest
 of the target system (M33 firmware, HAT, secure boot, updates, test rig, detection) is planned.
+Phase 2 (HAT design) is in progress: the sensor is chosen (ADR-0004) and the current measurement moved
+to the test rig (ADR-0005); the KiCad design has not started.
 
 ## Target architecture (what I am building)
 
@@ -45,8 +47,8 @@ flowchart TB
     end
     DEV["Development PC: Yocto build, signing, OTA, SBOM"] --> RAUC
     DAEMON --> MQTT["MQTT broker (alerts)"]
-    HAT["HAT (own KiCad PCB): current measurement, EEPROM, connector"] -- "40-pin header" --- SoC
-    RIG["Test rig: Pi Zero 2 W + labgrid + pytest (boot, update, power cut, rollback)"] -- "power, console" --- SoC
+    HAT["HAT (own KiCad PCB): sensor connector, EEPROM, LED, button"] -- "40-pin header" --- SoC
+    RIG["Test rig: Pi Zero 2 W + labgrid + pytest (boot, update, power cut, rollback)"] -- "power, current, console" --- SoC
     FAN["Fan + ADXL345: the monitored machine"] -- "SPI over cable" --- HAT
 ```
 
@@ -60,8 +62,8 @@ How the parts connect (planned):
 | SPI + DMA | ADXL345 <-> M33 | 3 | via the 40-pin header / HAT cable, fixed sample rate. Pin mapping not defined yet (see open items) |
 | RPMsg over remoteproc | M33 <-> A35 | 3 | the A35 loads the M33 firmware and receives the FFT spectrum |
 | Logic analyzer | Pico <-> SPI lines | 3 | verifies equal sample spacing and measures jitter |
-| Power + console | test rig <-> board | 6 | relay on the 5 V DC line only (never mains), USB-UART console |
-| 40-pin header | board <-> HAT | 2, 7 | HAT: current-measurement chip (INA219-type), EEPROM, LED, button, sensor connector |
+| Power + console | test rig <-> board | 6 | relay and INA219 current sensor in the USB-C VBUS line (5 V DC only, never mains), USB-UART console (ADR-0005) |
+| 40-pin header | board <-> HAT | 2, 7 | HAT: sensor connector, EEPROM, LED, button |
 | MQTT over TLS | A35 -> MQTT broker | 7 | alerts when the spectrum deviates from the learned healthy spectrum |
 
 ## System parts and status
@@ -71,13 +73,13 @@ How the parts connect (planned):
 | STM32MP215F-DK | the board of the project | 1 | working: boots my image from microSD |
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | starts Linux; later verifies every stage | 1, 4 | working: ST's binaries (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10). Not signed (phase 4) |
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
-| ADXL345 on a breakout | vibration sensor | 2, 3 | header soldered, continuity checked, not connected |
-| HAT (KiCad PCB) | current measurement, EEPROM, LED, button, sensor connector | 2, 7 | planned, not designed |
+| ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
+| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: parts decided, not designed |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | planned |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | planned, unverified on this board |
-| 5 V fan | the "machine" being monitored | 3, 7 | received, not used |
+| 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
 | RAUC A/B updates, dm-verity, watchdog | updates with rollback, read-only rootfs | 5 | planned |
-| Test rig (Pi Zero 2 W, labgrid, pytest, relay, USB-UART, Pico) | automatic verification on the real board | 6 | planned |
+| Test rig (Pi Zero 2 W, labgrid, pytest, relay, INA219, USB-UART, Pico) | automatic verification on the real board | 6 | planned |
 | Detection daemon | statistical anomaly detection, MQTT/TLS alerts | 7 | planned |
 
 Status legend: `planned` (not started), `in progress`, `working` (proof recorded in `captures/`),
@@ -175,9 +177,15 @@ In the image recipe, for ST's partition class (`image_types-stsplitpartitions`):
 
 Received from the Mouser order (2026-11-11):
 - STM32MP215F-DK (511-STM32MP215F-DK).
-- SEN0032: DFRobot ADXL345 triple-axis accelerometer breakout (I2C and SPI).
-- DFR0251: DFRobot Gravity digital 16 A relay module, 1 channel, 5 V DC supply. Its DC contact rating
-  must be checked before phase 6.
+- SEN0032: DFRobot ADXL345 triple-axis accelerometer breakout (I2C and SPI). Connector J1: 1 GND,
+  2 VCC, 3 CS, 4 INT1, 5 INT2, 6 SDO, 7 SDA, 8 SCL (in SPI mode SCL = SCLK, SDA = data in, SDO = data
+  out). An on-board regulator feeds the chip; no level shifting or pull-ups on the signals
+  (SEN0032 schematic 2.0; ADXL345 Rev. G, p. 6). Measured 3.30 V on C2 with VCC = 5 V (2026-11-19).
+- DFR0251: DFRobot Gravity digital 16 A relay module, 1 channel, 5 V DC supply. Control connector
+  D, +, −; contacts COM, NO, NC. Relay Hongfa HF152FD, 1 Form C: contact ratings are given for AC
+  only, and the max. switching power curve (not labelled AC or DC) allows far more than 3 A at 5 V;
+  contact resistance 100 mΩ max (HF152FD Rev. 1.00, p. 1, p. 3). To confirm on the test rig before
+  phase 6.
 - FIT0121: DFRobot jumper wires, female/male, 65 pack.
 - FIT0030: wires.
   (Identified by part number from distributor listings: TME, Digi-Key, Jameco, DFRobot wiki.)
@@ -190,6 +198,8 @@ Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. Th
 is a SanDisk, marked Class 10 and A1.
 
 Received: soldering iron, solder wire, multimeter (2026-11-13); side cutter, 5 V fan (by 2026-11-15).
+The fan is a Waveshare Fan-4010-5V (40 x 40 x 10 mm, 3-pin connector, 9 blades counted); Waveshare
+does not publish its speed.
 All ordered items have arrived.
 
 ### Board facts: STM32MP215F-DK
@@ -208,10 +218,10 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
 | STLINK | CN5: STDC14 debug connector, 14 pins in 2 rows of 7. Carries SWD/JTAG and the A35 console (USART2). Pitch about half of CN12's (by eye), consistent with STDC14 | UM3571 Rev 1, p. 2; MB2059 schematic B-02, sheet 3; counted on the board |
 | Display | FFC connector CN8, silkscreen "DISPLAY" | photo, ST wiki |
 | Ethernet | RJ45, reference CN11 | photo |
-| GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4; SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). I/O at 3.3 V (VDDIO). Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). Comparison with Raspberry Pi: see open items | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheet 3 |
+| GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4 (`5V_VIN`, the output of the eFuse U14, see Power and USB); SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). I/O at 3.3 V (VDDIO). Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). Comparison with Raspberry Pi: see open items | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheet 12 of 14 |
 | Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers, pin 1 = board RX, pin 2 = GND, pin 3 = board TX. A35 console: 115200 baud, Linux device ttySTM0 | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3; `captures/st-starter_first-boot_untimed.log` line 207 |
 | Silicon revision | The chip reports Rev.Z (UM3571 lists revision "Y"). ES0628 errata must be read for Rev.Z | `captures/st-starter_first-boot_untimed.log` lines 1, 91; UM3571 Rev 1, p. 33 |
-| Power and USB | CN10 is the only USB connector: USB Type-C, 5 V power input and USB 2.0 data (device). Its CC1/CC2 lines go to ADC inputs ANA0/ANA1 to detect the current the power source offers (0.5, 1.5 or 3 A). Also used for flashing with STM32CubeProgrammer (UART/USB boot switch position). Checked on the board | UM3571 Rev 1, p. 11, section 7.4.2; p. 16, section 8.1 |
+| Power and USB | CN10 is the only USB connector: USB Type-C, 5 V power input and USB 2.0 data (device). Its CC1/CC2 lines go to ADC inputs ANA0/ANA1 to detect the current the power source offers (0.5, 1.5 or 3 A). Also used for flashing with STM32CubeProgrammer (UART/USB boot switch position). Checked on the board. VBUS goes through the electronic fuse U14 (STEF05SGR) and becomes `5V_VIN`. Each CC line has a pull-down (1.2 kΩ + 3.9 kΩ), which the charger needs to see before it turns on VBUS | UM3571 Rev 1, p. 11, section 7.4.2; p. 16, section 8.1; schematic B-02, sheet 8 of 14 |
 
 ## Open items and unverified facts
 
