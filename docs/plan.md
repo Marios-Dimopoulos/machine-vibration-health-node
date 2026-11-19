@@ -40,13 +40,14 @@ detection is written, the spectrum with and without tape on a blade is compared,
 difference is clearly visible.
 
 **HAT.** A small two-layer KiCad PCB on the 40-pin header, with hand-solderable parts: a connector for
-the sensor, a current-measurement chip (e.g. INA219), an EEPROM, an LED and a button. Ordered at the
-end of phase 2 so it arrives before bring-up in phase 7. Every connection is checked against the
-datasheets before ordering; an error that gets through is fixed with a wire and recorded.
+the sensor, an EEPROM, an LED and a button. Ordered at the end of phase 2 so it arrives before
+bring-up in phase 7. Every connection is checked against the datasheets before ordering; an error
+that gets through is fixed with a wire and recorded.
 
 **Test rig.** A Raspberry Pi Zero 2 W with labgrid controls a relay on the board's 5 V DC supply
-(never mains) and reads the console through a USB-UART. A Raspberry Pi Pico acts as a logic analyzer
-for the sensor SPI and HAT bring-up. Tests are written in pytest.
+(never mains) and reads the console through a USB-UART. An INA219 in the USB-C power line, next to
+the relay, measures the board's current, and the Pi Zero reads it over I2C. A Raspberry Pi Pico
+acts as a logic analyzer for the sensor SPI and HAT bring-up. Tests are written in pytest.
 
 ## Phases
 
@@ -74,8 +75,8 @@ Start from the ready-made ST image, then build your own with the ST BSP layer an
   `captures/vibration-image-trimmed_*.log`, stage table in [architecture.md](architecture.md).
 
 ### 2. HAT design (weeks 2-4) `[ ]`
-Schematic and two-layer layout in KiCad: sensor connector, current-measurement chip, EEPROM, LED,
-button. The accelerometer is chosen here, with an ADR.
+Schematic and two-layer layout in KiCad: sensor connector, EEPROM, LED, button. The accelerometer
+is chosen here, with an ADR.
 - Proof: ERC and DRC with no errors, every connection checked against the datasheets, order placed at
   the end of week 4.
 
@@ -105,9 +106,9 @@ power cut at a random moment of an update, rollback, data flow.
   from a valid slot every time.
 
 ### 7. HAT bring-up and anomaly detection (weeks 10-11) `[ ]`
-Soldering, multimeter measurements, device tree overlay, drivers for the current measurement and the
-EEPROM. The daemon learns the spectrum of the healthy fan and sends an MQTT alert when it changes,
-starting with a simple statistical comparison.
+Soldering, multimeter measurements, device tree overlay, driver for the EEPROM. The daemon learns
+the spectrum of the healthy fan and sends an MQTT alert when it changes, starting with a simple
+statistical comparison.
 - Proof: with tape on a fan blade, an alert within a few seconds. Without tape, no false alert in 24
   hours. A graph shows the board power at every stage of an update.
 
