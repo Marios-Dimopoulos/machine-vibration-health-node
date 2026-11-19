@@ -203,7 +203,7 @@ All ordered items have arrived.
 Platform: 1x Cortex-A35 at 1.5 GHz, Cortex-M33 at 300 MHz, 2 GB LPDDR4, no NPU, no eMMC, 100 Mbit
 Ethernet, USB-C power, M.2 E-Key slot, 40-pin GPIO expansion header.
 
-Observed on the physical board (photos taken 2026-11-11) and in ST documentation:
+Observed on the physical board and in ST documentation:
 
 | Item | Fact | Source |
 |---|---|---|
