@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Boot stage durations from Tera Term logs with timestamps.
 
-Usage: tools/boot_time.py docs/captures/boot_timed_*.log
+Usage: tools/boot_time.py docs/captures/boot-time/*_boot_timed-*.log
 """
 import re
 import sys

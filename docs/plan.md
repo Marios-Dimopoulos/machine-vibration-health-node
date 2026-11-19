@@ -72,7 +72,7 @@ Start from the ready-made ST image, then build your own with the ST BSP layer an
 `meta-vibration-node`. Read every boot stage on the serial console.
 - Proof: your image boots from microSD, and a table shows the time of each stage, measured from the log.
 - Done (2026-11-18): `vibration-image` boots from microSD in 15.0 s, logs in
-  `captures/vibration-image-trimmed_*.log`, stage table in [architecture.md](architecture.md).
+  `captures/boot-time/vibration-image-trimmed_*.log`, stage table in [architecture.md](architecture.md).
 
 ### 2. HAT design (weeks 2-4) `[~]`
 Schematic and two-layer layout in KiCad: sensor connector, EEPROM, LED, button. The accelerometer
