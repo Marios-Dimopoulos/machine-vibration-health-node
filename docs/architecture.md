@@ -193,9 +193,7 @@ the board's serial console), microSD card reader, power supply for the board (Sa
 with a USB-C to USB-C cable), 2 microSD 32 GB,
 passives and cables, Nucleo-F411RE (not used in this project).
 Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
-is a SanDisk, marked Class 10 and A1.
-
-Received: soldering iron, solder wire, multimeter (2026-11-13); side cutter, 5 V fan (by 2026-11-15).
+is a SanDisk, marked Class 10 and A1. Soldering iron, solder wire, multimeter (2026-11-13); side cutter, 5 V fan (by 2026-11-15).
 The fan is a Waveshare Fan-4010-5V (40 x 40 x 10 mm, 3-pin connector, 9 blades counted); Waveshare
 does not publish its speed.
 All ordered items have arrived.
