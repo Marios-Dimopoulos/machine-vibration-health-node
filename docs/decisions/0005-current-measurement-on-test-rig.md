@@ -50,7 +50,7 @@ power.
 ## Consequences
 
 - Easier: the HAT gets simpler. It keeps the sensor connector, the EEPROM, the LED and the button.
-- The HAT's I2C need shrinks to the EEPROM only (open item 4 in architecture.md).
+- The HAT's I2C need shrinks to the EEPROM only.
 - The phase 7 proof (a graph of the board power at every stage of an update) stays, measured by the
   test rig.
 

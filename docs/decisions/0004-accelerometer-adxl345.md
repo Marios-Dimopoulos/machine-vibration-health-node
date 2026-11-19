@@ -25,7 +25,7 @@ What the ADXL345 gives (ADXL345 Rev. G):
 The breakout (SEN0032 schematic, rev 2.0) has an on-board regulator between VCC and the chip, and
 no level shifting or pull-ups on the signals. Connector J1: 1 GND, 2 VCC, 3 CS, 4 INT1, 5 INT2,
 6 SDO, 7 SDA, 8 SCL. The schematic names the regulator BL8555-30 and labels its output 3.3V; I
-measured 3.30 V on C2 with VCC = 5 V (2026-11-19).
+measured 3.30 V on C2 both with VCC = 5 V and with VCC = 3.3 V (2026-11-19).
 
 ## Options considered
 
@@ -63,7 +63,8 @@ new part would add cost and risk without changing what the project can show.
   - The sensor connector carries GND, VCC, CS, INT1, INT2 and the SPI lines, which the breakout
     labels with their I2C names: SCL is SCLK, SDA is the data input (MOSI), SDO is the data output
     (MISO) (p. 6).
-  - VCC comes from 5 V, so the regulator has headroom.
+  - VCC comes from the board's 3V3. The regulator then has no headroom and passes the supply
+    through (3.30 V measured on C2), which the chip accepts: 2.0 to 3.6 V (p. 1).
   - The signals are 3.3 V, inside the chip's limit of its supply + 0.3 V (p. 5).
 
 ## Interview angle
