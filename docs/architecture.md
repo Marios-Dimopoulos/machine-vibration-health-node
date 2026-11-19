@@ -6,11 +6,11 @@ changes a part, that part's section is updated to describe it as it is now (the 
 git). Update this file whenever something in the system changes (a part is built, a decision is made,
 a measurement is taken), and keep the "Status" column honest.
 
-Last updated: 2026-11-18.
+Last updated: 2026-11-19.
 
 ## Summary
 
-Phase 1 (bring-up and own image) is in its final steps. The board boots my own Linux image,
+Phase 1 (bring-up and own image) is done. The board boots my own Linux image,
 `vibration-image`, from microSD in 15.0 s from TF-A to login: ST's boot chain (TF-A, OP-TEE, U-Boot,
 not signed yet) and ST's Linux 6.6, trimmed to what the product needs. It is reached over SSH on
 Ethernet and over the serial console on CN2, and runs my first program, `vibration-hello`. The rest
@@ -232,6 +232,11 @@ Observed on the physical board (photos taken 2026-11-11) and in ST documentation
    verified.
 8. Every boot logs `stm32-rproc 0.m33: ... could not locate channel named "detach"`. To look at with
    remoteproc in phase 3.
+9. Development logins: root has an empty password (`/etc/shadow`), dropbear accepts it (`-B` in
+   `/etc/default/dropbear`), and the serial console logs in as root automatically. The first two come
+   from `EXTRA_IMAGE_FEATURES ?= "debug-tweaks"` in `local.conf` (ST's template), the autologin from
+   ST's getty setting. Anyone on the network can log in as root over SSH. To remove for the product
+   in phase 4: no `debug-tweaks`, SSH with keys only, no autologin.
 
 ## Decisions
 
