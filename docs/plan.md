@@ -31,9 +31,8 @@ Board constraints that shape the plan (STM32MP215F-DK):
 ## System hardware
 
 **Vibration sensor.** ADXL345 on a breakout, bolted onto the fan (not onto the HAT, otherwise it
-measures the board) and connected to the HAT with a short SPI cable. The choice is recorded in an ADR
-in phase 2. Criteria: SPI, a sample rate of at least a few kHz, an internal FIFO, available as a
-breakout.
+measures the board) and connected to the HAT with a short SPI cable. Criteria: SPI, a sample rate 
+of at least a few kHz, an internal FIFO, available as a breakout.
 
 **Fan.** A 5 V fan is the monitored machine. The sensor is fixed rigidly on its body. Before the
 detection is written, the spectrum with and without tape on a blade is compared, to confirm the
@@ -75,8 +74,7 @@ I start from the ready-made ST image, then build my own with the ST BSP layer an
   `captures/boot-time/vibration-image-trimmed_*.log`, stage table in [architecture.md](architecture.md).
 
 ### 2. HAT design (weeks 2-4) `[~]`
-Schematic and two-layer layout in KiCad: sensor connector, EEPROM, LED, button. The accelerometer
-is chosen here, with an ADR.
+Schematic and two-layer layout in KiCad: sensor connector, EEPROM, LED, button.
 - Proof: ERC and DRC with no errors, every connection checked against the datasheets, order placed at
   the end of week 4.
 
@@ -91,7 +89,7 @@ with remoteproc.
 ### 4. Secure boot (weeks 6-7) `[ ]`
 Keys, signing of TF-A and FIP, OP-TEE, U-Boot that accepts only a signed FIT (kernel and device tree).
 - Proof: a tampered kernel image is rejected at boot, and the log shows it.
-- Decision point: the fuses and closing the chip are irreversible. The decision is written in an ADR.
+- Decision point: the fuses and closing the chip are irreversible.
 
 ### 5. A/B updates with RAUC (weeks 8-9) `[ ]`
 Two rootfs slots, signed bundles, boot counter in U-Boot, watchdog and a health check after boot.
@@ -124,7 +122,7 @@ detection. Phases 3 to 6 are the core and are not cut.
 
 | Risk | What I do |
 |---|---|
-| **Fuses and closing the chip.** Writing the keys to the fuses and closing the chip are irreversible; closing without a working signature check kills the chip. ST's guide covers the MP13 and MP15, not the MP21 ([ST wiki](https://wiki.st.com/stm32mpu/wiki/How_to_perform_Secure_Boot_from_Distribution_package)). | I read the MP21 documentation first. I set up and test the whole chain without closing. I never close the only board. The decision is written in an ADR (end of week 7). |
+| **Fuses and closing the chip.** Writing the keys to the fuses and closing the chip are irreversible; closing without a working signature check kills the chip. ST's guide covers the MP13 and MP15, not the MP21 ([ST wiki](https://wiki.st.com/stm32mpu/wiki/How_to_perform_Secure_Boot_from_Distribution_package)). | I read the MP21 documentation first. I set up and test the whole chain without closing. I never close the only board. |
 | **RPMsg from Zephyr on the M33.** Not confirmed for this board. An RPMsg problem was reported on the MP257 DK with STM32Cube firmware ([ST community](https://community.st.com/stm32-mpus-embedded-software-and-solutions-46/stm32mp257-openamp-rpmsg-endpoint-not-getting-created-161965)). | I test it on the first day of phase 3. If it does not work in 2-3 days, I switch to ST's firmware (STM32CubeMP2) and keep Zephyr for later. |
 | **Weak vibration signal.** The sensor may pick up more noise from the table than vibration from the fan. | I fix the sensor rigidly on the fan. I compare the spectrum with and without tape before writing detection. |
 | **First PCB revision with errors.** Normal for a first spin. | I check every connection against the datasheets and the CN12 pinout before ordering. I fix errors with a wire and record them. |
