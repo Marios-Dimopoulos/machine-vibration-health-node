@@ -187,9 +187,6 @@ Received from the Mouser order (2026-11-11):
   only, and the max. switching power curve (not labelled AC or DC) allows far more than 3 A at 5 V;
   contact resistance 100 mΩ max (HF152FD Rev. 1.00, p. 1, p. 3). To confirm on the test rig before
   phase 6.
-- FIT0121: DFRobot jumper wires, female/male, 65 pack.
-- FIT0030: wires.
-  (Identified by part number from distributor listings: TME, Digi-Key, Jameco, DFRobot wiki.)
 
 Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART adapter (used for
 the board's serial console), microSD card reader, power supply for the board (Samsung USB-C charger, 15 W, 5 V / 3 A,
