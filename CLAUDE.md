@@ -87,6 +87,7 @@ machine-vibration-health-node/
 - yocto/          Yocto layer(s), recipes and configuration for the Linux image
                   (own layer: yocto/layers/meta-vibration-node/, next to the vendor layers)
 - firmware/       Zephyr application for the M33
+- kicad-hat/      KiCad project of the HAT (schematic, PCB, later the production files)
 - docs/
   - captures/     evidence: serial logs, logic analyzer captures, screenshots, measurements
   - decisions/    all ADRs, plus adr-template.md (written by the user, always follow it)
