@@ -35,6 +35,12 @@ the old row stays until nothing cites it anymore.
 |---|---|---|---|
 | `hf152fd-rev1.pdf` | HF152FD, subminiature high power relay datasheet | Rev. 1.00, 2013 | [link](https://gr.mouser.com/datasheet/3/1500/1/HF152FD_Datasheet.pdf) |
 
+## EEPROM: Microchip 24LC256
+
+| File | Document | Revision | Source |
+|---|---|---|---|
+| `24xx256-revm.pdf` | 24AA256/24LC256/24FC256, 256K I2C CMOS serial EEPROM datasheet (DS21203) | Rev. M, 2004 | [link](https://grobotronics.com/images/companies/1/21203M.pdf) |
+
 ## SHA-256 checksums
 
 ```
@@ -46,6 +52,7 @@ d9b28dea43bfd41e30d6938caf020e366f8f770f7b3962b999de33410edcca4c  es0628-rev1.pd
 87ae2212498c35a6759d8732adee0ec9b9d8d60fa95688bc5904f1f07ceb8ff6  adxl345-revg.pdf
 c9cc93bf3e46ab1103863963aba46b03266a183e4aebbd0a339cfc77920cb4e5  sen0032-schematic-rev2.pdf
 38dd9b38da342a159fe2da6e82c8b0ebc403584907947c27e1badb0987c05f08  hf152fd-rev1.pdf
+f7175c8a7acbef964cf412762aa6fedc968b674a7491b2d0f0845ae38f94a6c2  24xx256-revm.pdf
 ```
 
 A different checksum means a different file (usually a silent update by the vendor):
