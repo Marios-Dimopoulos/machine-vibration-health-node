@@ -118,6 +118,15 @@ Keep docs up to date as the work moves:
   Do not invent or change the template. If the template is missing, ask the user for it.
   Examples: choice of accelerometer, boot chain options, fuses and secure boot.
   Every ADR cites the source (document and page) that supports it.
+- ADRs are independent of each other. An ADR never mentions, links to or depends on another ADR
+  (no "see ADR-0004", no "as decided in ADR-0005"): it states the facts it needs itself, with their
+  sources. The only exception is the template's status line "Superseded by ADR-YYYY".
+  Links between docs are allowed only between the README files, plan.md, architecture.md and
+  individual ADRs, where outdated information is easier to catch. ADR-0001 to ADR-0005 were written
+  before this rule and keep their existing links.
+- An accepted ADR is not edited afterwards, even when a fact in it becomes outdated: the current
+  state is recorded in architecture.md. When a decision changes, a new ADR replaces it, and the old
+  ADR's status becomes "Superseded by ADR-YYYY" (the only edit allowed).
 - At the end of each phase, before moving to the next one, quiz the user with 5-10 questions to
   check real understanding. If an answer is weak, go back and explain again.
   Do not start the next phase until the user is comfortable with the current one.
