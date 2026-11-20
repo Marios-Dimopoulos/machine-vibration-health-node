@@ -65,6 +65,8 @@ fp-info-cache
 _autosave-*
 *.lck
 \#auto_saved_files#
+# KiCad 10's local history: its own small git repository inside the project directory.
+.history/
 
 # Editors and OS
 *.swp
