@@ -17,8 +17,10 @@ ADR-0002 switched off the drivers for this hardware, but the device tree still d
 kernel still created those devices, and the description did not match the product.
 
 I2C2 only goes to the camera connector CN4 and the display's touch panel (UM3571 Rev 1, p. 21,
-Table 12). No I2C bus reaches the 40-pin header CN12: pins 3 and 5 carry I3C1, pins 27 and 28 I3C2
-(UM3571 Rev 1, p. 26, Table 17). So disabling I2C2 does not take anything from the HAT.
+Table 12); it does not reach the 40-pin header CN12. The manual labels CN12 pins 3 and 5 as I3C1 and
+pins 27 and 28 as I3C2 (UM3571 Rev 1, p. 26, Table 17), and the same pins can be set to plain I2C,
+I2C1 and I2C3 (DS14556 Rev 2, Table 13, p. 73, 77, 80, 81). So disabling I2C2 does not take anything
+from the HAT.
 
 ## Options considered
 

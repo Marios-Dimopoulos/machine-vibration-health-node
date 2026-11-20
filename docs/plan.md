@@ -31,16 +31,16 @@ Board constraints that shape the plan (STM32MP215F-DK):
 ## System hardware
 
 **Vibration sensor.** ADXL345 on a breakout, bolted onto the fan (not onto the HAT, otherwise it
-measures the board) and connected to the HAT with a short SPI cable. Criteria: SPI, a sample rate 
-of at least a few kHz, an internal FIFO, available as a breakout.
+measures the board) and connected to the HAT with a short SPI cable. Criteria: SPI, a sample rate of
+at least a few kHz, an internal FIFO, available as a breakout.
 
 **Fan.** A 5 V fan is the monitored machine. The sensor is fixed rigidly on its body. Before the
 detection is written, the spectrum with and without tape on a blade is compared, to confirm the
 difference is clearly visible.
 
-**HAT.** A small two-layer KiCad PCB on the 40-pin header, with hand-solderable parts: a connector for
-the sensor, an EEPROM, an LED and a button. Ordered at the end of phase 2 so it arrives before
-bring-up in phase 7. Every connection is checked against the datasheets before ordering; an error
+**HAT.** A small two-layer KiCad PCB on pins 17-30 of the 40-pin header (the other pins stay free),
+with hand-solderable parts: a connector for the sensor, an EEPROM, an LED and a button. Ordered at
+the end of phase 2 so it arrives before bring-up in phase 7. Every connection is checked against the datasheets before ordering; an error
 that gets through is fixed with a wire and recorded.
 
 **Test rig.** A Raspberry Pi Zero 2 W with labgrid controls a relay on the board's 5 V DC supply

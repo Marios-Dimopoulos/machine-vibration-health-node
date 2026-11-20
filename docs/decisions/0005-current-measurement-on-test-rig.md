@@ -6,7 +6,7 @@
 
 ## Context
 
-The plan puts a current-measurement chip (e.g. INA219) on the HAT, so that phase 7 can show the
+The plan first put a current-measurement chip (e.g. INA219) on the HAT, so that phase 7 can show the
 board's power at every stage of an update. For that, the board's supply current has to flow through
 the chip's shunt resistor.
 

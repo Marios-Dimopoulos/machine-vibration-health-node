@@ -19,7 +19,7 @@ modules (`lsmod`), including drivers for hardware that is not connected
 What the vibration node needs from Linux:
 - Ethernet: network, SSH, MQTT (phase 7).
 - remoteproc for the M33 (phase 3).
-- I2C controller driver: the HAT's current sensor and EEPROM (phase 7). The PMIC is not on a Linux
+- I2C controller driver: the HAT's EEPROM (phase 7). The PMIC is not on a Linux
   I2C bus: its regulators are reached through OP-TEE over SCMI (`VOLTD_SCMI_STPMIC_*` in the device
   tree).
 - Crypto, CRC, OP-TEE, the watchdog (phases 4 and 5). OP-TEE and the watchdog are built in.

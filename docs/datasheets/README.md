@@ -14,7 +14,7 @@ the old row stays until nothing cites it anymore.
 | `um3571-rev1.pdf` | UM3571, Discovery kit with STM32MP215F MPU, user manual | Rev 1, Nov 2025 | [link](https://www.st.com/resource/en/user_manual/um3571-discovery-kit-with-stm32mp215f-mpu-stmicroelectronics.pdf) |
 | `mb2059-mp215f-b02-schematic.pdf` | MB2059 schematic, variant MP215F | B-02, 08-Jul-2025 | [link](https://www.st.com/en/evaluation-tools/stm32mp215f-dk.html#cad-resources) |
 
-## Chip: STM32MP215FAN3 (VFBGA273, silicon revision "Y")
+## Chip: STM32MP215FAN3 (VFBGA273; UM3571 lists silicon revision "Y", my chip reports "Z")
 
 | File | Document | Revision | Source |
 |---|---|---|---|

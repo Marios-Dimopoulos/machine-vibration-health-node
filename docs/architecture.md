@@ -6,7 +6,7 @@ changes a part, that part's section is updated to describe it as it is now (the 
 git). Update this file whenever something in the system changes (a part is built, a decision is made,
 a measurement is taken), and keep the "Status" column honest.
 
-Last updated: 2026-11-19.
+Last updated: 2026-11-20.
 
 ## Summary
 
@@ -15,8 +15,9 @@ Phase 1 (bring-up and own image) is done. The board boots my own Linux image,
 not signed yet) and ST's Linux 6.6, trimmed to what the product needs. It is reached over SSH on
 Ethernet and over the serial console on CN2, and runs my first program, `vibration-hello`. The rest
 of the target system (M33 firmware, HAT, secure boot, updates, test rig, detection) is planned.
-Phase 2 (HAT design) is in progress: the sensor is chosen (ADR-0004) and the current measurement moved
-to the test rig (ADR-0005), and the CN12 pin plan is drafted; the KiCad design has not started.
+Phase 2 (HAT design) is in progress: the sensor is chosen (ADR-0004), the current measurement moved
+to the test rig (ADR-0005) and the HAT's pins on CN12 are decided (ADR-0006). The KiCad design has
+not started.
 
 ## Target architecture (what I am building)
 
@@ -50,6 +51,7 @@ flowchart TB
     HAT["HAT (own KiCad PCB): sensor connector, EEPROM, LED, button"] -- "40-pin header" --- SoC
     RIG["Test rig: Pi Zero 2 W + labgrid + pytest (boot, update, power cut, rollback)"] -- "power, current, console" --- SoC
     FAN["Fan + ADXL345: the monitored machine"] -- "SPI over cable" --- HAT
+    SoC -- "fan power: 5 V, GND (CN12)" --- FAN
 ```
 
 Every boot stage verifies the signature of the next one. Linux loads the M33 firmware (remoteproc) and
@@ -63,7 +65,8 @@ How the parts connect (planned):
 | RPMsg over remoteproc | M33 <-> A35 | 3 | the A35 loads the M33 firmware and receives the FFT spectrum |
 | Logic analyzer | Pico <-> SPI lines | 3 | verifies equal sample spacing and measures jitter |
 | Power + console | test rig <-> board | 6 | relay and INA219 current sensor in the USB-C VBUS line (5 V DC only, never mains), USB-UART console (ADR-0005) |
-| 40-pin header | board <-> HAT | 2, 7 | HAT: sensor connector, EEPROM, LED, button. Draft: the HAT covers only rows 17-30 of CN12 (pins 17-30), the other pins stay free |
+| 40-pin header | board <-> HAT | 2, 7 | HAT: sensor connector, EEPROM, LED, button. The HAT covers only pins 17-30 of CN12 (7 rows of 2), the other pins stay free (ADR-0006) |
+| Fan power | board -> fan | 3 | 5 V from CN12 pin 2 or 4, GND from pin 6, outside the HAT (UM3571 Rev 1, p. 26, Table 17) |
 | MQTT over TLS | A35 -> MQTT broker | 7 | alerts when the spectrum deviates from the learned healthy spectrum |
 
 ## System parts and status
@@ -74,7 +77,7 @@ How the parts connect (planned):
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | starts Linux; later verifies every stage | 1, 4 | working: ST's binaries (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10). Not signed (phase 4) |
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
-| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: parts decided, CN12 pin plan drafted, not designed |
+| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: functions and CN12 pins decided (ADR-0006), not designed |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | planned |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | planned, unverified on this board |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
@@ -189,11 +192,13 @@ Received from the Mouser order (2026-11-11):
   phase 6.
 
 Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART adapter (used for
-the board's serial console), microSD card reader, power supply for the board (Samsung USB-C charger, 15 W, 5 V / 3 A,
-with a USB-C to USB-C cable), 2 microSD 32 GB,
-passives and cables, Nucleo-F411RE (not used in this project).
+the board's serial console), microSD card reader, power supply for the board (Samsung USB-C charger,
+15 W, 5 V / 3 A, with a USB-C to USB-C cable), 2 microSD 32 GB, passives and cables, Nucleo-F411RE
+(not used in this project).
 Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
-is a SanDisk, marked Class 10 and A1. Soldering iron, solder wire, multimeter (2026-11-13); side cutter, 5 V fan (by 2026-11-15).
+is a SanDisk, marked Class 10 and A1.
+
+Received: soldering iron, solder wire, multimeter (2026-11-13); side cutter, 5 V fan (by 2026-11-15).
 The fan is a Waveshare Fan-4010-5V (40 x 40 x 10 mm, 3-pin connector, 9 blades counted); Waveshare
 does not publish its speed.
 All ordered items have arrived.
@@ -207,14 +212,14 @@ Observed on the physical board and in ST documentation:
 
 | Item | Fact | Source |
 |---|---|---|
-| Boot storage | microSD slot, silkscreen "SD CARD", reference CN7, 8 contacts. | photo, ST hardware description wiki |
+| Boot storage | microSD slot, silkscreen "SD CARD", reference CN7, 8 contacts | photo, ST hardware description wiki |
 | microSD interface | SDMMC1, 4 data bits, High Speed mode at 50 MHz and 3.3 V (about 25 MB/s at most). UHS-I is not supported, so this is the board's maximum. Measured on the board: `/sys/kernel/debug/mmc0/ios` shows `clock: 50000000 Hz`, `timing spec: sd high-speed` | UM3571 Rev 1, p. 17, section 8.2.2 |
 | Boot mode switches | SW2 = BOOT0, BOOT1; SW1 = BOOT2, BOOT3. ON = 1 (pin tied to VDDIO through 1 kOhm). microSD boot (A35): BOOT0 ON, others OFF (0b0001). All OFF (0b0000) = UART/USB flash programming. Read only at reset. Valid with the default boot OTP (0b00). Current position: 0b0001 (microSD boot) | UM3571 Rev 1, p. 13, Tables 4-5; schematic B-02, sheet 14; DS14556 Rev 2, p. 14, Table 5 |
 | Programming mode | With the switches at 0b0000, LD5 blinks at about 3-4 Hz (Boot ROM waiting, PH4) | observed on the board (2026-11-13) |
 | STLINK | CN5: STDC14 debug connector, 14 pins in 2 rows of 7. Carries SWD/JTAG and the A35 console (USART2). Pitch about half of CN12's (by eye), consistent with STDC14 | UM3571 Rev 1, p. 2; MB2059 schematic B-02, sheet 3; counted on the board |
 | Display | FFC connector CN8, silkscreen "DISPLAY" | photo, ST wiki |
 | Ethernet | RJ45, reference CN11 | photo |
-| GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4 (`5V_VIN`, the output of the eFuse U14, see Power and USB); SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). Other pins checked on the schematic: 18 = PB14, 22 = PD13, 26 = PC7, 29 = PH13; 27 = PG0 (`ID_SD`), 28 = PC12 (`ID_SC`), with no pull-up resistors on the board. Plain I2C is an alternate function on pins 27/28 (I2C3_SDA on PG0, I2C3_SCL on PC12) and 3/5 (I2C1_SDA on PA2, I2C1_SCL on PG13). Each of these pins has no other connection on the board. I/O at 3.3 V (VDDIO, from LDO2): all HAT pins are on VDDIO; only VDDIO2 (PE6-PE15) runs at 1.8 V, and no CN12 pin uses it. Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). Comparison with Raspberry Pi: see open items | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheets 3 and 12 of 14; DS14556 Rev 2, Table 13, p. 73, 77, 80, 81; UM3571 Rev 1, p. 11; schematic B-02, sheets 4 and 5 of 14 |
+| GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4 (`5V_VIN`, the output of the eFuse U14, see Power and USB); SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). Other pins checked on the schematic: 18 = PB14, 22 = PD13, 26 = PC7, 29 = PH13; 27 = PG0 (`ID_SD`), 28 = PC12 (`ID_SC`), with no pull-up resistors on the board. Plain I2C is an alternate function on pins 27/28 (I2C3_SDA on PG0, I2C3_SCL on PC12) and 3/5 (I2C1_SDA on PA2, I2C1_SCL on PG13). Each of these pins has no other connection on the board. I/O at 3.3 V (VDDIO, from LDO2): all HAT pins are on VDDIO; only VDDIO2 (PE6-PE15) runs at 1.8 V, and no CN12 pin uses it. Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). The schematic names the CN12 signals with Raspberry Pi GPIO numbers (`EXP_GPIO2` to `EXP_GPIO27`) and `ID_SD`/`ID_SC` on pins 27/28 | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheets 3 and 12 of 14; DS14556 Rev 2, Table 13, p. 73, 77, 80, 81; UM3571 Rev 1, p. 11; schematic B-02, sheets 4 and 5 of 14 |
 | Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers, pin 1 = board RX, pin 2 = GND, pin 3 = board TX. A35 console: 115200 baud, Linux device ttySTM0 | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3; `captures/boot-time/st-starter_first-boot_untimed.log` line 207 |
 | Silicon revision | The chip reports Rev.Z (UM3571 lists revision "Y"). ES0628 errata must be read for Rev.Z | `captures/boot-time/st-starter_first-boot_untimed.log` lines 1, 91; UM3571 Rev 1, p. 33 |
 | Power and USB | CN10 is the only USB connector: USB Type-C, 5 V power input and USB 2.0 data (device). Its CC1/CC2 lines go to ADC inputs ANA0/ANA1 to detect the current the power source offers (0.5, 1.5 or 3 A). Also used for flashing with STM32CubeProgrammer (UART/USB boot switch position). Checked on the board. VBUS goes through the electronic fuse U14 (STEF05SGR) and becomes `5V_VIN`. Each CC line has a pull-down (1.2 kΩ + 3.9 kΩ), which the charger needs to see before it turns on VBUS | UM3571 Rev 1, p. 11, section 7.4.2; p. 16, section 8.1; schematic B-02, sheet 8 of 14 |
@@ -222,35 +227,33 @@ Observed on the physical board and in ST documentation:
 ## Open items and unverified facts
 
 1. Secure boot flow on the MP21 (TF-A, OP-TEE, signed FIT): not verified. Required before phase 4.
-2. CN12 40-pin pinout compared to Raspberry Pi: not verified. Required before the HAT PCB order
-   (end of week 4).
-3. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
-4. Every small systemd job takes 0.3-0.8 s during boot (even mounting a tmpfs), so systemd still takes
+2. RPMsg from Zephyr on this board: not verified. Test on the first day of phase 3.
+3. Every small systemd job takes 0.3-0.8 s during boot (even mounting a tmpfs), so systemd still takes
    8.8 s. Not verified why; reading programs from the SD card (50 MHz, the board's maximum) is
    suspected.
-5. ST's `stm32mp-calibration.timer` recalibrates the internal oscillators HSI/CSI every few seconds.
+4. ST's `stm32mp-calibration.timer` recalibrates the internal oscillators HSI/CSI every few seconds.
    What depends on these oscillators on this board is not checked (RM0506).
-6. `stm32_lptimer` is kept: whether the built-in clock driver `CLKSRC_STM32_LP` needs it is not
+5. `stm32_lptimer` is kept: whether the built-in clock driver `CLKSRC_STM32_LP` needs it is not
    verified.
-7. Every boot logs `stm32-rproc 0.m33: ... could not locate channel named "detach"`. To look at with
+6. Every boot logs `stm32-rproc 0.m33: ... could not locate channel named "detach"`. To look at with
    remoteproc in phase 3.
-8. Development logins: root has an empty password (`/etc/shadow`), dropbear accepts it (`-B` in
+7. Development logins: root has an empty password (`/etc/shadow`), dropbear accepts it (`-B` in
    `/etc/default/dropbear`), and the serial console logs in as root automatically. The first two come
    from `EXTRA_IMAGE_FEATURES ?= "debug-tweaks"` in `local.conf` (ST's template), the autologin from
    ST's getty setting. Anyone on the network can log in as root over SSH. To remove for the product
    in phase 4: no `debug-tweaks`, SSH with keys only, no autologin.
-9. Parts for the test rig's power path, not bought yet: two USB-C female breakouts (wired back to
-    back, with the relay and the current sensor in series in VBUS) and an INA219 current-sensor
-    breakout, read by the Pi Zero over I2C. Before buying: check that the USB-C breakouts bring out
-    VBUS, GND, CC1 and CC2 (CC must pass through or the charger gives no power), and that the INA219
-    breakout handles 5 V and up to 3 A.
-10. HAT pins owned by the M33: SPI1, its DMA, and the EXTI lines of INT1 and INT2 (13 and 7) must be
-    assigned to the M33, not to Linux. The hardware allows it: the RIF assigns each peripheral to a
-    core at boot, SPI1 included (RM0506 Rev 2, Table 38, p. 309), and EXTI1 and EXTI2 both serve the
-    Cortex-A35 and the Cortex-M33 (p. 1501). Not verified: that ST's boot setup (TF-A, OP-TEE) gives
-    SPI1 and its DMA to the M33, and that Zephyr has working SPI and DMA drivers for this chip. To
-    test in phase 3, with the breakout wired to CN12 pins 17-30 exactly as on the HAT, before the
-    HAT PCB order.
+8. Parts for the test rig's power path, not bought yet: two USB-C female breakouts (wired back to
+   back, with the relay and the current sensor in series in VBUS) and an INA219 current-sensor
+   breakout, read by the Pi Zero over I2C. Before buying: check that the USB-C breakouts bring out
+   VBUS, GND, CC1 and CC2 (CC must pass through or the charger gives no power), and that the INA219
+   breakout handles 5 V and up to 3 A.
+9. HAT pins owned by the M33: SPI1, its DMA, and the EXTI lines of INT1 and INT2 (13 and 7) must be
+   assigned to the M33, not to Linux. The hardware allows it: the RIF assigns each peripheral to a
+   core at boot, SPI1 included (RM0506 Rev 2, Table 38, p. 309), and EXTI1 and EXTI2 both serve the
+   Cortex-A35 and the Cortex-M33 (p. 1501). Not verified: that ST's boot setup (TF-A, OP-TEE) gives
+   SPI1 and its DMA to the M33, and that Zephyr has working SPI and DMA drivers for this chip. To
+   test in phase 3, with the breakout wired to CN12 pins 17-30 exactly as on the HAT, before the
+   HAT PCB order.
 
 ## Decisions
 
@@ -263,6 +266,7 @@ ADRs in [decisions/](decisions/), using `decisions/adr-template.md`:
 - [ADR-0004](decisions/0004-accelerometer-adxl345.md): keep the ADXL345 as the vibration sensor.
 - [ADR-0005](decisions/0005-current-measurement-on-test-rig.md): measure the board's current on the
   test rig, not on the HAT.
+- [ADR-0006](decisions/0006-hat-on-cn12-pins-17-30.md): put the HAT on CN12 pins 17-30 only, powered
+  from 3V3.
 
-Decisions expected: boot chain and signing (phase 4), fuses and
-secure boot lock (end of week 7).
+Decisions expected: boot chain and signing (phase 4), fuses and secure boot lock (end of week 7).

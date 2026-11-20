@@ -2,12 +2,12 @@
 
 **Status:** Proposed | Accepted | Superseded by ADR-YYYY
 **Date:** YYYY-MM-DD
-**Phase:** 1 | 2 | 3 | 4
+**Phase:** 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 
 ## Context
 
-What problem am i solving? What forces are at play (constraints from
-CLAUDE.md, hardware limits, budget, time)? What would happen if i did
+What problem am I solving? What forces are at play (constraints from
+CLAUDE.md, hardware limits, budget, time)? What would happen if I did
 nothing / kept the naive approach?
 
 ## Options considered
@@ -34,7 +34,6 @@ it (not a restatement of the pros/cons list).
 
 - What this makes easier
 - What this makes harder or forecloses
-- Any follow-up work this creates (e.g. "revisit this once Phase 3 starts")
 
 ## Interview angle
 

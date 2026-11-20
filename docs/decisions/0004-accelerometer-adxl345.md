@@ -43,14 +43,16 @@ measured 3.30 V on C2 both with VCC = 5 V and with VCC = 3.3 V (2026-11-19).
 
 ## Decision
 
-Option A. Everything the fan produces lies below 1600 Hz, and the sensor is already on my desk, so a
-new part would add cost and risk without changing what the project can show.
+Option A. The fan's main frequencies (rotation and blade pass, at the assumed speed) lie below
+1600 Hz, and the sensor is already on my desk, so a new part would add cost and risk without
+changing what the project can show.
 
 ## Consequences
 
 - Easier: phase 3 can start with the breakout on wires right away.
 - Limit: nothing above 1600 Hz is visible, so the project detects imbalance and gross faults (the
-  tape on a blade), not early bearing wear.
+  tape on a blade), not early bearing wear. The higher harmonics of the blade frequency are not
+  visible either.
 - Firmware (phase 3):
   - SPI between 2 MHz (needed for 3200 Hz, p. 14) and 5 MHz.
   - One sample is a 7-byte burst read: the command, then DATAX0 to DATAZ1 (p. 27).
@@ -69,5 +71,5 @@ new part would add cost and risk without changing what the project can show.
 
 ## Interview angle
 
-I checked that every frequency my fan produces fits under the sensor's 1600 Hz limit, and I can say
-exactly what the sensor cannot see: early bearing wear.
+I checked that my fan's main frequencies, rotation and blade pass, fit under the sensor's 1600 Hz
+limit, and I can say exactly what the sensor cannot see: early bearing wear.
