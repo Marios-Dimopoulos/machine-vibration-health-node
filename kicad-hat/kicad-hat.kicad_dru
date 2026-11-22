@@ -1,0 +1,12 @@
+(version 1)
+# Hand-soldering clearance is 0.5 mm (net classes), except around J1:
+# the top-row signals can only leave J1 between two bottom-row pins
+# (0.84 mm gap), which needs 0.25 mm. They run on B.Cu, under the socket.
+(rule "J1 pin escape"
+   (constraint clearance (min 0.25mm))
+   (condition "A.memberOfFootprint('J1') || B.memberOfFootprint('J1')"))
+# J1 sits in the narrow neck: its GND pads can't get 2 thermal spokes,
+# 1 spoke is enough for the HAT's few mA.
+(rule "J1 thermal spokes"
+   (constraint min_resolved_spokes 1)
+   (condition "A.memberOfFootprint('J1')"))

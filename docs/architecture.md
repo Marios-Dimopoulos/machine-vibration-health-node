@@ -6,7 +6,7 @@ changes a part, that part's section is updated to describe it as it is now (the 
 git). Update this file whenever something in the system changes (a part is built, a decision is made,
 a measurement is taken), and keep the "Status" column honest.
 
-Last updated: 2026-11-21.
+Last updated: 2026-11-22.
 
 ## Summary
 
@@ -77,7 +77,7 @@ How the parts connect (planned):
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | starts Linux; later verifies every stage | 1, 4 | working: ST's binaries (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10). Not signed (phase 4) |
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
-| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: CN12 pins decided (ADR-0006), schematic done (ERC clean), footprints being assigned, no layout yet |
+| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: layout routed, DRC clean, not ordered. T-shaped 2-layer board, GND pour on the bottom. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2 |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | planned |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | planned, unverified on this board |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
@@ -256,10 +256,15 @@ Observed on the physical board and in ST documentation:
    HAT PCB order.
 10. Parts for the HAT, not bought yet: the EEPROM 24LC256-I/PG (the `/P` means the 8-pin PDIP
     package, `G` a lead-free finish; 24XX256 Rev. M, p. 25), a DIP-8 IC socket for it, a 2x7 female
-    header (CN12 side), a 1x8 female header (sensor cable) and a 1x8 male header (test pins), all
-    2.54 mm pitch. Before buying: check that the shop lists the full EEPROM part number or the PDIP
-    package, not only "24LC256". Already in stock: resistors, the 100 nF capacitor, the green LED and
-    the button.
+    header (CN12 side), a 1x8 female header (sensor cable) and a 1x9 male header (test pins), all
+    2.54 mm pitch, and an M2 brass male-female standoff kit (4 to 12 mm, stackable) for three
+    spacers from the HAT down to the desk (two bottom corners and the top-left corner). Before
+    buying: check that the shop lists the full EEPROM part number or the PDIP package, not only
+    "24LC256". Already in stock: resistors, the 100 nF capacitor, the green LED and the button.
+11. HAT PCB edge clearance: J1's outer pads end 0.42 mm from the board edge, because the HAT's neck
+    is exactly as wide as J1 (17.78 mm), so that CN12 pins 15/16 and 31/32 stay free. KiCad's
+    default copper-to-edge rule (0.5 mm) is lowered to 0.4 mm in the board setup. Before the PCB
+    order: check that the chosen factory accepts 0.4 mm copper-to-edge clearance.
 
 ## Decisions
 
