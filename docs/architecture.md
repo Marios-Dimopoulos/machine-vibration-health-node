@@ -77,7 +77,7 @@ How the parts connect (planned):
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | starts Linux; later verifies every stage | 1, 4 | working: ST's binaries (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10). Not signed (phase 4) |
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
-| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: layout routed, DRC clean, not ordered. T-shaped 2-layer board, GND pour on the bottom. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2 |
+| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: layout routed, DRC clean, not ordered. T-shaped 2-layer board with GND poured on both layers, held by two M2 spacers (bottom corners). J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2 |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | planned |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | planned, unverified on this board |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
@@ -219,7 +219,7 @@ Observed on the physical board and in ST documentation:
 | STLINK | CN5: STDC14 debug connector, 14 pins in 2 rows of 7. Carries SWD/JTAG and the A35 console (USART2). Pitch about half of CN12's (by eye), consistent with STDC14 | UM3571 Rev 1, p. 2; MB2059 schematic B-02, sheet 3; counted on the board |
 | Display | FFC connector CN8, silkscreen "DISPLAY" | photo, ST wiki |
 | Ethernet | RJ45, reference CN11 | photo |
-| GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4 (`5V_VIN`, the output of the eFuse U14, see Power and USB); SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). Other pins checked on the schematic: 18 = PB14, 22 = PD13, 26 = PC7, 29 = PH13; 27 = PG0 (`ID_SD`), 28 = PC12 (`ID_SC`), with no pull-up resistors on the board. Plain I2C is an alternate function on pins 27/28 (I2C3_SDA on PG0, I2C3_SCL on PC12) and 3/5 (I2C1_SDA on PA2, I2C1_SCL on PG13). Each of these pins has no other connection on the board. I/O at 3.3 V (VDDIO, from LDO2): all HAT pins are on VDDIO; only VDDIO2 (PE6-PE15) runs at 1.8 V, and no CN12 pin uses it. Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). The schematic names the CN12 signals with Raspberry Pi GPIO numbers (`EXP_GPIO2` to `EXP_GPIO27`) and `ID_SD`/`ID_SC` on pins 27/28 | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheets 3 and 12 of 14; DS14556 Rev 2, Table 13, p. 73, 77, 80, 81; UM3571 Rev 1, p. 11; schematic B-02, sheets 4 and 5 of 14 |
+| GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4 (`5V_VIN`, the output of the eFuse U14, see Power and USB); SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). Other pins checked on the schematic: 18 = PB14, 22 = PD13, 26 = PC7, 29 = PH13; 27 = PG0 (`ID_SD`), 28 = PC12 (`ID_SC`), with no pull-up resistors on the board. Plain I2C is an alternate function on pins 27/28 (I2C3_SDA on PG0, I2C3_SCL on PC12) and 3/5 (I2C1_SDA on PA2, I2C1_SCL on PG13). Each of these pins has no other connection on the board. I/O at 3.3 V (VDDIO, from LDO2): all HAT pins are on VDDIO; only VDDIO2 (PE6-PE15) runs at 1.8 V, and no CN12 pin uses it. Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). The schematic names the CN12 signals with Raspberry Pi GPIO numbers (`EXP_GPIO2` to `EXP_GPIO27`) and `ID_SD`/`ID_SC` on pins 27/28. The odd-pin row is about 3.5 mm from the board's edge (measured with a ruler) | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheets 3 and 12 of 14; DS14556 Rev 2, Table 13, p. 73, 77, 80, 81; UM3571 Rev 1, p. 11; schematic B-02, sheets 4 and 5 of 14; edge distance measured on the board |
 | Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers, pin 1 = board RX, pin 2 = GND, pin 3 = board TX. A35 console: 115200 baud, Linux device ttySTM0 | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3; `captures/boot-time/st-starter_first-boot_untimed.log` line 207 |
 | Silicon revision | The chip reports Rev.Z (UM3571 lists revision "Y"). ES0628 errata must be read for Rev.Z | `captures/boot-time/st-starter_first-boot_untimed.log` lines 1, 91; UM3571 Rev 1, p. 33 |
 | Power and USB | CN10 is the only USB connector: USB Type-C, 5 V power input and USB 2.0 data (device). Its CC1/CC2 lines go to ADC inputs ANA0/ANA1 to detect the current the power source offers (0.5, 1.5 or 3 A). Also used for flashing with STM32CubeProgrammer (UART/USB boot switch position). Checked on the board. VBUS goes through the electronic fuse U14 (STEF05SGR) and becomes `5V_VIN`. Each CC line has a pull-down (1.2 kΩ + 3.9 kΩ), which the charger needs to see before it turns on VBUS | UM3571 Rev 1, p. 11, section 7.4.2; p. 16, section 8.1; schematic B-02, sheet 8 of 14 |
@@ -257,14 +257,18 @@ Observed on the physical board and in ST documentation:
 10. Parts for the HAT, not bought yet: the EEPROM 24LC256-I/PG (the `/P` means the 8-pin PDIP
     package, `G` a lead-free finish; 24XX256 Rev. M, p. 25), a DIP-8 IC socket for it, a 2x7 female
     header (CN12 side), a 1x8 female header (sensor cable) and a 1x9 male header (test pins), all
-    2.54 mm pitch, and an M2 brass male-female standoff kit (4 to 12 mm, stackable) for three
-    spacers from the HAT down to the desk (two bottom corners and the top-left corner). Before
-    buying: check that the shop lists the full EEPROM part number or the PDIP package, not only
-    "24LC256". Already in stock: resistors, the 100 nF capacitor, the green LED and the button.
-11. HAT PCB edge clearance: J1's outer pads end 0.42 mm from the board edge, because the HAT's neck
-    is exactly as wide as J1 (17.78 mm), so that CN12 pins 15/16 and 31/32 stay free. KiCad's
-    default copper-to-edge rule (0.5 mm) is lowered to 0.4 mm in the board setup. Before the PCB
-    order: check that the chosen factory accepts 0.4 mm copper-to-edge clearance.
+    2.54 mm pitch, and an M2 brass male-female standoff kit (4 to 12 mm, stackable) for two spacers
+    from the HAT down to the desk (the two bottom corners). Before buying: check that the shop lists
+    the full EEPROM part number or the PDIP package, not only "24LC256". Already in stock:
+    resistors, the 100 nF capacitor, the green LED and the button.
+11. HAT PCB, factory limits to confirm before the order (the design goes below KiCad's defaults in
+    a few places): copper-to-edge 0.4 mm (J1's outer pads end 0.42 mm from the edge, because the
+    neck is exactly as wide as J1, 17.78 mm, so that CN12 pins 15/16 and 31/32 stay free; the
+    BUTTON track runs about 0.54 mm from the neck's top edge); copper clearance 0.25 mm next to J1's
+    pads (custom rule, for the tracks that leave J1 between two pins); vias 0.6 mm with a 0.3 mm
+    drill; silkscreen text 0.8 mm high with 0.15 mm lines (the pin names at J2 and J3).
+12. HAT button (SW1, CN12 pin 18): its function is not defined. Candidates: mark the current
+    spectrum as the healthy reference, or acknowledge an alert. To decide in phase 7.
 
 ## Decisions
 
