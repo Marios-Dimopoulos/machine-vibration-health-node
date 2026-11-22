@@ -77,7 +77,7 @@ How the parts connect (planned):
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | starts Linux; later verifies every stage | 1, 4 | working: ST's binaries (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10). Not signed (phase 4) |
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
-| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: layout routed, DRC clean, not ordered. T-shaped 2-layer board with GND poured on both layers, held by two M2 spacers (bottom corners). J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2 |
+| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: layout routed, DRC clean, not ordered. T-shaped 2-layer board with GND poured on both layers, held by two M2 spacers (bottom corners). J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | planned |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | planned, unverified on this board |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
@@ -259,8 +259,8 @@ Observed on the physical board and in ST documentation:
     header (CN12 side), a 1x8 female header (sensor cable) and a 1x9 male header (test pins), all
     2.54 mm pitch, and an M2 brass male-female standoff kit (4 to 12 mm, stackable) for two spacers
     from the HAT down to the desk (the two bottom corners). Before buying: check that the shop lists
-    the full EEPROM part number or the PDIP package, not only "24LC256". Already in stock:
-    resistors, the 100 nF capacitor, the green LED and the button.
+    the full EEPROM part number or the PDIP package, not only "24LC256". Already in stock: the
+    resistors (4.7 kΩ, 330 Ω, 47 kΩ, 10 kΩ), two 100 nF capacitors, the green LED and the button.
 11. HAT PCB, factory limits to confirm before the order (the design goes below KiCad's defaults in
     a few places): copper-to-edge 0.4 mm (J1's outer pads end 0.42 mm from the edge, because the
     neck is exactly as wide as J1, 17.78 mm, so that CN12 pins 15/16 and 31/32 stay free; the
@@ -268,7 +268,8 @@ Observed on the physical board and in ST documentation:
     pads (custom rule, for the tracks that leave J1 between two pins); vias 0.6 mm with a 0.3 mm
     drill; silkscreen text 0.8 mm high with 0.15 mm lines (the pin names at J2 and J3).
 12. HAT button (SW1, CN12 pin 18): its function is not defined. Candidates: mark the current
-    spectrum as the healthy reference, or acknowledge an alert. To decide in phase 7.
+    spectrum as the healthy reference, or acknowledge an alert. To decide in phase 7, together with
+    a software debounce (ignore new presses for about 50 ms) as a safety net behind the RC filter.
 
 ## Decisions
 
