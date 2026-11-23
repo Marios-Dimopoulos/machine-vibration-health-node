@@ -95,7 +95,7 @@
 		(capping no)
 		(filling no)
 		(pcbplotparams
-			(layerselection 0x00000000_00000000_55555555_5755f5ff)
+			(layerselection 0x00000000_00000000_55555555_575555ff)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
@@ -123,12 +123,12 @@
 			(hidednponfab no)
 			(sketchdnponfab yes)
 			(crossoutdnponfab yes)
-			(subtractmaskfromsilk no)
+			(subtractmaskfromsilk yes)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "production/")
 		)
 	)
 	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
@@ -4259,7 +4259,7 @@
 	)
 	(via
 		(at 156.5 81.5)
-		(size 0.6)
+		(size 0.7)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
 		(free yes)
@@ -4268,7 +4268,7 @@
 	)
 	(via
 		(at 136.5 92)
-		(size 0.6)
+		(size 0.7)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
 		(net "GND")
