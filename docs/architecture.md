@@ -6,7 +6,7 @@ changes a part, that part's section is updated to describe it as it is now (the 
 git). Update this file whenever something in the system changes (a part is built, a decision is made,
 a measurement is taken), and keep the "Status" column honest.
 
-Last updated: 2026-11-22.
+Last updated: 2026-11-23.
 
 ## Summary
 
@@ -14,10 +14,12 @@ Phase 1 (bring-up and own image) is done. The board boots my own Linux image,
 `vibration-image`, from microSD in 15.0 s from TF-A to login: ST's boot chain (TF-A, OP-TEE, U-Boot,
 not signed yet) and ST's Linux 6.6, trimmed to what the product needs. It is reached over SSH on
 Ethernet and over the serial console on CN2, and runs my first program, `vibration-hello`. The rest
-of the target system (M33 firmware, HAT, secure boot, updates, test rig, detection) is planned.
+of the target system (M33 firmware, secure boot, updates, test rig, detection) is planned.
 Phase 2 (HAT design) is in progress: the sensor is chosen (ADR-0004), the current measurement moved
-to the test rig (ADR-0005) and the HAT's pins on CN12 are decided (ADR-0006). The KiCad design has
-not started.
+to the test rig (ADR-0005), the HAT's pins on CN12 are decided (ADR-0006) and the button is
+debounced in hardware (ADR-0007). The KiCad design is finished (ERC and DRC clean), the production
+files are generated and the factory is chosen (Aisler). The order waits for the wire test on CN12
+pins 17-30 in phase 3 (open item 9).
 
 ## Target architecture (what I am building)
 
@@ -77,7 +79,7 @@ How the parts connect (planned):
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | starts Linux; later verifies every stage | 1, 4 | working: ST's binaries (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10). Not signed (phase 4) |
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
-| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: layout routed, DRC clean, not ordered. T-shaped 2-layer board with GND poured on both layers, held by two M2 spacers (bottom corners). J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged. Factory: Aisler (2 layers, 1.6 mm, 35 µm copper, HASL). The board meets its limits: copper-to-edge 0.3 mm (the board's tightest is J1's pads at 0.42 mm), copper spacing 0.15 mm (0.25 mm next to J1), via drill 0.3 mm with a 0.2 mm ring (vias 0.7/0.3 mm), PTH ring 0.3 mm (smallest: J1 and J3 at 0.35 mm), silkscreen lines 0.15 mm and text 0.8 mm high (Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules", updated 2025-07-07, https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) |
+| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: design finished (ERC and DRC clean), production files generated (Gerbers and Excellon drill files in `kicad-hat/production/`, git-ignored until the order), not ordered. T-shaped 2-layer board (54 x 41 mm) with rounded corners, GND poured on both layers, held by two M2 spacers (bottom corners). Component values are printed next to each part for hand assembly. J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117; ADR-0007). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged. Factory: Aisler (2 layers, 1.6 mm, 35 µm copper, HASL). The board meets its limits: copper-to-edge 0.3 mm (the board's tightest is J1's pads at 0.42 mm), copper spacing 0.15 mm (0.25 mm next to J1), via drill 0.3 mm with a 0.2 mm ring (vias 0.7/0.3 mm), PTH ring 0.3 mm (smallest: J1 and J3 at 0.35 mm), silkscreen lines 0.15 mm and text 0.8 mm high (Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules", updated 2025-07-07, https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | planned |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | planned, unverified on this board |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
