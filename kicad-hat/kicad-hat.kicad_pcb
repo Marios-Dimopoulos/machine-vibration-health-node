@@ -149,12 +149,12 @@
 			)
 		)
 		(property "Value" "47k"
-			(at 3.81 2 0)
-			(layer "F.Fab")
+			(at 3.81 0 0)
+			(layer "F.SilkS")
 			(uuid "eb7958b0-e799-4317-a280-7d4650f34927")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -705,12 +705,12 @@
 			)
 		)
 		(property "Value" "330"
-			(at -3 0 90)
-			(layer "F.Fab")
+			(at 3.81 0 90)
+			(layer "F.SilkS")
 			(uuid "05edc6df-f6bf-40d5-a585-3ae218bd7bd0")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -1042,12 +1042,12 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 1.62 -2.5 90)
-			(layer "F.Fab")
+			(at 3.81 0 90)
+			(layer "F.SilkS")
 			(uuid "8b4f3204-7a23-4e0d-8901-c6f69d669a3e")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -1262,12 +1262,12 @@
 			)
 		)
 		(property "Value" "100n"
-			(at 2.5 2.5 90)
-			(layer "F.Fab")
+			(at 2.5 0 90)
+			(layer "F.SilkS")
 			(uuid "0e09a540-1982-4347-a433-949c3ad0bb44")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.6)
 					(thickness 0.15)
 				)
 			)
@@ -1462,12 +1462,12 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 1.62 -2.2 90)
-			(layer "F.Fab")
+			(at 3.81 0 90)
+			(layer "F.SilkS")
 			(uuid "727e3bda-cb31-49c8-8a12-b6b7e5b1a8f3")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -2813,12 +2813,12 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 3.81 2.37 0)
-			(layer "F.Fab")
+			(at 3.81 0 0)
+			(layer "F.SilkS")
 			(uuid "df5282cb-008c-4300-bd47-f757d84fa102")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.8)
 					(thickness 0.15)
 				)
 			)
@@ -3033,12 +3033,12 @@
 			)
 		)
 		(property "Value" "100n"
-			(at -2 0 90)
-			(layer "F.Fab")
+			(at 2.5 0 0)
+			(layer "F.SilkS")
 			(uuid "6911c95f-f8f4-4c7c-88ea-6a56a5d68539")
 			(effects
 				(font
-					(size 1 1)
+					(size 0.8 0.6)
 					(thickness 0.15)
 				)
 			)
@@ -4039,7 +4039,7 @@
 		)
 	)
 	(gr_text "SENSOR"
-		(at 145 107.6 0)
+		(at 144.5 107.6 0)
 		(layer "F.SilkS")
 		(uuid "07c570d1-854c-4975-ad06-5d98dc6d3bae")
 		(effects
@@ -4051,7 +4051,7 @@
 		)
 	)
 	(gr_text "TEST"
-		(at 127.15 87 270)
+		(at 128.5 90 90)
 		(layer "F.SilkS")
 		(uuid "232f242c-7098-4b6d-b4c8-88ebeb875afc")
 		(effects
