@@ -78,7 +78,7 @@ Schematic and two-layer layout in KiCad: sensor connector, EEPROM, LED, button.
 - Proof: ERC and DRC with no errors, every connection checked against the datasheets, order placed at
   the end of week 4.
 
-### 3. Sampling and FFT on the M33 (weeks 3-5) `[ ]`
+### 3. Sampling and FFT on the M33 (weeks 3-5) `[~]`
 With the breakout on wires, before the HAT arrives. Zephyr firmware reads the sensor over SPI with DMA
 at a fixed rate, computes the FFT and sends the spectrum to Linux over RPMsg. Linux loads the firmware
 with remoteproc.
