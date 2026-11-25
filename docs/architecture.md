@@ -19,10 +19,10 @@ Phase 2 (HAT design) is in progress: the sensor is chosen (ADR-0004), the curren
 to the test rig (ADR-0005), the HAT's pins on CN12 are decided (ADR-0006) and the button is
 debounced in hardware (ADR-0007). The KiCad design is finished (ERC and DRC clean), the production
 files are generated and the factory is chosen (Aisler). The order waits for the wire test on CN12
-pins 17-30 in phase 3 (open item 8).
+pins 17-30 in phase 3 (open item 7).
 Phase 3 (sampling and FFT on the M33) is in progress: the Zephyr workspace and toolchain are set up,
-and Linux loads, starts and stops a first Zephyr firmware (`blinky`) on the M33 with remoteproc.
-RPMsg is not tested yet.
+Linux loads, starts and stops Zephyr firmware on the M33 with remoteproc, and RPMsg works between
+Zephyr and Linux (Zephyr's RPMsg sample). No own M33 app yet.
 
 ## Target architecture (what I am building)
 
@@ -84,7 +84,7 @@ How the parts connect (planned):
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
 | HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: design finished (ERC and DRC clean), production files generated (Gerbers and Excellon drill files in `kicad-hat/production/`, git-ignored until the order), not ordered. T-shaped 2-layer board (54 x 41 mm) with rounded corners, GND poured on both layers, held by two M2 spacers (bottom corners). Component values are printed next to each part for hand assembly. J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117; ADR-0007). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged. Factory: Aisler (2 layers, 1.6 mm, 35 µm copper, HASL). The board meets its limits: copper-to-edge 0.3 mm (the board's tightest is J1's pads at 0.42 mm), copper spacing 0.15 mm (0.25 mm next to J1), via drill 0.3 mm with a 0.2 mm ring (vias 0.7/0.3 mm), PTH ring 0.3 mm (smallest: J1 and J3 at 0.35 mm), silkscreen lines 0.15 mm and text 0.8 mm high (Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules", updated 2025-07-07, https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | in progress: workspace and toolchain set up, Zephyr's `blinky` sample built and running on the M33 (see M33 firmware). No own app yet |
-| remoteproc + RPMsg | M33 <-> Linux communication | 3 | in progress: remoteproc loads, starts and stops the firmware on the board. RPMsg not tested |
+| remoteproc + RPMsg | M33 <-> Linux communication | 3 | in progress: remoteproc loads, starts and stops the firmware, and RPMsg carries messages both ways with Zephyr's sample (see M33 firmware). Not used by an own app yet |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
 | RAUC A/B updates, dm-verity, watchdog | updates with rollback, read-only rootfs | 5 | planned |
 | Test rig (Pi Zero 2 W, labgrid, pytest, relay, INA219, USB-UART, Pico) | automatic verification on the real board | 6 | planned |
@@ -230,6 +230,24 @@ Reserved memory in Linux's device tree (`/sys/firmware/devicetree/base/reserved-
 | `vdev0buffer` | `0x812fa000` | not read | RPMsg buffers |
 | `tfm-code`, `tfm-data` | `0x80000000`, `0x80900000` | not read | Trusted Firmware-M (the M33's secure side) |
 
+`ipc-shmem-1`, the two vrings (4 KB each) and `vdev0buffer` (24 KB) sit back to back from
+`0x81200000` to `0x81300000`: exactly 1 MB, the size Zephyr's MP257 board files use for RPMsg.
+
+### RPMsg on the board
+
+Tested 2026-11-24 with Zephyr's sample `samples/subsys/ipc/openamp_rsc_table` (v4.5.0), built with
+a test overlay `firmware/test-overlays/rpmsg-mp215f-dk.overlay` (git-ignored): `zephyr,ipc_shm` =
+`0x81200000`, 1 MB; `zephyr,ipc` = the IPCC mailbox (`0x40490000`, Zephyr driver
+`ipm_stm32_ipcc`). The `.elf` carries a `.resource_table` section (88 bytes); 59 KB code, 18 KB data.
+- Linux side, all in `vibration-image`: `CONFIG_RPMSG=y`, `CONFIG_RPMSG_NS=y`, `CONFIG_RPMSG_VIRTIO=m`
+  (`virtio_rpmsg_bus.ko`), `CONFIG_RPMSG_TTY=m` (`rpmsg_tty.ko`), plus `rpmsg_client_sample.ko`.
+  udev loads them when the M33 announces its channels.
+- `rpmsg-client-sample` channel: Linux's test module loaded by itself and exchanged 100 messages with
+  the M33 (`incoming msg 1` to `100`, `goodbye!`).
+- Two tty channels appear: `/dev/ttyRPMSG0` is a Zephyr shell on the M33 (prompt `ipc:~$`,
+  `CONFIG_SHELL_BACKEND_RPMSG=y` in the sample), `/dev/ttyRPMSG1` echoes back what it receives
+  (`TTY 0x0402: ...`).
+
 ## Hardware
 
 ### Inventory (what exists today)
@@ -283,27 +301,24 @@ Observed on the physical board and in ST documentation:
 ## Open items and unverified facts
 
 1. Secure boot flow on the MP21 (TF-A, OP-TEE, signed FIT): not verified. Required before phase 4.
-2. RPMsg from Zephyr on this board: not verified (remoteproc itself works). Zephyr has no RPMsg
-   board files for this board: the shared-memory overlay must be written and match Linux's
-   reserved memory (`0x81200000`, vrings at `0x812f8000`, see M33 firmware).
-3. Every small systemd job takes 0.3-0.8 s during boot (even mounting a tmpfs), so systemd still takes
+2. Every small systemd job takes 0.3-0.8 s during boot (even mounting a tmpfs), so systemd still takes
    8.8 s. Not verified why; reading programs from the SD card (50 MHz, the board's maximum) is
    suspected.
-4. ST's `stm32mp-calibration.timer` recalibrates the internal oscillators HSI/CSI every few seconds.
+3. ST's `stm32mp-calibration.timer` recalibrates the internal oscillators HSI/CSI every few seconds.
    What depends on these oscillators on this board is not checked (RM0506).
-5. `stm32_lptimer` is kept: whether the built-in clock driver `CLKSRC_STM32_LP` needs it is not
+4. `stm32_lptimer` is kept: whether the built-in clock driver `CLKSRC_STM32_LP` needs it is not
    verified.
-6. Development logins: root has an empty password (`/etc/shadow`), dropbear accepts it (`-B` in
+5. Development logins: root has an empty password (`/etc/shadow`), dropbear accepts it (`-B` in
    `/etc/default/dropbear`), and the serial console logs in as root automatically. The first two come
    from `EXTRA_IMAGE_FEATURES ?= "debug-tweaks"` in `local.conf` (ST's template), the autologin from
    ST's getty setting. Anyone on the network can log in as root over SSH. To remove for the product
    in phase 4: no `debug-tweaks`, SSH with keys only, no autologin.
-7. Parts for the test rig's power path, not bought yet: two USB-C female breakouts (wired back to
+6. Parts for the test rig's power path, not bought yet: two USB-C female breakouts (wired back to
    back, with the relay and the current sensor in series in VBUS) and an INA219 current-sensor
    breakout, read by the Pi Zero over I2C. Before buying: check that the USB-C breakouts bring out
    VBUS, GND, CC1 and CC2 (CC must pass through or the charger gives no power), and that the INA219
    breakout handles 5 V and up to 3 A.
-8. HAT pins owned by the M33: SPI1, its DMA, and the EXTI lines of INT1 and INT2 (13 and 7) must be
+7. HAT pins owned by the M33: SPI1, its DMA, and the EXTI lines of INT1 and INT2 (13 and 7) must be
    assigned to the M33, not to Linux. The hardware allows it: the RIF assigns each peripheral to a
    core at boot, SPI1 included (RM0506 Rev 2, Table 38, p. 309), and EXTI1 and EXTI2 both serve the
    Cortex-A35 and the Cortex-M33 (p. 1501). Not verified: that ST's boot setup (TF-A, OP-TEE) gives
@@ -311,16 +326,16 @@ Observed on the physical board and in ST documentation:
    (Zephyr v4.5.0 sets up SPI1 on the HAT pins and lists SPI as supported, but not DMA). To
    test in phase 3, with the breakout wired to CN12 pins 17-30 exactly as on the HAT, before the
    HAT PCB order.
-9. Parts for the HAT, not bought yet: the EEPROM 24LC256-I/PG (the `/P` means the 8-pin PDIP
+8. Parts for the HAT, not bought yet: the EEPROM 24LC256-I/PG (the `/P` means the 8-pin PDIP
    package, `G` a lead-free finish; 24XX256 Rev. M, p. 25), a DIP-8 IC socket for it, a 2x7 female
    header (CN12 side), a 1x8 female header (sensor cable) and a 1x9 male header (test pins), all
    2.54 mm pitch, and an M2 brass male-female standoff kit (4 to 12 mm, stackable) for two spacers
    from the HAT down to the desk (the two bottom corners). Before buying: check that the shop lists
    the full EEPROM part number or the PDIP package, not only "24LC256". Already in stock: the
    resistors (4.7 kΩ, 330 Ω, 47 kΩ, 10 kΩ), two 100 nF capacitors, the green LED and the button.
-10. HAT button (SW1, CN12 pin 18): its function is not defined. Candidates: mark the current
-    spectrum as the healthy reference, or acknowledge an alert. To decide in phase 7, together with
-    a software debounce (ignore new presses for about 50 ms) as a safety net behind the RC filter.
+9. HAT button (SW1, CN12 pin 18): its function is not defined. Candidates: mark the current
+   spectrum as the healthy reference, or acknowledge an alert. To decide in phase 7, together with
+   a software debounce (ignore new presses for about 50 ms) as a safety net behind the RC filter.
 
 ## Decisions
 
