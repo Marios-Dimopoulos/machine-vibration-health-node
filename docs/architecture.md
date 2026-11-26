@@ -6,7 +6,7 @@ changes a part, that part's section is updated to describe it as it is now (the 
 git). Update this file whenever something in the system changes (a part is built, a decision is made,
 a measurement is taken), and keep the "Status" column honest.
 
-Last updated: 2026-11-24.
+Last updated: 2026-11-26.
 
 ## Summary
 
@@ -22,7 +22,8 @@ files are generated and the factory is chosen (Aisler). The order waits for the 
 pins 17-30 in phase 3 (open item 7).
 Phase 3 (sampling and FFT on the M33) is in progress: the Zephyr workspace and toolchain are set up,
 Linux loads, starts and stops Zephyr firmware on the M33 with remoteproc, and RPMsg works between
-Zephyr and Linux (Zephyr's RPMsg sample). No own M33 app yet.
+Zephyr and Linux (Zephyr's RPMsg sample). My own M33 app, `vibration-m33`, builds and runs
+(it only blinks LD3 so far).
 
 ## Target architecture (what I am building)
 
@@ -83,7 +84,7 @@ How the parts connect (planned):
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
 | HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: design finished (ERC and DRC clean), production files generated (Gerbers and Excellon drill files in `kicad-hat/production/`, git-ignored until the order), not ordered. T-shaped 2-layer board (54 x 41 mm) with rounded corners, GND poured on both layers, held by two M2 spacers (bottom corners). Component values are printed next to each part for hand assembly. J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117; ADR-0007). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged. Factory: Aisler (2 layers, 1.6 mm, 35 µm copper, HASL). The board meets its limits: copper-to-edge 0.3 mm (the board's tightest is J1's pads at 0.42 mm), copper spacing 0.15 mm (0.25 mm next to J1), via drill 0.3 mm with a 0.2 mm ring (vias 0.7/0.3 mm), PTH ring 0.3 mm (smallest: J1 and J3 at 0.35 mm), silkscreen lines 0.15 mm and text 0.8 mm high (Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules", updated 2025-07-07, https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) |
-| Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | in progress: workspace and toolchain set up, Zephyr's `blinky` sample built and running on the M33 (see M33 firmware). No own app yet |
+| Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | in progress: workspace and toolchain set up, Zephyr's `blinky` sample and my own app `firmware/vibration-m33/` (blinks LD3: two flashes, then a pause; 23 KB code) built and running on the M33 (see M33 firmware). No sampling yet |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | in progress: remoteproc loads, starts and stops the firmware, and RPMsg carries messages both ways with Zephyr's sample (see M33 firmware). Not used by an own app yet |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
 | RAUC A/B updates, dm-verity, watchdog | updates with rollback, read-only rootfs | 5 | planned |
