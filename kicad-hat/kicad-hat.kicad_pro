@@ -512,7 +512,7 @@
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.25,
         "tuning_profile": "",
-        "via_diameter": 0.6,
+        "via_diameter": 0.7,
         "via_drill": 0.3,
         "wire_width": 6
       },
@@ -528,7 +528,7 @@
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.5,
         "tuning_profile": "",
-        "via_diameter": 0.6,
+        "via_diameter": 0.7,
         "via_drill": 0.3
       }
     ],
