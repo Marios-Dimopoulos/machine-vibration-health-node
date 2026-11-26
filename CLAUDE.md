@@ -10,7 +10,7 @@ test rig that proves all of the above on the real board.
 Board: STM32MP215F-DK (1x Cortex-A35 1.5 GHz, Cortex-M33 300 MHz, 2 GB LPDDR4, boot from
 microSD, no eMMC, no NPU, 100 Mbit Ethernet, USB-C power, 40-pin GPIO header CN12).
 Test rig: Raspberry Pi Zero 2 W + labgrid + pytest, relay on the 5 V DC line only,
-USB-UART console, Raspberry Pi Pico as logic analyzer.
+console on the Pi Zero's own UART, Raspberry Pi Pico as logic analyzer.
 
 ## Purpose of this project (most important section)
 

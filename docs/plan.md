@@ -44,9 +44,10 @@ the end of phase 2 so it arrives before bring-up in phase 7. Every connection is
 that gets through is fixed with a wire and recorded.
 
 **Test rig.** A Raspberry Pi Zero 2 W with labgrid controls a relay on the board's 5 V DC supply
-(never mains) and reads the console through a USB-UART. An INA219 in the USB-C power line, next to
-the relay, measures the board's current, and the Pi Zero reads it over I2C. A Raspberry Pi Pico
-acts as a logic analyzer for the sensor SPI and HAT bring-up. Tests are written in pytest.
+(never mains) and reads the console through its own UART, wired to the board's console header. An
+INA219 in the USB-C power line, next to the relay, measures the board's current, and the Pi Zero
+reads it over I2C. A Raspberry Pi Pico acts as a logic analyzer for the sensor SPI and HAT
+bring-up. Tests are written in pytest.
 
 ## Phases
 

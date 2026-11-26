@@ -71,7 +71,7 @@ How the parts connect (planned):
 | SPI + DMA | ADXL345 <-> M33 | 3 | via the 40-pin header / HAT cable, fixed sample rate. SPI1 on CN12 pins 19, 21, 23, 24 (see Board facts) |
 | RPMsg over remoteproc | M33 <-> A35 | 3 | the A35 loads the M33 firmware and receives the FFT spectrum |
 | Logic analyzer | Pico <-> SPI lines | 3 | verifies equal sample spacing and measures jitter |
-| Power + console | test rig <-> board | 6 | relay and INA219 current sensor in the USB-C VBUS line (5 V DC only, never mains), USB-UART console (ADR-0005) |
+| Power + console | test rig <-> board | 6 | relay and INA219 current sensor in the USB-C VBUS line (5 V DC only, never mains) (ADR-0005); console: the Pi Zero's own UART (GPIO14/15, header pins 8/10) wired to CN2 (ADR-0008) |
 | 40-pin header | board <-> HAT | 2, 7 | HAT: sensor connector, EEPROM, LED, button. The HAT covers only pins 17-30 of CN12 (7 rows of 2), the other pins stay free (ADR-0006) |
 | Fan power | board -> fan | 3 | 5 V from CN12 pin 2 or 4, GND from pin 6, outside the HAT (UM3571 Rev 1, p. 26, Table 17) |
 | MQTT over TLS | A35 -> MQTT broker | 7 | alerts when the spectrum deviates from the learned healthy spectrum |
@@ -89,7 +89,7 @@ How the parts connect (planned):
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | in progress: remoteproc loads, starts and stops the firmware, and RPMsg carries messages both ways with Zephyr's sample (see M33 firmware). Not used by an own app yet |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
 | RAUC A/B updates, dm-verity, watchdog | updates with rollback, read-only rootfs | 5 | planned |
-| Test rig (Pi Zero 2 W, labgrid, pytest, relay, INA219, USB-UART, Pico) | automatic verification on the real board | 6 | planned |
+| Test rig (Pi Zero 2 W, labgrid, pytest, relay, INA219, Pico; console on the Pi Zero's UART) | automatic verification on the real board | 6 | planned |
 | Detection daemon | statistical anomaly detection, MQTT/TLS alerts | 7 | planned |
 
 Status legend: `planned` (not started), `in progress`, `working` (proof recorded in `captures/`),
@@ -299,8 +299,9 @@ Received from the Mouser order (2026-11-11):
   contact resistance 100 mΩ max (HF152FD Rev. 1.00, p. 1, p. 3). To confirm on the test rig before
   phase 6.
 
-Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART adapter (used for
-the board's serial console), microSD card reader, power supply for the board (Samsung USB-C charger,
+Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART adapter (for the
+A35 console on CN2 and the M33 console on CN1 during development; the test rig uses the Pi Zero's
+own UART instead, ADR-0008), microSD card reader, power supply for the board (Samsung USB-C charger,
 15 W, 5 V / 3 A, with a USB-C to USB-C cable), 2 microSD 32 GB, passives and cables, Nucleo-F411RE
 (not used in this project).
 Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
@@ -365,6 +366,10 @@ Observed on the physical board and in ST documentation:
 9. HAT button (SW1, CN12 pin 18): its function is not defined. Candidates: mark the current
    spectrum as the healthy reference, or acknowledge an alert. To decide in phase 7, together with
    a software debounce (ignore new presses for about 50 ms) as a safety net behind the RC filter.
+10. Test rig console (ADR-0008), before phase 6: configure the Pi Zero (PL011 on GPIO14/15 with
+    `dtoverlay=disable-bt`, its own serial login console off), and check that the Pi's TX, idling
+    high at 3.3 V, does not feed current into the board's RX pin while the relay has cut the
+    board's power (a series resistor on that line would limit it).
 
 ## Decisions
 
@@ -381,5 +386,7 @@ ADRs in [decisions/](decisions/), using `decisions/adr-template.md`:
   from 3V3.
 - [ADR-0007](decisions/0007-hat-button-rc-debounce.md): debounce the HAT button in hardware with
   an RC filter.
+- [ADR-0008](decisions/0008-test-rig-console-on-pi-zero-uart.md): read the board's console with the
+  Pi Zero's own UART in the test rig.
 
 Decisions expected: boot chain and signing (phase 4), fuses and secure boot lock (end of week 7).
