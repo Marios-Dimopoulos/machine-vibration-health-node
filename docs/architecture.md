@@ -302,15 +302,25 @@ Received from the Mouser order (2026-11-11):
 Already owned: Raspberry Pi Zero 2 W, Raspberry Pi Pico (logic analyzer), USB-UART adapter (for the
 A35 console on CN2 and the M33 console on CN1 during development; the test rig uses the Pi Zero's
 own UART instead, ADR-0008), microSD card reader, power supply for the board (Samsung USB-C charger,
-15 W, 5 V / 3 A, with a USB-C to USB-C cable), 2 microSD 32 GB, passives and cables, Nucleo-F411RE
-(not used in this project).
+15 W, 5 V / 3 A, with a USB-C to USB-C cable), a second USB-C to USB-C cable (breakout to board in
+the test rig), power supplies for the Pi Zero and the Pico with two USB-A to micro-USB cables,
+2 microSD 32 GB, passives, jumper wires and cables, Nucleo-F411RE (not used in this project).
 Note: ST verified only SanDisk Class 10 / UHS-1 microSD cards for this board. The card for the board
 is a SanDisk, marked Class 10 and A1.
 
 Received: soldering iron, solder wire, multimeter (2026-11-13); side cutter, 5 V fan (by 2026-11-15).
 The fan is a Waveshare Fan-4010-5V (40 x 40 x 10 mm, 3-pin connector, 9 blades counted); Waveshare
 does not publish its speed.
-All ordered items have arrived.
+
+Ordered on 2026-11-26, not received yet:
+- 3 HAT boards from Aisler (see System parts and status).
+- The HAT's parts: EEPROM 24LC256-I/PG (PDIP-8, lead-free; 24XX256 Rev. M, p. 25), a DIP-8 IC
+  socket, a 2x7 female header (CN12 side), a 1x8 female header (sensor cable), a 1x9 male header
+  (test pins), all 2.54 mm pitch, and an M2 brass male-female standoff kit. Already in stock: the
+  resistors (4.7 kΩ, 330 Ω, 47 kΩ, 10 kΩ), two 100 nF capacitors, the green LED and the button.
+- Two USB-C female breakouts for the test rig's power path, with VBUS, GND, CC1, CC2, D+/D- and SBU
+  on through-hole pads and no resistors on CC (checked on the listing), so CC passes straight
+  through from the charger to the board.
 
 ### Board facts: STM32MP215F-DK
 
@@ -348,28 +358,20 @@ Observed on the physical board and in ST documentation:
    from `EXTRA_IMAGE_FEATURES ?= "debug-tweaks"` in `local.conf` (ST's template), the autologin from
    ST's getty setting. Anyone on the network can log in as root over SSH. To remove for the product
    in phase 4: no `debug-tweaks`, SSH with keys only, no autologin.
-6. Parts for the test rig's power path, not bought yet: two USB-C female breakouts (wired back to
-   back, with the relay and the current sensor in series in VBUS) and an INA219 current-sensor
-   breakout, read by the Pi Zero over I2C. Before buying: check that the USB-C breakouts bring out
-   VBUS, GND, CC1 and CC2 (CC must pass through or the charger gives no power), and that the INA219
-   breakout handles 5 V and up to 3 A.
+6. INA219 current-sensor breakout for the test rig, not bought yet (the shop of the 2026-11-26 order
+   had none). It goes in series in VBUS between the two USB-C breakouts, next to the relay, and the
+   Pi Zero reads it over I2C. Before buying: check that it is the INA219 chip, that its shunt
+   (usually 0.1 Ω) covers up to 3 A at 5 V, and that it runs on the Pi Zero's 3.3 V.
 7. SPI1's DMA on the M33: not tested. Zephyr v4.5.0 does not list DMA as supported for this board,
    although ST's SPI driver has DMA support (`SPI_DMA_CHANNEL` in `drivers/spi/spi_stm32.c`). To test
    with the sampling; it does not change the HAT PCB.
-8. Parts for the HAT, not bought yet: the EEPROM 24LC256-I/PG (the `/P` means the 8-pin PDIP
-   package, `G` a lead-free finish; 24XX256 Rev. M, p. 25), a DIP-8 IC socket for it, a 2x7 female
-   header (CN12 side), a 1x8 female header (sensor cable) and a 1x9 male header (test pins), all
-   2.54 mm pitch, and an M2 brass male-female standoff kit (4 to 12 mm, stackable) for two spacers
-   from the HAT down to the desk (the two bottom corners). Before buying: check that the shop lists
-   the full EEPROM part number or the PDIP package, not only "24LC256". Already in stock: the
-   resistors (4.7 kΩ, 330 Ω, 47 kΩ, 10 kΩ), two 100 nF capacitors, the green LED and the button.
-9. HAT button (SW1, CN12 pin 18): its function is not defined. Candidates: mark the current
+8. HAT button (SW1, CN12 pin 18): its function is not defined. Candidates: mark the current
    spectrum as the healthy reference, or acknowledge an alert. To decide in phase 7, together with
    a software debounce (ignore new presses for about 50 ms) as a safety net behind the RC filter.
-10. Test rig console (ADR-0008), before phase 6: configure the Pi Zero (PL011 on GPIO14/15 with
-    `dtoverlay=disable-bt`, its own serial login console off), and check that the Pi's TX, idling
-    high at 3.3 V, does not feed current into the board's RX pin while the relay has cut the
-    board's power (a series resistor on that line would limit it).
+9. Test rig console (ADR-0008), before phase 6: configure the Pi Zero (PL011 on GPIO14/15 with
+   `dtoverlay=disable-bt`, its own serial login console off), and check that the Pi's TX, idling
+   high at 3.3 V, does not feed current into the board's RX pin while the relay has cut the
+   board's power (a series resistor on that line would limit it).
 
 ## Decisions
 
