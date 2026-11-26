@@ -18,5 +18,11 @@
 		reg = <0>;
 		/* Max 5 MHz (ADXL345 Rev. G, p. 14); 1 MHz is slow and safe on jumper wires. */
 		spi-max-frequency = <1000000>;
+		/*
+		 * Its two interrupt outputs: INT1 on PD13 (CN12 pin 22), INT2 on PC7 (CN12 pin 26).
+		 * Active high by default (ADXL345 Rev. G, p. 19).
+		 */
+		int1-gpios = <&gpiod 13 GPIO_ACTIVE_HIGH>;
+		int2-gpios = <&gpioc 7 GPIO_ACTIVE_HIGH>;
 	};
 };

@@ -18,13 +18,13 @@ of the target system (M33 firmware, secure boot, updates, test rig, detection) i
 Phase 2 (HAT design) is in progress: the sensor is chosen (ADR-0004), the current measurement moved
 to the test rig (ADR-0005), the HAT's pins on CN12 are decided (ADR-0006) and the button is
 debounced in hardware (ADR-0007). The KiCad design is finished (ERC and DRC clean), the production
-files are generated and the factory is chosen (Aisler). The order waits for the rest of the wire test
-on CN12 pins 17-30: SPI1 works, the interrupt pins are not tested yet (open item 7).
+files are generated and the factory is chosen (Aisler). The wire test on CN12 pins 17-30 passed
+(SPI1 and both interrupt pins work from the M33), so the order can be placed.
 Phase 3 (sampling and FFT on the M33) is in progress: the Zephyr workspace and toolchain are set up,
 Linux loads, starts and stops Zephyr firmware on the M33 with remoteproc, and RPMsg works between
 Zephyr and Linux (Zephyr's RPMsg sample). My own M33 app, `vibration-m33`, reads the ADXL345's ID
-over SPI1 with the breakout wired to CN12 exactly as on the HAT; the interrupt pins are not tested
-yet.
+over SPI1 and receives its INT1 and INT2 interrupts, with the breakout wired to CN12 exactly as on
+the HAT.
 
 ## Target architecture (what I am building)
 
@@ -85,7 +85,7 @@ How the parts connect (planned):
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured, not connected to the board |
 | HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | in progress: design finished (ERC and DRC clean), production files generated (Gerbers and Excellon drill files in `kicad-hat/production/`, git-ignored until the order), not ordered. T-shaped 2-layer board (54 x 41 mm) with rounded corners, GND poured on both layers, held by two M2 spacers (bottom corners). Component values are printed next to each part for hand assembly. J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117; ADR-0007). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged. Factory: Aisler (2 layers, 1.6 mm, 35 µm copper, HASL). The board meets its limits: copper-to-edge 0.3 mm (the board's tightest is J1's pads at 0.42 mm), copper spacing 0.15 mm (0.25 mm next to J1), via drill 0.3 mm with a 0.2 mm ring (vias 0.7/0.3 mm), PTH ring 0.3 mm (smallest: J1 and J3 at 0.35 mm), silkscreen lines 0.15 mm and text 0.8 mm high (Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules", updated 2025-07-07, https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) |
-| Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | in progress: workspace and toolchain set up, Zephyr's `blinky` sample and my own app `firmware/vibration-m33/` built and running on the M33. The app reads the ADXL345's ID register over SPI1 and shows the result on LD3 (28 KB code; see M33 firmware). No sampling yet |
+| Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | in progress: workspace and toolchain set up, Zephyr's `blinky` sample and my own app `firmware/vibration-m33/` built and running on the M33. The app checks the ADXL345's ID over SPI1 and its INT1/INT2 interrupts, and shows the result on LD3 (28 KB code; see M33 firmware). No sampling yet |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | in progress: remoteproc loads, starts and stops the firmware, and RPMsg carries messages both ways with Zephyr's sample (see M33 firmware). Not used by an own app yet |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
 | RAUC A/B updates, dm-verity, watchdog | updates with rollback, read-only rootfs | 5 | planned |
@@ -273,6 +273,12 @@ The ADXL345 breakout on jumper wires to CN12, with the HAT's connections (read f
   built (`CONFIG_SENSOR` off): the app reads the register itself, SPI mode 3 (CPOL = 1, CPHA = 1).
 - Result: reading register 0x00 (DEVID) returns 0xE5, the fixed ID (ADXL345 Rev. G, p. 24; SPI mode
   and read bit, p. 14). So SPI1 works from the M33 with ST's boot setup, on the HAT's pins.
+- Interrupts (same day): `int1-gpios` (PD13) and `int2-gpios` (PC7) added to the `accel` node, both
+  inputs with an interrupt on the rising edge (the build enables the EXTI driver,
+  `CONFIG_EXTI_STM32`). The ADXL345 runs at 100 Hz (`BW_RATE` 0x0A, Table 7, p. 13) with DATA_READY
+  enabled (`INT_ENABLE` bit 7, p. 26), sent to INT1 and then to INT2 (`INT_MAP` bit 7, p. 27), 2 s
+  each. The interrupt handler only counts and gives a semaphore; `main()` reads the six data
+  registers, which clears DATA_READY (p. 19). Both pins delivered interrupts to the M33.
 - A new overlay or `boards/` file needs a pristine build (`west build -p always`): the build
   directory keeps the file list from its first configuration.
 
@@ -346,12 +352,9 @@ Observed on the physical board and in ST documentation:
    breakout, read by the Pi Zero over I2C. Before buying: check that the USB-C breakouts bring out
    VBUS, GND, CC1 and CC2 (CC must pass through or the charger gives no power), and that the INA219
    breakout handles 5 V and up to 3 A.
-7. HAT pins owned by the M33: SPI1 works from the M33 on the HAT's pins (see M33 firmware, wire
-   test). Not verified yet: the EXTI lines of INT1 (PD13, CN12 pin 22) and INT2 (PC7, pin 26)
-   interrupting the M33 (EXTI1 and EXTI2 both serve the Cortex-A35 and the Cortex-M33, RM0506 Rev 2,
-   p. 1501), and SPI1's DMA on the M33 (Zephyr v4.5.0 does not list DMA as supported for this
-   board). The interrupt pins must be tested before the HAT PCB order, because a failure would move
-   them to other pins; DMA does not change the PCB.
+7. SPI1's DMA on the M33: not tested. Zephyr v4.5.0 does not list DMA as supported for this board,
+   although ST's SPI driver has DMA support (`SPI_DMA_CHANNEL` in `drivers/spi/spi_stm32.c`). To test
+   with the sampling; it does not change the HAT PCB.
 8. Parts for the HAT, not bought yet: the EEPROM 24LC256-I/PG (the `/P` means the 8-pin PDIP
    package, `G` a lead-free finish; 24XX256 Rev. M, p. 25), a DIP-8 IC socket for it, a 2x7 female
    header (CN12 side), a 1x8 female header (sensor cable) and a 1x9 male header (test pins), all
