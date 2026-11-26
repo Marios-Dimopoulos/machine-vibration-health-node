@@ -68,8 +68,8 @@ _autosave-*
 \#auto_saved_files#
 # KiCad 10's local history: its own small git repository inside the project directory.
 .history/
-# Gerbers and drill files: regenerated from the board, so they go stale. The exact set sent to the
-# factory is committed at order time (git add -f).
+# Gerbers and drill files: regenerated from the board, so they go stale. The set made for an order
+# is committed with git add -f, as a reference next to the board file the factory received.
 kicad-hat/production/
 
 # Editors and OS

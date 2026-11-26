@@ -41,6 +41,20 @@ the old row stays until nothing cites it anymore.
 |---|---|---|---|
 | `24xx256-revm.pdf` | 24AA256/24LC256/24FC256, 256K I2C CMOS serial EEPROM datasheet (DS21203) | Rev. M, 2004 | [link](https://grobotronics.com/images/companies/1/21203M.pdf) |
 
+## Web pages
+
+Cited pages that are not PDFs. They change without a revision number, so the date I read each one
+stands in for the revision; there is no checksum.
+
+| Page | Cited for | Read on |
+|---|---|---|
+| [Raspberry Pi documentation, "Raspberry Pi hardware"](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html), section "40-pin GPIO header" | Pi Zero 2 W GPIO pins: 3.3 V logic, not 5 V tolerant; GPIO14 TX = pin 8, GPIO15 RX = pin 10 | 2026-11-26 |
+| [Raspberry Pi documentation, "Configuration"](https://www.raspberrypi.com/documentation/computers/configuration.html), section "Configure UARTs" | Pi Zero 2 W UARTs: mini UART on GPIO14/15 by default, PL011 on Bluetooth, `disable-bt`, serial console | 2026-11-26 |
+| [Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules"](https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) (page updated 2025-07-07) | the HAT's PCB limits | 2026-11-23 |
+
+Zephyr's own files (board support, samples, drivers) are cited by path in the Zephyr v4.5.0 tree in
+`firmware/zephyr/`, a fixed tag, so they need no entry here.
+
 ## SHA-256 checksums
 
 ```

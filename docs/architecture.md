@@ -13,8 +13,8 @@ Last updated: 2026-11-26.
 Phase 1 (bring-up and own image) is done. The board boots my own Linux image,
 `vibration-image`, from microSD in 15.0 s from TF-A to login: ST's boot chain (TF-A, OP-TEE, U-Boot,
 not signed yet) and ST's Linux 6.6, trimmed to what the product needs. It is reached over SSH on
-Ethernet and over the serial console on CN2, and runs my first program, `vibration-hello`. The rest
-of the target system (M33 firmware, secure boot, updates, test rig, detection) is planned.
+Ethernet and over the serial console on CN2, and runs my first program, `vibration-hello`. Secure
+boot, updates, the test rig and the detection are planned.
 Phase 2 (HAT design): the sensor is chosen (ADR-0004), the current measurement moved
 to the test rig (ADR-0005), the HAT's pins on CN12 are decided (ADR-0006) and the button is
 debounced in hardware (ADR-0007). The KiCad design is finished (ERC and DRC clean), the wire test on CN12
@@ -64,12 +64,12 @@ flowchart TB
 Every boot stage verifies the signature of the next one. Linux loads the M33 firmware (remoteproc) and
 talks to it over RPMsg.
 
-How the parts connect (planned):
+How the parts connect (the Phase column says when each link is built):
 
 | Link | Between | Phase | Notes |
 |---|---|---|---|
-| SPI + DMA | ADXL345 <-> M33 | 3 | via the 40-pin header / HAT cable, fixed sample rate. SPI1 on CN12 pins 19, 21, 23, 24 (see Board facts) |
-| RPMsg over remoteproc | M33 <-> A35 | 3 | the A35 loads the M33 firmware and receives the FFT spectrum |
+| SPI + DMA | ADXL345 <-> M33 | 3 | via the 40-pin header / HAT cable, fixed sample rate. SPI1 on CN12 pins 19, 21, 23, 24 (see Board facts). SPI and both interrupt pins work on jumper wires; DMA and the fixed-rate sampling not yet (see M33 firmware) |
+| RPMsg over remoteproc | M33 <-> A35 | 3 | the A35 loads the M33 firmware and receives the FFT spectrum. Loading and RPMsg work with Zephyr's samples; no spectrum yet |
 | Logic analyzer | Pico <-> SPI lines | 3 | verifies equal sample spacing and measures jitter |
 | Power + console | test rig <-> board | 6 | relay and INA219 current sensor in the USB-C VBUS line (5 V DC only, never mains) (ADR-0005); console: the Pi Zero's own UART (GPIO14/15, header pins 8/10) wired to CN2 (ADR-0008) |
 | 40-pin header | board <-> HAT | 2, 7 | HAT: sensor connector, EEPROM, LED, button. The HAT covers only pins 17-30 of CN12 (7 rows of 2), the other pins stay free (ADR-0006) |
@@ -84,7 +84,7 @@ How the parts connect (planned):
 | Boot chain (Boot ROM, TF-A, OP-TEE, U-Boot) | starts Linux; later verifies every stage | 1, 4 | working: ST's binaries (TF-A v2.10, OP-TEE 4.0, U-Boot 2023.10). Not signed (phase 4) |
 | Linux image `vibration-image` (layer `meta-vibration-node`) | the Linux system on the A35 | 1 | working: boots in 15.0 s, see Linux image |
 | ADXL345 on the DFRobot SEN0032 breakout | vibration sensor | 2, 3 | chosen (ADR-0004); header soldered, continuity checked, regulator output measured. Wired to CN12 with jumper wires as on the HAT, read over SPI1 from the M33 (see M33 firmware, wire test) |
-| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | ordered: 3 bare boards at Aisler on 2026-11-26 ("Beautiful Boards": 2 layers, 1.6 mm, 35 µm copper, HASL lead-free, green/white, no stencil), uploaded as the native `kicad-hat.kicad_pcb` of commit `b747750`; delivery date not known yet. Production files (Gerbers, job file, Excellon PTH/NPTH drill files) committed in `kicad-hat/production/` for reference. Design finished (ERC and DRC clean). T-shaped 2-layer board (54 x 41 mm) with rounded corners, GND poured on both layers, held by two M2 spacers (bottom corners). Component values are printed next to each part for hand assembly. J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117; ADR-0007). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged. Factory: Aisler (2 layers, 1.6 mm, 35 µm copper, HASL). The board meets its limits: copper-to-edge 0.3 mm (the board's tightest is J1's pads at 0.42 mm), copper spacing 0.15 mm (0.25 mm next to J1), via drill 0.3 mm with a 0.2 mm ring (vias 0.7/0.3 mm), PTH ring 0.3 mm (smallest: J1 and J3 at 0.35 mm), silkscreen lines 0.15 mm and text 0.8 mm high (Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules", updated 2025-07-07, https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) |
+| HAT (KiCad PCB) | sensor connector, EEPROM, LED, button | 2, 7 | ordered: 3 bare boards at Aisler on 2026-11-26 ("Beautiful Boards": 2 layers, 1.6 mm, 35 µm copper, HASL lead-free, green/white, no stencil), uploaded as the native `kicad-hat.kicad_pcb` of commit `b747750`; delivery date not known yet. Production files (Gerbers, job file, Excellon PTH/NPTH drill files) committed in `kicad-hat/production/` for reference. Design finished (ERC and DRC clean). T-shaped 2-layer board (54 x 41 mm) with rounded corners, GND poured on both layers, held by two M2 spacers (bottom corners). Component values are printed next to each part for hand assembly. J3 (test pins) runs along the left edge for the logic analyzer. J2 (sensor cable) follows J1's pin order, not the breakout's: wire it by the signal names printed next to J2. The button has an RC debounce: R4 47 kΩ pull-up, R5 10 kΩ to the switch, C2 100 nF to GND, so short bounces never cross the input's thresholds (1.61 V / 1.05 V, DS14556 Rev 2, p. 117; ADR-0007). Pads enlarged for hand soldering: 2.2 mm round on R1-R5, C1, C2, SW1; oval on U1, J2, D1; J1 and J3 unchanged. The board meets Aisler's limits: copper-to-edge 0.3 mm (the board's tightest is J1's pads at 0.42 mm), copper spacing 0.15 mm (0.25 mm next to J1), via drill 0.3 mm with a 0.2 mm ring (vias 0.7/0.3 mm), PTH ring 0.3 mm (smallest: J1 and J3 at 0.35 mm), silkscreen lines 0.15 mm and text 0.8 mm high (Aisler, "2 Layer 1.6 mm 35 µm HASL Design Rules", updated 2025-07-07, https://community.aisler.net/t/2-layer-1-6-mm-35-m-hasl-design-rules/3735) |
 | Zephyr firmware for the M33 (`firmware/`) | sampling, FFT, RPMsg | 3 | in progress: workspace and toolchain set up, Zephyr's `blinky` sample and my own app `firmware/vibration-m33/` built and running on the M33. The app checks the ADXL345's ID over SPI1 and its INT1/INT2 interrupts, and shows the result on LD3 (28 KB code; see M33 firmware). No sampling yet |
 | remoteproc + RPMsg | M33 <-> Linux communication | 3 | in progress: remoteproc loads, starts and stops the firmware, and RPMsg carries messages both ways with Zephyr's sample (see M33 firmware). Not used by an own app yet |
 | 5 V fan (Waveshare Fan-4010-5V) | the "machine" being monitored | 3, 7 | received, not used |
@@ -185,10 +185,10 @@ In the image recipe, for ST's partition class (`image_types-stsplitpartitions`):
 
 ### Workspace and toolchain
 
-A west workspace in `firmware/`, git-ignored (only my own app will be re-included):
+A west workspace in `firmware/`, git-ignored except my own app, `firmware/vibration-m33/`:
 - Zephyr v4.5.0 (tag), its 83 modules fetched by `west update` at the commits pinned in
-  `zephyr/west.yml` (`zephyr/` 1.6 GB, `modules/` 7.7 GB). Used so far: `hal_stm32`, `cmsis_6`;
-  planned: `open-amp` and `libmetal` (RPMsg), `cmsis-dsp` (FFT).
+  `zephyr/west.yml` (`zephyr/` 1.6 GB, `modules/` 7.7 GB). Used so far: `hal_stm32`, `cmsis_6`,
+  and `open-amp` with `libmetal` (RPMsg, in Zephyr's sample); planned: `cmsis-dsp` (FFT).
 - Python virtual environment `firmware/.venv` with west v1.5.0 and Zephyr's Python packages
   (`west packages pip --install`). It must be activated in each new terminal.
 - Zephyr SDK 1.0.1 (the version in `zephyr/SDK_VERSION`), Arm toolchain only
@@ -228,9 +228,9 @@ Reserved memory in Linux's device tree (`/sys/firmware/devicetree/base/reserved-
 | `cm33-cube-fw` | `0x80100000` | 8 MB | M33 code; Zephyr's `ddr_code` (same address and size) |
 | `cm33-cube-data` | `0x80a00000` | 8 MB | M33 data; Zephyr's `ddr_sys` (same address and size) |
 | `ipc-shmem-1` | `0x81200000` | 992 KB (`0xF8000`) | shared memory, ends where the vrings start |
-| `vdev0vring0`, `vdev0vring1` | `0x812f8000`, `0x812f9000` | not read | RPMsg virtio rings |
-| `vdev0buffer` | `0x812fa000` | not read | RPMsg buffers |
-| `tfm-code`, `tfm-data` | `0x80000000`, `0x80900000` | not read | Trusted Firmware-M (the M33's secure side) |
+| `vdev0vring0`, `vdev0vring1` | `0x812f8000`, `0x812f9000` | 4 KB each | RPMsg virtio rings |
+| `vdev0buffer` | `0x812fa000` | 24 KB | RPMsg buffers |
+| `tfm-code`, `tfm-data` | `0x80000000`, `0x80900000` | not read | probably Trusted Firmware-M, the M33's secure side (from the names; not checked) |
 
 `ipc-shmem-1`, the two vrings (4 KB each) and `vdev0buffer` (24 KB) sit back to back from
 `0x81200000` to `0x81300000`: exactly 1 MB, the size Zephyr's MP257 board files use for RPMsg.
@@ -339,7 +339,7 @@ Observed on the physical board and in ST documentation:
 | Display | FFC connector CN8, silkscreen "DISPLAY" | photo, ST wiki |
 | Ethernet | RJ45, reference CN11 | photo |
 | GPIO expansion | 40-pin header CN12: 3V3 on pins 1, 17; 5V on pins 2, 4 (`5V_VIN`, the output of the eFuse U14, see Power and USB); SPI1 on pins 19 (MOSI, PI5), 21 (MISO, PD1), 23 (SCK, PD11), 24 (NSS, PD2). Other pins checked on the schematic: 18 = PB14, 22 = PD13, 26 = PC7, 29 = PH13; 27 = PG0 (`ID_SD`), 28 = PC12 (`ID_SC`), with no pull-up resistors on the board. Plain I2C is an alternate function on pins 27/28 (I2C3_SDA on PG0, I2C3_SCL on PC12) and 3/5 (I2C1_SDA on PA2, I2C1_SCL on PG13). Each of these pins has no other connection on the board. I/O at 3.3 V (VDDIO, from LDO2): all HAT pins are on VDDIO; only VDDIO2 (PE6-PE15) runs at 1.8 V, and no CN12 pin uses it. Errata in UM3571: pin 16 (SDMMC3.CMD) is PD12, not PH8 (PH8 is the M33 console RX on CN1). The schematic names the CN12 signals with Raspberry Pi GPIO numbers (`EXP_GPIO2` to `EXP_GPIO27`) and `ID_SD`/`ID_SC` on pins 27/28. The odd-pin row is about 3.5 mm from the board's edge (measured with a ruler) | UM3571 Rev 1, p. 26, Table 17; schematic B-02, sheets 3 and 12 of 14; DS14556 Rev 2, Table 13, p. 73, 77, 80, 81; UM3571 Rev 1, p. 11; schematic B-02, sheets 4 and 5 of 14; edge distance measured on the board |
-| Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers, pin 1 = board RX, pin 2 = GND, pin 3 = board TX. A35 console: 115200 baud, Linux device ttySTM0 | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3; `captures/boot-time/st-starter_first-boot_untimed.log` line 207 |
+| Consoles | CN2 "VCPA35": Cortex-A35 console, USART2 (PA4 TX, PA8 RX). CN1 "VCPM33": Cortex-M33 console, UART4 (PH7 TX, PH8 RX). 3-pin headers, pin 1 = board RX, pin 2 = GND, pin 3 = board TX. CN2 pins 1 and 3 go straight to the MPU's USART2_RX/USART2_TX, with no level shifter, so the console is at VDDIO, 3.3 V. A35 console: 115200 baud, Linux device ttySTM0 | UM3571 Rev 1, p. 9, p. 28, p. 30; schematic sheet 3; UM3571 Rev 1, p. 11 (VDDIO); `captures/boot-time/st-starter_first-boot_untimed.log` line 207 |
 | Silicon revision | The chip reports Rev.Z (UM3571 lists revision "Y"). ES0628 errata must be read for Rev.Z | `captures/boot-time/st-starter_first-boot_untimed.log` lines 1, 91; UM3571 Rev 1, p. 33 |
 | Power and USB | CN10 is the only USB connector: USB Type-C, 5 V power input and USB 2.0 data (device). Its CC1/CC2 lines go to ADC inputs ANA0/ANA1 to detect the current the power source offers (0.5, 1.5 or 3 A). Also used for flashing with STM32CubeProgrammer (UART/USB boot switch position). Checked on the board. VBUS goes through the electronic fuse U14 (STEF05SGR) and becomes `5V_VIN`. Each CC line has a pull-down (1.2 kΩ + 3.9 kΩ), which the charger needs to see before it turns on VBUS | UM3571 Rev 1, p. 11, section 7.4.2; p. 16, section 8.1; schematic B-02, sheet 8 of 14 |
 

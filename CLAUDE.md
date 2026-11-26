@@ -59,7 +59,7 @@ The full teaching goes in the conversation, not in the file.
 - Before `dd`, flashing, partitioning or ANY command that deletes or overwrites data, stop and
   ask the user, and confirm the exact target (a wrong disk can destroy their data).
 - Do not run `git commit` unless the user asks. Propose the commit message first.
-- Do not create new top-level directories (e.g. for the KiCad HAT or the pytest rig) before the
+- Do not create new top-level directories (e.g. for the pytest rig) before the
   corresponding phase starts, and only with the user's approval.
 - The relay switches only the 5 V DC supply line, never mains voltage.
 - Signing keys, passwords and Wi-Fi credentials never go in the repo or in a prompt.
@@ -86,8 +86,9 @@ KiCad, Python with pytest and labgrid.
 machine-vibration-health-node/
 - yocto/          Yocto layer(s), recipes and configuration for the Linux image
                   (own layer: yocto/layers/meta-vibration-node/, next to the vendor layers)
-- firmware/       Zephyr application for the M33
-- kicad-hat/      KiCad project of the HAT (schematic, PCB, later the production files)
+- firmware/       west workspace for Zephyr (git-ignored), with my M33 app in
+                  firmware/vibration-m33/ (the only part committed)
+- kicad-hat/      KiCad project of the HAT (schematic, PCB, production files in production/)
 - docs/
   - captures/     evidence: serial logs, logic analyzer captures, screenshots, measurements
   - decisions/    all ADRs, plus adr-template.md (written by the user, always follow it)
