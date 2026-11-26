@@ -1,0 +1,22 @@
+/*
+ * My additions to the STM32MP215F-DK device tree, for the M33.
+ * Picked up automatically because the file name matches the board.
+ */
+
+&spi1 {
+	/*
+	 * Chip select as a plain GPIO on PD2 (CN12 pin 24), driven by Zephyr's SPI code, instead of
+	 * the SPI block's hardware NSS: the ADXL345 needs CS low for the whole transfer. So NSS is
+	 * left out of the pin list, which keeps only SCK (PD11), MISO (PD1), MOSI (PI5).
+	 */
+	pinctrl-0 = <&spi1_sck_pd11 &spi1_miso_pd1 &spi1_mosi_pi5>;
+	cs-gpios = <&gpiod 2 GPIO_ACTIVE_LOW>;
+
+	/* The ADXL345 on the first (only) chip select. */
+	accel: adxl345@0 {
+		compatible = "adi,adxl345";
+		reg = <0>;
+		/* Max 5 MHz (ADXL345 Rev. G, p. 14); 1 MHz is slow and safe on jumper wires. */
+		spi-max-frequency = <1000000>;
+	};
+};
